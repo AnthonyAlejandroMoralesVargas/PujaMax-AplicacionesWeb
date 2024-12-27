@@ -319,7 +319,21 @@
             </div>
             <div class="modal-body text-center">
                 <p>Are you sure you want to delete the address?</p>
-                <p>${address.name}</p>
+                <h3>${address.name}</h3>
+                <p class="card-text text-secondary small mb-4">
+                    <i class="fas fa-map-marker-alt me-2"></i>${address.province},
+                    ${address.city}
+                </p>
+                <p class="card-text text-secondary small mb-4">
+                    <i class="fa-solid fa-house me-2"></i>${address.houseNumber}
+                </p>
+                <p class="card-text text-secondary small mb-4">
+                    <i class="fa-solid fa-road me-2"></i>${address.mainStreet} &
+                    ${address.secondaryStreet}
+                </p>
+                <p class="card-text text-secondary small mb-4">
+                    <i class="fa-solid fa-envelope me-2"></i></i>${address.postcode}
+                </p>
             </div>
             <div class="modal-footer justify-content-center">
                 <!-- Cancel button, closes the modal -->
