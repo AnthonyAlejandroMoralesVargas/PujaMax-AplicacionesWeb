@@ -71,6 +71,14 @@ public class AddressManagmentController extends HttpServlet {
     }
 
     private void addAddress(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        AddressDAO addressDAO = new AddressDAO();
+        try {
+            List<Address> addresses = addressDAO.getAddresses();
+            req.setAttribute("addresses", addresses);
+        } catch (SQLException e) {
+            throw new ServletException("Error retrieving addresses", e);
+        }
+
         req.setAttribute("route", "add");
         req.getRequestDispatcher("jsp/AUCTIONEER_PROFILE.jsp").forward(req, resp);
     }
@@ -79,25 +87,44 @@ public class AddressManagmentController extends HttpServlet {
         int idAddress = Integer.parseInt(req.getParameter("idAddress"));
         AddressDAO addressDAO = new AddressDAO();
 
-        Address address = addressDAO.findAddressById(idAddress);
-        if (address != null) {
-            req.setAttribute("address", address);
-            req.getRequestDispatcher("jsp/AUCTIONEER_PROFILE.jsp").forward(req, resp);
-        } else {
-            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Address could not be found");
-            resp.sendRedirect("AddressManagmentController?route=list");
+        try {
+            // Obtener la dirección específica para eliminar
+            Address address = addressDAO.findAddressById(idAddress);
+            // Obtener todas las direcciones para mantener la lista visible
+            List<Address> addresses = addressDAO.getAddresses();
+
+            if (address != null) {
+                req.setAttribute("address", address);
+                req.setAttribute("addresses", addresses);
+                req.getRequestDispatcher("jsp/AUCTIONEER_PROFILE.jsp").forward(req, resp);
+            } else {
+                resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Address could not be found");
+                resp.sendRedirect("AddressManagmentController?route=list");
+            }
+        } catch (SQLException e) {
+            throw new ServletException("Error retrieving addresses", e);
         }
     }
 
     private void editAddress(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int idAddress = Integer.parseInt(req.getParameter("idAddress"));
         AddressDAO addressDAO = new AddressDAO();
-        Address address = addressDAO.findAddressById(idAddress);
-        if (address != null) {
-            req.setAttribute("address", address);
-            req.getRequestDispatcher("jsp/AUCTIONEER_PROFILE.jsp").forward(req, resp);
-        } else {
-            resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Address not found");
+
+        try {
+            // Obtener la dirección específica para editar
+            Address address = addressDAO.findAddressById(idAddress);
+            // Obtener todas las direcciones para mantener la lista visible
+            List<Address> addresses = addressDAO.getAddresses();
+
+            if (address != null) {
+                req.setAttribute("address", address);
+                req.setAttribute("addresses", addresses);
+                req.getRequestDispatcher("jsp/AUCTIONEER_PROFILE.jsp").forward(req, resp);
+            } else {
+                resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Address not found");
+            }
+        } catch (SQLException e) {
+            throw new ServletException("Error retrieving addresses", e);
         }
     }
 
