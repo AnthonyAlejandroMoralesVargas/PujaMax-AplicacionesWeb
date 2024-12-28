@@ -9,6 +9,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import model.dao.AddressDAO;
 import model.entities.Address;
 
@@ -64,7 +65,9 @@ public class AddressManagmentController extends HttpServlet {
         if (addressDAO.removeAddress(idAddress)) {
             resp.sendRedirect("AddressManagmentController?route=list");
         } else {
-            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Could not delete address");
+            HttpSession session = req.getSession();
+            session.setAttribute("message", "Could not delete address");
+
             resp.sendRedirect("AddressManagmentController?route=list");
         }
     }
@@ -87,9 +90,7 @@ public class AddressManagmentController extends HttpServlet {
         AddressDAO addressDAO = new AddressDAO();
 
         try {
-            // Obtener la dirección específica para eliminar
             Address address = addressDAO.findAddressById(idAddress);
-            // Obtener todas las direcciones para mantener la lista visible
             List<Address> addresses = addressDAO.getAddresses();
 
             if (address != null) {
@@ -97,7 +98,9 @@ public class AddressManagmentController extends HttpServlet {
                 req.setAttribute("addresses", addresses);
                 req.getRequestDispatcher("jsp/AUCTIONEER_PROFILE.jsp").forward(req, resp);
             } else {
-                resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Address could not be found");
+                HttpSession session = req.getSession();
+                session.setAttribute("message", "Address could not be found");
+
                 resp.sendRedirect("AddressManagmentController?route=list");
             }
         } catch (SQLException e) {
@@ -118,7 +121,10 @@ public class AddressManagmentController extends HttpServlet {
                 req.setAttribute("address", address);
                 req.getRequestDispatcher("jsp/AUCTIONEER_PROFILE.jsp").forward(req, resp);
             } else {
-                resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Address not found");
+                HttpSession session = req.getSession();
+                session.setAttribute("message", "Address not found");
+
+                resp.sendRedirect("AddressManagmentController?route=list");
             }
         } catch (SQLException e) {
             throw new ServletException("Error retrieving addresses", e);
@@ -133,10 +139,12 @@ public class AddressManagmentController extends HttpServlet {
         if (addressDAO.updateAddress(address)) {
             resp.sendRedirect("AddressManagmentController?route=list");
         } else {
-            req.setAttribute("message", "The address could not be updated");
-            req.getRequestDispatcher("jsp/AUCTIONEER_PROFILE.jsp").forward(req, resp);
-        }
+            // Almacena el mensaje en la sesión
+            HttpSession session = req.getSession();
+            session.setAttribute("message", "The address could not be updated");
 
+            resp.sendRedirect("AddressManagmentController?route=list");
+        }
     }
 
     private void saveNewAddress(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
@@ -145,8 +153,11 @@ public class AddressManagmentController extends HttpServlet {
         if (addressDAO.createAddress(address)) {
             resp.sendRedirect("AddressManagmentController?route=list");
         } else {
-            req.setAttribute("message", "The address could not be created");
-            req.getRequestDispatcher("AddressManagmentController?route=list").forward(req, resp);
+            // Almacena el mensaje en la sesión
+            HttpSession session = req.getSession();
+            session.setAttribute("message", "The address could not be created");
+
+            resp.sendRedirect("AddressManagmentController?route=list");
         }
     }
 
@@ -185,5 +196,4 @@ public class AddressManagmentController extends HttpServlet {
 
         return new Address(id, name, province, city, mainStreet, secondaryStreet, postcode, houseNumber, company);
     }
-
 }
