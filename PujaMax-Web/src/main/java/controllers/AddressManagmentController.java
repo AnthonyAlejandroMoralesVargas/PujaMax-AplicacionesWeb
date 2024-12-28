@@ -25,7 +25,6 @@ public class AddressManagmentController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         this.router(req, resp);
-
     }
 
     private void router(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -109,16 +108,14 @@ public class AddressManagmentController extends HttpServlet {
     private void editAddress(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         int idAddress = Integer.parseInt(req.getParameter("idAddress"));
         AddressDAO addressDAO = new AddressDAO();
+        Address address = addressDAO.findAddressById(idAddress);
 
         try {
-            // Obtener la dirección específica para editar
-            Address address = addressDAO.findAddressById(idAddress);
-            // Obtener todas las direcciones para mantener la lista visible
             List<Address> addresses = addressDAO.getAddresses();
+            req.setAttribute("addresses", addresses);
 
             if (address != null) {
                 req.setAttribute("address", address);
-                req.setAttribute("addresses", addresses);
                 req.getRequestDispatcher("jsp/AUCTIONEER_PROFILE.jsp").forward(req, resp);
             } else {
                 resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Address not found");
@@ -133,14 +130,13 @@ public class AddressManagmentController extends HttpServlet {
         Address address = parseAddressFromRequest(req);
         AddressDAO addressDAO = new AddressDAO();
 
-        boolean isUpdated = addressDAO.updateAddress(address);
-
-        if (isUpdated) {
+        if (addressDAO.updateAddress(address)) {
             resp.sendRedirect("AddressManagmentController?route=list");
         } else {
             req.setAttribute("message", "The address could not be updated");
             req.getRequestDispatcher("jsp/AUCTIONEER_PROFILE.jsp").forward(req, resp);
         }
+
     }
 
     private void saveNewAddress(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
@@ -150,7 +146,7 @@ public class AddressManagmentController extends HttpServlet {
             resp.sendRedirect("AddressManagmentController?route=list");
         } else {
             req.setAttribute("message", "The address could not be created");
-            req.getRequestDispatcher("jsp/AUCTIONEER_PROFILE.jsp").forward(req, resp);
+            req.getRequestDispatcher("AddressManagmentController?route=list").forward(req, resp);
         }
     }
 
