@@ -235,13 +235,14 @@
                 <div class="modal-body">
                     <!-- Form fields with pre-filled values from the retrieved address -->
                     <div class="row">
+                        <input type="hidden" name="txtId" value="${address.idAddress}">
                         <div class="col-md-6 mb-3">
-                            <label for="editTxtName" class="form-label fw-bold">Name</label>
+                            <label for="txtName" class="form-label fw-bold">Name</label>
                             <input type="text" class="form-control" name="txtName"
                                    id="txtName" value="${address.name}" placeholder="Enter name">
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="editTxtCompany" class="form-label fw-bold">Company
+                            <label for="txtCompany" class="form-label fw-bold">Company
                                 (Optional)</label> <input type="text" class="form-control"
                                                           name="txtCompany" id="txtCompany" value="${address.company}"
                                                           placeholder="Enter company">
@@ -250,13 +251,13 @@
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label for="editTxtProvince" class="form-label fw-bold">Province</label>
+                            <label for="txtProvince" class="form-label fw-bold">Province</label>
                             <input type="text" class="form-control" name="txtProvince"
                                    id="txtProvince" value="${address.province}"
                                    placeholder="Enter province">
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="editTxtCity" class="form-label fw-bold">City</label>
+                            <label for="txtCity" class="form-label fw-bold">City</label>
                             <input type="text" class="form-control" name="txtCity"
                                    id="txtCity" value="${address.city}" placeholder="Enter city">
                         </div>
@@ -264,13 +265,13 @@
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label for="editTxtMainStreet" class="form-label fw-bold">Main
+                            <label for="txtMainStreet" class="form-label fw-bold">Main
                                 Street</label> <input type="text" class="form-control"
                                                       name="txtMainStreet" id="txtMainStreet"
                                                       value="${address.mainStreet}" placeholder="Enter main street">
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="editTxtSecondaryStreet" class="form-label fw-bold">Secondary
+                            <label for="txtSecondaryStreet" class="form-label fw-bold">Secondary
                                 Street (Optional)</label> <input type="text" class="form-control"
                                                                  name="txtSecondaryStreet" id="txtSecondaryStreet"
                                                                  value="${address.secondaryStreet}"
@@ -280,13 +281,13 @@
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label for="editTxtPostcode" class="form-label fw-bold">Postcode</label>
+                            <label for="txtPostcode" class="form-label fw-bold">Postcode</label>
                             <input type="text" class="form-control" name="txtPostcode"
                                    id="txtPostcode" value="${address.postcode}"
                                    placeholder="Enter postcode">
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="editTxtHouseNumber" class="form-label fw-bold">House/Apartment
+                            <label for="txtHouseNumber" class="form-label fw-bold">House/Apartment
                                 No.</label> <input type="text" class="form-control"
                                                    name="txtHouseNumber" id="txtHouseNumber"
                                                    value="${address.houseNumber}"
@@ -296,8 +297,7 @@
 
                 </div>
                 <div class="modal-footer justify-content-center">
-                    <a href="AddressManagmentController?route=list"
-                       class="btn btn-danger"> Cancel </a>
+                    <a href="AddressManagmentController?route=list" class="btn btn-danger"> Cancel </a>
                     <button type="submit" class="btn btn-primary">Save</button>
                 </div>
             </form>
@@ -367,22 +367,25 @@
         var route = "${param.route}";
 
         if (route === "add") {
-            var myModal = new bootstrap.Modal(document
-                .getElementById('ADD_ADDRESS_MODAL'), {
-                keyboard : false
+            var myModal = new bootstrap.Modal(document.getElementById('ADD_ADDRESS_MODAL'), {
+                keyboard: false,
+                backdrop: 'static'
             });
+            document.body.classList.remove('modal-open');
             myModal.show();
         } else if (route === "edit" && "${param.idAddress}") {
-            var myModal = new bootstrap.Modal(document
-                .getElementById('EDIT_ADDRESS_MODAL'), {
-                keyboard : false
+            var myModal = new bootstrap.Modal(document.getElementById('EDIT_ADDRESS_MODAL'), {
+                keyboard: false,
+                backdrop: 'static'
             });
+            document.body.classList.remove('modal-open');
             myModal.show();
         } else if (route === "delete" && "${param.idAddress}") {
-            var myModal = new bootstrap.Modal(document
-                .getElementById('DELETE_ADDRESS_MODAL'), {
-                keyboard : false
+            var myModal = new bootstrap.Modal(document.getElementById('DELETE_ADDRESS_MODAL'), {
+                keyboard: false,
+                backdrop: 'static'
             });
+            document.body.classList.remove('modal-open');
             myModal.show();
         }
     };
