@@ -312,8 +312,9 @@
         <div class="modal-content">
             <div class="modal-header"
                  style="background-color: #dc3545; color: #fff;">
-                <h5 class="modal-title" id="DELETE_ADDRESSLabel">Delete
-                    Address</h5>
+                <h5 class="modal-title" id="DELETE_ADDRESSLabel">
+                    <i class="fa-solid fa-trash me-2"></i> Delete Address
+                </h5>
                 <a href="AddressManagmentController?route=list" class="btn-close"
                    aria-label="Close"></a>
             </div>
