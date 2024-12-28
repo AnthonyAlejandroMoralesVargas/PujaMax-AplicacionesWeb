@@ -53,9 +53,15 @@
 <main class="container my-4">
     <h2 class="mb-4">User Profile</h2>
     <!-- Feedback Message -->
-    <c:if test="${not empty message}">
-        <div class="alert alert-info">${message}</div>
+    <c:if test="${not empty sessionScope.message}">
+        <div id="notification" class="alert alert-danger"
+             style="background-color: #f8d7da; color: #721c24;" role="alert">
+                ${sessionScope.message}</div>
+        <c:remove var="message" scope="session" />
     </c:if>
+
+
+
 
     <div class="row">
         <!-- User Information Card -->
@@ -146,13 +152,11 @@
                 <div class="modal-body">
                     <!-- Address Form Fields -->
                     <div class="row g-4">
-                        <!-- Name -->
                         <div class="col-md-6">
                             <label for="txtName" class="form-label fw-semibold">Name</label>
                             <input type="text" class="form-control rounded-3" name="txtName"
                                    id="txtName" placeholder="Enter name" required>
                         </div>
-                        <!-- Company (Optional) -->
                         <div class="col-md-6">
                             <label for="txtCompany" class="form-label fw-semibold">Company
                                 (Optional)</label> <input type="text" class="form-control rounded-3"
@@ -160,14 +164,12 @@
                         </div>
                     </div>
                     <div class="row g-4 mt-2">
-                        <!-- Province -->
                         <div class="col-md-6">
                             <label for="txtProvince" class="form-label fw-semibold">Province</label>
                             <input type="text" class="form-control rounded-3"
                                    name="txtProvince" id="txtProvince"
                                    placeholder="Enter province" required>
                         </div>
-                        <!-- City -->
                         <div class="col-md-6">
                             <label for="txtCity" class="form-label fw-semibold">City</label>
                             <input type="text" class="form-control rounded-3" name="txtCity"
@@ -175,14 +177,12 @@
                         </div>
                     </div>
                     <div class="row g-4 mt-2">
-                        <!-- Main Street -->
                         <div class="col-md-6">
                             <label for="txtMainStreet" class="form-label fw-semibold">Main
                                 Street</label> <input type="text" class="form-control rounded-3"
                                                       name="txtMainStreet" id="txtMainStreet"
                                                       placeholder="Enter main street" required>
                         </div>
-                        <!-- Secondary Street (Optional) -->
                         <div class="col-md-6">
                             <label for="txtSecondaryStreet" class="form-label fw-semibold">Secondary
                                 Street (Optional)</label> <input type="text"
@@ -191,14 +191,12 @@
                         </div>
                     </div>
                     <div class="row g-4 mt-2">
-                        <!-- Postcode -->
                         <div class="col-md-6">
                             <label for="txtPostcode" class="form-label fw-semibold">Postcode</label>
                             <input type="text" class="form-control rounded-3"
                                    name="txtPostcode" id="txtPostcode"
                                    placeholder="Enter postcode" required>
                         </div>
-                        <!-- House/Apartment No. -->
                         <div class="col-md-6">
                             <label for="txtHouseNumber" class="form-label fw-semibold">House/Apartment
                                 No.</label> <input type="text" class="form-control rounded-3"
@@ -237,9 +235,9 @@
                     <div class="row">
                         <input type="hidden" name="txtId" value="${address.idAddress}">
                         <div class="col-md-6 mb-3">
-                            <label for="txtName" class="form-label fw-bold">Name</label>
-                            <input type="text" class="form-control" name="txtName"
-                                   id="txtName" value="${address.name}" placeholder="Enter name">
+                            <label for="txtName" class="form-label fw-bold">Name</label> <input
+                                type="text" class="form-control" name="txtName" id="txtName"
+                                value="${address.name}" placeholder="Enter name">
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="txtCompany" class="form-label fw-bold">Company
@@ -257,9 +255,9 @@
                                    placeholder="Enter province">
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="txtCity" class="form-label fw-bold">City</label>
-                            <input type="text" class="form-control" name="txtCity"
-                                   id="txtCity" value="${address.city}" placeholder="Enter city">
+                            <label for="txtCity" class="form-label fw-bold">City</label> <input
+                                type="text" class="form-control" name="txtCity" id="txtCity"
+                                value="${address.city}" placeholder="Enter city">
                         </div>
                     </div>
 
@@ -297,7 +295,8 @@
 
                 </div>
                 <div class="modal-footer justify-content-center">
-                    <a href="AddressManagmentController?route=list" class="btn btn-danger"> Cancel </a>
+                    <a href="AddressManagmentController?route=list"
+                       class="btn btn-danger"> Cancel </a>
                     <button type="submit" class="btn btn-primary">Save</button>
                 </div>
             </form>
@@ -367,30 +366,43 @@
         var route = "${param.route}";
 
         if (route === "add") {
-            var myModal = new bootstrap.Modal(document.getElementById('ADD_ADDRESS_MODAL'), {
-                keyboard: false,
-                backdrop: 'static'
+            var myModal = new bootstrap.Modal(document
+                .getElementById('ADD_ADDRESS_MODAL'), {
+                keyboard : false,
+                backdrop : 'static'
             });
             document.body.classList.remove('modal-open');
             myModal.show();
         } else if (route === "edit" && "${param.idAddress}") {
-            var myModal = new bootstrap.Modal(document.getElementById('EDIT_ADDRESS_MODAL'), {
-                keyboard: false,
-                backdrop: 'static'
+            var myModal = new bootstrap.Modal(document
+                .getElementById('EDIT_ADDRESS_MODAL'), {
+                keyboard : false,
+                backdrop : 'static'
             });
             document.body.classList.remove('modal-open');
             myModal.show();
         } else if (route === "delete" && "${param.idAddress}") {
-            var myModal = new bootstrap.Modal(document.getElementById('DELETE_ADDRESS_MODAL'), {
-                keyboard: false,
-                backdrop: 'static'
+            var myModal = new bootstrap.Modal(document
+                .getElementById('DELETE_ADDRESS_MODAL'), {
+                keyboard : false,
+                backdrop : 'static'
             });
             document.body.classList.remove('modal-open');
             myModal.show();
         }
     };
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const notification = document.getElementById("notification");
+        if (notification) {
+            // Oculta el mensaje después de 2 segundos
+            setTimeout(() => {
+                notification.style.transition = "opacity 0.5s";
+                notification.style.opacity = "0";
+                setTimeout(() => notification.remove(), 1000); // Remueve el elemento después de la transición
+            }, 2000);
+        }
+    });
 </script>
-
-
 </body>
 </html>
