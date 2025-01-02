@@ -8,7 +8,7 @@ import java.util.List;
 
 import model.bdd.DBConnection;
 import model.entities.Address;
-0
+
 public class AddressDAO {
 
     public List<Address> getAddresses() throws SQLException {
