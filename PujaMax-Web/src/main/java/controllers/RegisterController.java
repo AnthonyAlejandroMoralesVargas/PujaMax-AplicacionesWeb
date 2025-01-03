@@ -48,27 +48,18 @@ public class RegisterController extends HttpServlet {
     }
 
     private void save(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        // 1. Obtener los datos del formulario
-        String dni = req.getParameter("txtDni");
-        String name = req.getParameter("txtName");
-        String lastName = req.getParameter("txtLastName");
-        String email = req.getParameter("txtEmail");
-        String password = req.getParameter("txtPassword");
-        String phoneNumber = req.getParameter("txtPhoneNumber");
+        // 1. Get data from the request
         String role = req.getParameter("txtRole");
-
-            // 2. Validar el rol y crear el objeto correspondiente
+        System.out.println("Role: " + role);
+            // Validar el rol y crear el objeto correspondiente
             if ("auctioneer".equalsIgnoreCase(role)) {
-                // Crear un Auctioneer
-                Auctioneer auctioneer = new Auctioneer(dni, name, lastName, email, password, phoneNumber);
-
-                // 3. Llamar al servicio de Auctioneer para guardarlo
+                // 2. talk to the model
+                Auctioneer auctioneer = parseAuctioneerFromRequest(req);
                 AuctioneerService auctioneerService = new AuctioneerService();
                 if (auctioneerService.createAuctioneer(auctioneer)) {
-                    // 4. Si el registro fue exitoso, redirigir al Login
+                    // 3. Redirect to the view
                     resp.sendRedirect("LoginController?route=enter");
                 } else {
-                    // Si falla, enviar mensaje de error
                     req.setAttribute("error", "Failed to register Auctioneer. Please try again.");
                     req.getRequestDispatcher("jsp/REGISTER.jsp").forward(req, resp);
                 }
@@ -78,6 +69,17 @@ public class RegisterController extends HttpServlet {
                 req.setAttribute("error", "Bidder registration is not yet implemented.");
                 req.getRequestDispatcher("jsp/REGISTER.jsp").forward(req, resp);
             }
+    }
+    private Auctioneer parseAuctioneerFromRequest(HttpServletRequest req) {
+        int id = 0;
+        String dni = req.getParameter("txtDni");
+        String name = req.getParameter("txtName");
+        String lastName = req.getParameter("txtLastName");
+        String email = req.getParameter("txtEmail");
+        String password = req.getParameter("txtPassword");
+        String phoneNumber = req.getParameter("txtPhoneNumber");
+
+        return new Auctioneer(id, dni, name, lastName, email, password, phoneNumber);
     }
 
 }

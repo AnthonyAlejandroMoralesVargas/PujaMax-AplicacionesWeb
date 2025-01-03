@@ -46,6 +46,36 @@ public class AuctioneerDAO {
             rs = pstmt.executeQuery();
             if (rs.next()) {
                 auctioneer = new Auctioneer();
+                auctioneer.setId(rs.getInt("id"));
+                auctioneer.setDni(rs.getString("dni"));
+                auctioneer.setName(rs.getString("name"));
+                auctioneer.setLastName(rs.getString("lastName"));
+                auctioneer.setEmail(rs.getString("email"));
+                auctioneer.setPassword(rs.getString("password"));
+                auctioneer.setPhoneNumber(rs.getString("phoneNumber"));
+            }
+            return auctioneer;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            DBConnection.close(pstmt);
+            DBConnection.close();
+        }
+    }
+
+    public Auctioneer findAuctioneerById(int idAuctioneer) throws SQLException {
+        String _SQL_FIND_AUCTIONEER_BY_ID = "SELECT * FROM auctioneer WHERE id = ?";
+        Auctioneer auctioneer = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+        try {
+            pstmt = DBConnection.getConnection().prepareStatement(_SQL_FIND_AUCTIONEER_BY_ID);
+            pstmt.setInt(1, idAuctioneer);
+            rs = pstmt.executeQuery();
+            if (rs.next()) {
+                auctioneer = new Auctioneer();
+                auctioneer.setId(rs.getInt("id"));
                 auctioneer.setDni(rs.getString("dni"));
                 auctioneer.setName(rs.getString("name"));
                 auctioneer.setLastName(rs.getString("lastName"));

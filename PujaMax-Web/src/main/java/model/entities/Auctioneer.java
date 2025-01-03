@@ -16,8 +16,8 @@ public class Auctioneer extends User implements Serializable {
     }
 
     // Constructor con todos los atributos
-    public Auctioneer(String dni, String name, String lastName, String email, String password, String phoneNumber) {
-        super(dni, name, lastName, email, password, phoneNumber);
+    public Auctioneer(int id,String dni, String name, String lastName, String email, String password, String phoneNumber) {
+        super(id, dni, name, lastName, email, password, phoneNumber);
         this.lots = new ArrayList<>();
     }
 

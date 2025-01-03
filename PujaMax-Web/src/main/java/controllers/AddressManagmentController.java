@@ -12,6 +12,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.dao.AddressDAO;
 import model.entities.Address;
+import model.entities.Auctioneer;
 
 @WebServlet("/AddressManagmentController")
 public class AddressManagmentController extends HttpServlet {
@@ -162,12 +163,15 @@ public class AddressManagmentController extends HttpServlet {
     }
 
     private void viewAddresses(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession();
+        Auctioneer auctioneer = (Auctioneer) session.getAttribute("user");
         List<Address> addresses;
         try {
             AddressDAO addressDAO = new AddressDAO();
-            addresses = addressDAO.getAddresses();
+            addresses = addressDAO.findAddressesByAuctioneer(auctioneer.getId());
             req.setAttribute("addresses", addresses);
-            getServletContext().getRequestDispatcher("/jsp/AUCTIONEER_PROFILE.jsp").forward(req, resp);
+            req.getRequestDispatcher("jsp/AUCTIONEER_PROFILE.jsp").forward(req, resp);
+            //getServletContext().getRequestDispatcher("/jsp/AUCTIONEER_PROFILE.jsp").forward(req, resp);
         } catch (SQLException e) {
             throw new ServletException("Error retrieving addresses", e);
         }
@@ -185,6 +189,9 @@ public class AddressManagmentController extends HttpServlet {
             }
         }
 
+        HttpSession session = req.getSession();
+        Auctioneer auctioneer = (Auctioneer) session.getAttribute("user");
+
         String name = req.getParameter("txtName");
         String province = req.getParameter("txtProvince");
         String city = req.getParameter("txtCity");
@@ -194,6 +201,6 @@ public class AddressManagmentController extends HttpServlet {
         String houseNumber = req.getParameter("txtHouseNumber");
         String company = req.getParameter("txtCompany");
 
-        return new Address(id, name, province, city, mainStreet, secondaryStreet, postcode, houseNumber, company);
+        return new Address(id,auctioneer,name, province, city, mainStreet, secondaryStreet, postcode, houseNumber, company);
     }
 }

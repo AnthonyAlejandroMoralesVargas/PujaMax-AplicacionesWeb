@@ -7,6 +7,7 @@ public class Address implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private int idAddress;
+    private Auctioneer auctioneer;
     private String name;
     private String province;
     private String city;
@@ -16,13 +17,15 @@ public class Address implements Serializable {
     private String houseNumber;
     private String company;
 
+
     public Address() {
     }
 
-    public Address(int idAddress, String name, String province, String city, String mainStreet, String secondaryStreet,
+    public Address(int idAddress, Auctioneer auctioneer,String name, String province, String city, String mainStreet, String secondaryStreet,
                    String postcode, String houseNumber, String company) {
         super();
         this.idAddress = idAddress;
+        this.auctioneer = auctioneer;
         this.name = name;
         this.province = province;
         this.city = city;
@@ -39,6 +42,14 @@ public class Address implements Serializable {
 
     public void setIdAddress(int idAddress) {
         this.idAddress = idAddress;
+    }
+
+    public Auctioneer getAuctioneer() {
+        return auctioneer;
+    }
+
+    public void setAuctioneer(Auctioneer auctioneer) {
+        this.auctioneer = auctioneer;
     }
 
     public String getName() {

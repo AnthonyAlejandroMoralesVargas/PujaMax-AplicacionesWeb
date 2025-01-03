@@ -31,6 +31,7 @@
         <h1 class="text-center login-header">Register</h1>
         <form action="${pageContext.request.contextPath}/RegisterController?route=save" method="POST">
           <div class="mb-3">
+            <input type="hidden" name="txtId" id="txtId">
             <label for="txtDni" class="form-label">DNI</label>
             <input type="text" class="form-control" id="txtDni" name="txtDni" placeholder="Enter your DNI" required>
           </div>

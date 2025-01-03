@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core"%>
 <!DOCTYPE html>
 <html lang="en">
@@ -13,9 +12,8 @@
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
 	rel="stylesheet">
 <!-- Font Awesome for icons -->
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-<link rel="stylesheet" href="../css/style.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 
 <body>
@@ -24,7 +22,7 @@
 		<div
 			class="container d-flex justify-content-between align-items-center">
 			<div class="d-flex align-items-center">
-				<img src="../images/logo1.png" alt="Logo"
+				<img src="${pageContext.request.contextPath}/images/logo1.png" alt="Logo"
 					style="height: 50px; margin-right: 10px;">
 				<h1 class="app-name mb-0">PUJAMAX Online Auction</h1>
 			</div>
@@ -74,9 +72,6 @@
 						</p>
 						<p>
 							<strong>Email:</strong> ${user.email}
-						</p>
-						<p>
-							<strong>Role:</strong> ${user.role}
 						</p>
 					</div>
 				</div>
