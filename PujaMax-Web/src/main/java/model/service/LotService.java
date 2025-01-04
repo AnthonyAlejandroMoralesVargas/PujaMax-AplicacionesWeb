@@ -29,4 +29,21 @@ public class LotService {
             throw new RuntimeException(e);
         }
     }
+
+    public Lot findLotById(int idLot) {
+        try {
+            return lotDAO.findLotById(idLot);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public boolean updateLot(Lot lot) {
+        try {
+            return lotDAO.updateLot(lot);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

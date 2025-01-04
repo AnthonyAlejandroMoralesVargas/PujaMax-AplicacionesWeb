@@ -74,9 +74,11 @@ public class AddressManagmentController extends HttpServlet {
     }
 
     private void addAddress(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession();
+        Auctioneer auctioneer = (Auctioneer) session.getAttribute("user");
         AddressDAO addressDAO = new AddressDAO();
         try {
-            List<Address> addresses = addressDAO.getAddresses();
+            List<Address> addresses = addressDAO.findAddressesByAuctioneer(auctioneer.getId());
             req.setAttribute("addresses", addresses);
         } catch (SQLException e) {
             throw new ServletException("Error retrieving addresses", e);

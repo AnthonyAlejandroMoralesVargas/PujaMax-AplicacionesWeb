@@ -10,6 +10,7 @@ import model.dao.AddressDAO;
 import model.entities.Address;
 import model.entities.Auctioneer;
 import model.entities.Lot;
+import model.service.AuctioneerService;
 import model.service.LotService;
 
 import java.io.IOException;
@@ -46,13 +47,10 @@ public class LotManagementController  extends HttpServlet {
                 this.saveNewLot(req, resp);
                 break;
             case "edit":
-                this.edit(req, resp);
+                this.editLot(req, resp);
                 break;
-            case "update":
-                this.update(req, resp);
-                break;
-            case "delete":
-                this.delete(req, resp);
+            case "saveExisting":
+                this.saveExistingLot(req, resp);
                 break;
             default:
                 throw new IllegalArgumentException("Unknown route: " + route);
@@ -101,16 +99,34 @@ public class LotManagementController  extends HttpServlet {
             resp.sendRedirect("LotManagementController?route=add");
         }
     }
-    private void edit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.sendRedirect("jsp/EDIT_LOT.jsp");
+    private void editLot(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession();
+        Auctioneer auctioneer = (Auctioneer) session.getAttribute("user");
+        int idLot = Integer.parseInt(req.getParameter("idLot"));
+        LotService lotService = new LotService();
+        Lot lot = lotService.findLotById(idLot);
+        AddressDAO addressDAO = new AddressDAO();
+        try {
+            List <Lot> lots = new LotService().findLotsByIdAuctioneer(auctioneer.getId());
+            List<Address> addresses = addressDAO.findAddressesByAuctioneer(auctioneer.getId());
+            req.setAttribute("addresses", addresses);
+            req.setAttribute("lot", lot);
+            req.setAttribute("lots", lots);
+            req.setAttribute("route", "edit");
+            req.getRequestDispatcher("jsp/AUCTIONEER_LOT_BOARD.jsp").forward(req, resp);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    private void update(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.sendRedirect("jsp/AUCTIONEER_LOT_BOARD.jsp");
-    }
-
-    private void delete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.sendRedirect("jsp/AUCTIONEER_LOT_BOARD.jsp");
+    private void saveExistingLot(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Lot lot = parseLotFromRequest(req);
+        LotService lotService = new LotService();
+        if (lotService.updateLot(lot)) {
+            resp.sendRedirect("LotManagementController?route=list");
+        } else {
+            resp.sendRedirect("LotManagementController?route=edit&idLot=" + lot.getIdLot());
+        }
     }
 
     private Lot parseLotFromRequest(HttpServletRequest req) {
@@ -132,7 +148,7 @@ public class LotManagementController  extends HttpServlet {
         Address address = addressDAO.findAddressById(idAddress);
 
         String title = req.getParameter("txtTitle");
-        int quantityProducts = 0;
+        int quantityProducts = Integer.parseInt(req.getParameter("txtQuantityProducts"));
         java.sql.Date dateOpening = java.sql.Date.valueOf(req.getParameter("txtOpeningDate"));
         java.sql.Date dateClosing = java.sql.Date.valueOf(req.getParameter("txtClosingDate"));
         String city = req.getParameter("txtCity");

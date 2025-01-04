@@ -92,10 +92,8 @@
               <!-- Action Icons -->
               <div class="action-icons d-flex flex-column align-items-center">
                 <!-- EDIT -->
-                <a href="#"
+                <a href="${pageContext.request.contextPath}/LotManagementController?route=edit&idLot=${lot.idLot}"
                    class="nav-item text-primary"
-                   data-bs-toggle="modal"
-                   data-bs-target="#LOT_FORM"
                    title="Edit">
                   <i class="fas fa-edit"></i>
                 </a>
@@ -144,6 +142,7 @@
             <input type="hidden" name="txtId" id="txtId">
             <label for="txtTitle" class="form-label">Title</label>
             <input type="text" class="form-control" id="txtTitle" name="txtTitle" placeholder="Enter title">
+            <input type="hidden" name="txtQuantityProducts" id="txtQuantityProducts">
           </div>
           <div class="mb-3">
             <label for="txtOpeningDate" class="form-label">Opening Date</label>
@@ -156,7 +155,7 @@
           <div class="mb-3">
             <label for="txtCity" class="form-label">City</label>
             <input type="text" class="form-control" id="txtCity" name="txtCity" placeholder="Enter city">
-            <input type="hidden" name="txtId" id="txtState">
+            <input type="hidden" name="txtState" id="txtState">
           </div>
           <div class="mb-3">
             <label for="delivery" class="form-label">Address</label>
@@ -179,6 +178,64 @@
   </div>
 </div>
 
+</div>
+
+<!-- Edit Lot Modal -->
+<div class="modal fade" id="EDIT_LOT_MODAL" tabindex="-1" aria-labelledby="EDIT_LOT_MODALLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="EDIT_LOT_MODALLabel"><i class="fas fa-edit"></i> Edit Lot</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form action="${pageContext.request.contextPath}/LotManagementController?route=saveExisting" method="POST">
+        <div class="modal-body">
+          <!-- Hidden ID Field -->
+          <input type="hidden" name="txtId" id="editLotId" value="${lot.idLot}">
+
+          <!-- Title -->
+          <div class="mb-3">
+            <label for="editLotTitle" class="form-label">Title</label>
+            <input type="text" class="form-control" name="txtTitle" id="editLotTitle" value="${lot.title}" required>
+            <input type="hidden" name="txtQuantityProducts" id="editLotQuantityProducts" value="${lot.quantityProducts}">
+          </div>
+
+          <!-- Opening Date -->
+          <div class="mb-3">
+            <label for="editLotOpeningDate" class="form-label">Opening Date</label>
+            <input type="date" class="form-control" name="txtOpeningDate" id="editLotOpeningDate" value="${lot.dateOpening}" required>
+          </div>
+
+          <!-- Closing Date -->
+          <div class="mb-3">
+            <label for="editLotClosingDate" class="form-label">Closing Date</label>
+            <input type="date" class="form-control" name="txtClosingDate" id="editLotClosingDate" value="${lot.dateClosing}" required>
+          </div>
+
+          <!-- City -->
+          <div class="mb-3">
+            <label for="editLotCity" class="form-label">City</label>
+            <input type="text" class="form-control" name="txtCity" id="editLotCity" value="${lot.city}" required>
+          </div>
+
+          <!-- Address Dropdown -->
+          <div class="mb-3">
+            <label for="editLotAddress" class="form-label">Address</label>
+            <select class="form-select" name="txtIdAddress" id="editLotAddress" required>
+              <option disabled>Select Address</option>
+              <c:forEach var="addr" items="${addresses}">
+                <option value="${addr.idAddress}" <c:if test="${lot.address.idAddress == addr.idAddress}">selected</c:if>>${addr.name}</option>
+              </c:forEach>
+            </select>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save</button>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
 
 <!-- Delete Lot Modal -->
@@ -224,7 +281,5 @@
     }
   };
 </script>
-
-
-
+</body>
 </html>

@@ -40,10 +40,10 @@ public class AuctioneerDAO {
         Auctioneer auctioneer = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
-        try {
-            pstmt = DBConnection.getConnection().prepareStatement(_SQL_FIND_AUCTIONEER_BY_DNI);
+        try {pstmt = DBConnection.getConnection().prepareStatement(_SQL_FIND_AUCTIONEER_BY_DNI);
             pstmt.setString(1, dni);
             rs = pstmt.executeQuery();
+
             if (rs.next()) {
                 auctioneer = new Auctioneer();
                 auctioneer.setId(rs.getInt("id"));
