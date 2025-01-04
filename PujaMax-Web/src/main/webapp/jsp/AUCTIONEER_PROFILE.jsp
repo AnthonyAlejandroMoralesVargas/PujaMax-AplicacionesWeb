@@ -27,7 +27,7 @@
 				<h1 class="app-name mb-0">PUJAMAX Online Auction</h1>
 			</div>
 			<div class="d-flex align-items-center">
-				<a href="AUCTIONEER_LOT_BOARD.jsp"
+				<a href="${pageContext.request.contextPath}/LotManagementController?route=list"
 					class="text-white text-decoration-none me-3"><i
 					class="fas fa-home"></i> Home</a>
 				<div class="dropdown">
