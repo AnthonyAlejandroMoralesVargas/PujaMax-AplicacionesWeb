@@ -14,6 +14,7 @@ import model.service.LotService;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
 @WebServlet("/LotManagementController")
@@ -38,11 +39,11 @@ public class LotManagementController  extends HttpServlet {
             case "list":
                 this.list(req, resp);
                 break;
-            case "create":
-                this.create(req, resp);
+            case "add":
+                this.addLot(req, resp);
                 break;
-            case "save":
-                this.save(req, resp);
+            case "saveNew":
+                this.saveNewLot(req, resp);
                 break;
             case "edit":
                 this.edit(req, resp);
@@ -75,12 +76,30 @@ public class LotManagementController  extends HttpServlet {
 
     }
 
-    private void create(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.sendRedirect("jsp/CREATE_LOT.jsp");
+    private void addLot(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession();
+        Auctioneer auctioneer = (Auctioneer) session.getAttribute("user");
+        AddressDAO addressDAO = new AddressDAO();
+        try {
+            List <Lot> lots = new LotService().findLotsByIdAuctioneer(auctioneer.getId());
+            List<Address> addresses = addressDAO.findAddressesByAuctioneer(auctioneer.getId());
+            req.setAttribute("addresses", addresses);
+            req.setAttribute("lots", lots);
+            req.setAttribute("route", "add");
+            req.getRequestDispatcher("jsp/AUCTIONEER_LOT_BOARD.jsp").forward(req, resp);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    private void save (HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.sendRedirect("jsp/AUCTIONEER_LOT_BOARD.jsp");
+    private void saveNewLot(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Lot lot = parseLotFromRequest(req);
+        LotService lotService = new LotService();
+        if (lotService.createLot(lot)) {
+            resp.sendRedirect("LotManagementController?route=list");
+        } else {
+            resp.sendRedirect("LotManagementController?route=add");
+        }
     }
     private void edit(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.sendRedirect("jsp/EDIT_LOT.jsp");
@@ -92,5 +111,34 @@ public class LotManagementController  extends HttpServlet {
 
     private void delete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.sendRedirect("jsp/AUCTIONEER_LOT_BOARD.jsp");
+    }
+
+    private Lot parseLotFromRequest(HttpServletRequest req) {
+        int id = 0;
+        String txtId = req.getParameter("txtId");
+        int idAddress = Integer.parseInt(req.getParameter("txtIdAddress"));
+
+        if (txtId != null && !txtId.trim().isEmpty()) {
+            try {
+                id = Integer.parseInt(txtId);
+            } catch (NumberFormatException e) {
+                System.out.println("Error al convertir el ID: " + e.getMessage());
+            }
+        }
+
+        HttpSession session = req.getSession();
+        Auctioneer auctioneer = (Auctioneer) session.getAttribute("user");
+        AddressDAO addressDAO = new AddressDAO();
+        Address address = addressDAO.findAddressById(idAddress);
+
+        String title = req.getParameter("txtTitle");
+        int quantityProducts = 0;
+        java.sql.Date dateOpening = java.sql.Date.valueOf(req.getParameter("txtOpeningDate"));
+        java.sql.Date dateClosing = java.sql.Date.valueOf(req.getParameter("txtClosingDate"));
+        String city = req.getParameter("txtCity");
+        String state = req.getParameter("txtState");
+
+
+        return new Lot(id, title, quantityProducts, dateOpening, dateClosing, city, address, state, auctioneer);
     }
 }

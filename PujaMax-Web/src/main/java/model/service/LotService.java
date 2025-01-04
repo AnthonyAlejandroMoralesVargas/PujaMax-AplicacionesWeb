@@ -21,4 +21,12 @@ public class LotService {
             throw new RuntimeException(e);
         }
     }
+
+    public boolean createLot(Lot lot) {
+        try {
+            return lotDAO.createLot(lot);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

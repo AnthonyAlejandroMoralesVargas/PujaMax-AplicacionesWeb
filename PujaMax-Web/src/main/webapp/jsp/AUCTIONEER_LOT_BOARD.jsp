@@ -43,8 +43,8 @@
   <section class="home-container">
     <nav class="nav-container">
       <a href="AUCTIONEER_LOT_BOARD.html" class="nav-item"><i class="fas fa-home"></i> Home</a>
-      <a href="#" class="nav-item" data-bs-toggle="modal" data-bs-target="#LOT_FORM"><i
-              class="fas fa-plus-circle"></i> Add Lot</a>
+      <a href="${pageContext.request.contextPath}/LotManagementController?route=add" class="nav-item">
+        <i class="fas fa-plus-circle"></i> Add Lot</a>
       <a href="AUCTIONEER_HISTORY.html" class="nav-item"><i class="fas fa-history"></i>
         History</a>
     </nav>
@@ -87,7 +87,6 @@
                   SCHEDULED CLOSURE DATE:
                   <c:out value="${lot.dateClosing}" />
                   <br>
-                  GMT-0500 (COLOMBIA STANDARD TIME)
                 </p>
               </div>
               <!-- Action Icons -->
@@ -140,36 +139,41 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form>
+        <form action="${pageContext.request.contextPath}/LotManagementController?route=saveNew" method="POST">
           <div class="mb-3">
-            <label for="lotTitle" class="form-label">Title</label>
-            <input type="text" class="form-control" id="lotTitle" placeholder="Enter title">
+            <input type="hidden" name="txtId" id="txtId">
+            <label for="txtTitle" class="form-label">Title</label>
+            <input type="text" class="form-control" id="txtTitle" name="txtTitle" placeholder="Enter title">
           </div>
           <div class="mb-3">
-            <label for="openingDate" class="form-label">Opening Date</label>
-            <input type="date" class="form-control" id="openingDate">
+            <label for="txtOpeningDate" class="form-label">Opening Date</label>
+            <input type="date" class="form-control" id="txtOpeningDate" name="txtOpeningDate">
           </div>
           <div class="mb-3">
-            <label for="closingDate" class="form-label">Closing Date</label>
-            <input type="date" class="form-control" id="closingDate">
+            <label for="txtClosingDate" class="form-label">Closing Date</label>
+            <input type="date" class="form-control" id="txtClosingDate" name="txtClosingDate">
           </div>
           <div class="mb-3">
-            <label for="city" class="form-label">City</label>
-            <input type="text" class="form-control" id="city" placeholder="Enter city">
+            <label for="txtCity" class="form-label">City</label>
+            <input type="text" class="form-control" id="txtCity" name="txtCity" placeholder="Enter city">
+            <input type="hidden" name="txtId" id="txtState">
           </div>
           <div class="mb-3">
             <label for="delivery" class="form-label">Address</label>
-            <select id="delivery" class="form-select">
+            <select id="delivery" class="form-select" name="txtIdAddress">
               <option selected disabled>Choose Address</option>
-              <option value="Pickup">AddressBook1</option>
-              <option value="Shipping">AddressBook2</option>
+              <c:forEach var="addr" items="${addresses}">
+                <option value="${addr.idAddress}" >${addr.name}</option>
+              </c:forEach>
             </select>
           </div>
+          <!-- Botones del modal -->
+          <div class="modal-footer justify-content-center">
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+            <!-- Importante: type="submit" para que envíe el form -->
+            <button type="submit" class="btn btn-primary">Save</button>
+          </div>
         </form>
-      </div>
-      <div class="modal-footer justify-content-center">
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary">Save</button>
       </div>
     </div>
   </div>
@@ -199,24 +203,28 @@
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+
 <script>
-  function closeModal(modalId) {
-    const modalElement = document.getElementById(modalId);
-    const modalInstance = bootstrap.Modal.getInstance(modalElement);
-    if (modalInstance) {
-      modalInstance.hide();
+  window.onload = function() {
+    var route = "${param.route}";
+    if (route === "add") {
+      var myModal = new bootstrap.Modal(document.getElementById('LOT_FORM'), {
+        keyboard: false,
+        backdrop: 'static'
+      });
+      myModal.show();
+    } else if (route === "edit" && "${param.idLot}") {
+      // Abre modal de Editar
+      var editModal = new bootstrap.Modal(document.getElementById('EDIT_LOT_MODAL'));
+      editModal.show();
+    } else if (route === "delete" && "${param.idLot}") {
+      // Abre modal de Delete
+      var deleteModal = new bootstrap.Modal(document.getElementById('DELETE_LOT_MODAL'));
+      deleteModal.show();
     }
-  }
-
-  document.querySelector('#LOT_FORM .btn-primary').addEventListener('click', function () {
-    closeModal('LOT_FORM');
-  });
-
-  document.querySelector('#DELETE_LOT .btn-primary').addEventListener('click', function () {
-    closeModal('DELETE_LOT');
-  });
+  };
 </script>
+
 
 
 </html>
