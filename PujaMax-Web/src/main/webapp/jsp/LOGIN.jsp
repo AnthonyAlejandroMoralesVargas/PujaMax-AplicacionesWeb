@@ -11,7 +11,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 
 <body>
@@ -26,7 +26,7 @@
         <div class="row align-items-center" style="min-height: 100vh;">
             <!-- Left Section: Image -->
             <div class="col-md-6 text-center div-image height-div-image">
-                <img src="../images/logo1.png" alt="Auction Image" class="logo-image">
+                <img src="${pageContext.request.contextPath}/images/logo1.png" alt="Auction Image" class="logo-image">
                 <p class="image-description">
                     Welcome to our auction platform. Explore and bid on your favorite items!
                 </p>
