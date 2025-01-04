@@ -46,4 +46,12 @@ public class LotService {
         }
     }
 
+    public boolean removeLot(int idLot) {
+        try {
+            return lotDAO.removeLot(idLot);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

@@ -98,11 +98,9 @@
                   <i class="fas fa-edit"></i>
                 </a>
                 <!-- DELETE -->
-                <a href="#"
+                <a href="${pageContext.request.contextPath}/LotManagementController?route=delete&idLot=${lot.idLot}"
                    class="text-danger"
-                   title="Delete"
-                   data-bs-toggle="modal"
-                   data-bs-target="#DELETE_LOT">
+                   title="Delete">
                   <i class="fas fa-trash-alt"></i>
                 </a>
               </div>
@@ -142,7 +140,7 @@
             <input type="hidden" name="txtId" id="txtId">
             <label for="txtTitle" class="form-label">Title</label>
             <input type="text" class="form-control" id="txtTitle" name="txtTitle" placeholder="Enter title">
-            <input type="hidden" name="txtQuantityProducts" id="txtQuantityProducts">
+            <input type="hidden" name="txtQuantityProducts" id="txtQuantityProducts" value="0">
           </div>
           <div class="mb-3">
             <label for="txtOpeningDate" class="form-label">Opening Date</label>
@@ -176,8 +174,6 @@
       </div>
     </div>
   </div>
-</div>
-
 </div>
 
 <!-- Edit Lot Modal -->
@@ -238,24 +234,37 @@
   </div>
 </div>
 
+
+
 <!-- Delete Lot Modal -->
-<div class="modal fade" id="DELETE_LOT" tabindex="-1" aria-labelledby="DELETE_LOTLabel" aria-hidden="true">
+<div class="modal fade" id="DELETE_LOT_MODAL" tabindex="-1" aria-labelledby="DELETE_LOT_MODALLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header bg-danger text-white">
-        <h5 class="modal-title" id="DELETE_LOTLabel">Confirm Deletion</h5>
+        <h5 class="modal-title" id="DELETE_LOT_MODALLabel"><i class="fas fa-trash-alt"></i> Confirm Deletion</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body text-center">
-        <p>Are you sure you want to delete the lot?</p>
+        <p>Are you sure you want to delete the following lot?</p>
+        <!-- Información del lote -->
+        <div class="text-start">
+          <p><strong>Title:</strong> ${lot.title}</p>
+          <p><strong>City:</strong> ${lot.city}</p>
+          <p><strong>Scheduled Closure Date:</strong> <c:out value="${lot.dateClosing}" /></p>
+          <p><strong>Products in Auction:</strong> ${lot.quantityProducts}</p>
+        </div>
       </div>
       <div class="modal-footer justify-content-center">
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-        <button type="button" class="btn btn-primary">Delete</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        <!-- Formulario para confirmar la eliminación -->
+        <form action="${pageContext.request.contextPath}/LotManagementController?route=accept&idLot=${lot.idLot}" method="POST">
+          <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
       </div>
     </div>
   </div>
 </div>
+
 
 
 <!-- Bootstrap JS -->

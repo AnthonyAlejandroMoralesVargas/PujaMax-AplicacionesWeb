@@ -19,7 +19,7 @@ import java.util.Date;
 import java.util.List;
 
 @WebServlet("/LotManagementController")
-public class LotManagementController  extends HttpServlet {
+public class LotManagementController extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     @Override
@@ -52,6 +52,12 @@ public class LotManagementController  extends HttpServlet {
             case "saveExisting":
                 this.saveExistingLot(req, resp);
                 break;
+            case "delete":
+                this.deleteLot(req, resp);
+                break;
+            case "accept":
+                this.accept(req, resp);
+                break;
             default:
                 throw new IllegalArgumentException("Unknown route: " + route);
         }
@@ -79,7 +85,7 @@ public class LotManagementController  extends HttpServlet {
         Auctioneer auctioneer = (Auctioneer) session.getAttribute("user");
         AddressDAO addressDAO = new AddressDAO();
         try {
-            List <Lot> lots = new LotService().findLotsByIdAuctioneer(auctioneer.getId());
+            List<Lot> lots = new LotService().findLotsByIdAuctioneer(auctioneer.getId());
             List<Address> addresses = addressDAO.findAddressesByAuctioneer(auctioneer.getId());
             req.setAttribute("addresses", addresses);
             req.setAttribute("lots", lots);
@@ -99,6 +105,7 @@ public class LotManagementController  extends HttpServlet {
             resp.sendRedirect("LotManagementController?route=add");
         }
     }
+
     private void editLot(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
         Auctioneer auctioneer = (Auctioneer) session.getAttribute("user");
@@ -107,7 +114,7 @@ public class LotManagementController  extends HttpServlet {
         Lot lot = lotService.findLotById(idLot);
         AddressDAO addressDAO = new AddressDAO();
         try {
-            List <Lot> lots = new LotService().findLotsByIdAuctioneer(auctioneer.getId());
+            List<Lot> lots = new LotService().findLotsByIdAuctioneer(auctioneer.getId());
             List<Address> addresses = addressDAO.findAddressesByAuctioneer(auctioneer.getId());
             req.setAttribute("addresses", addresses);
             req.setAttribute("lot", lot);
@@ -126,6 +133,35 @@ public class LotManagementController  extends HttpServlet {
             resp.sendRedirect("LotManagementController?route=list");
         } else {
             resp.sendRedirect("LotManagementController?route=edit&idLot=" + lot.getIdLot());
+        }
+    }
+
+    private void deleteLot(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession();
+        Auctioneer auctioneer = (Auctioneer) session.getAttribute("user");
+        int idLot = Integer.parseInt(req.getParameter("idLot"));
+        LotService lotService = new LotService();
+        Lot lot = lotService.findLotById(idLot);
+        try {
+            List<Lot> lots = new LotService().findLotsByIdAuctioneer(auctioneer.getId());
+            req.setAttribute("lot", lot);
+            req.setAttribute("lots", lots);
+            req.setAttribute("route", "delete");
+            req.getRequestDispatcher("jsp/AUCTIONEER_LOT_BOARD.jsp").forward(req, resp);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void accept(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        int idLot = Integer.parseInt(req.getParameter("idLot"));
+        LotService lotService = new LotService();
+        if (lotService.removeLot(idLot)) {
+            resp.sendRedirect("LotManagementController?route=list");
+        } else {
+            HttpSession session = req.getSession();
+            session.setAttribute("message", "Could not delete lot");
+            resp.sendRedirect("LotManagementController?route=list");
         }
     }
 

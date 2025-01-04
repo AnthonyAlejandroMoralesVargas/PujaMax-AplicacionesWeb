@@ -183,4 +183,22 @@ public class LotDAO {
             DBConnection.close();
         }
     }
+
+    public boolean removeLot(int idLot) throws SQLException {
+        String _SQL_DELETE = "DELETE FROM lot WHERE idLot = ?";
+        PreparedStatement pstmt = null;
+
+        try {
+            pstmt = DBConnection.getConnection().prepareStatement(_SQL_DELETE);
+            pstmt.setInt(1, idLot);
+            int rows = pstmt.executeUpdate();
+            return rows > 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            DBConnection.close(pstmt);
+            DBConnection.close();
+        }
+    }
 }
