@@ -11,7 +11,7 @@
   <!-- Font Awesome for icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <!-- Custom CSS -->
-  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 
 <body>
@@ -19,7 +19,7 @@
 <header class="header-container">
   <div class="container d-flex justify-content-between align-items-center">
     <div class="d-flex align-items-center">
-      <img src="../images/logo1.png" alt="Logo" style="height: 50px; margin-right: 10px;">
+      <img src="${pageContext.request.contextPath}/images/logo1.png" alt="Logo" style="height: 50px; margin-right: 10px;">
       <h1 class="app-name mb-0">PUJAMAX Online Auction</h1>
     </div>
     <div class="d-flex align-items-center">
@@ -53,89 +53,77 @@
   <!-- Product Cards -->
   <section class="lots-container">
     <div class="row">
-      <!-- Card 1 -->
-      <div class="col-md-6 col-lg-6 mb-4">
-        <div class="card">
-          <div class="card-header">
-            <span class="badge bg-success p-2"><i class="fas fa-gavel"></i> ACTIVE</span>
-            <!-- Functional icon -->
-            <a href="AUCTIONEER_LOT.html" class="text-white" title="Go to Details">
-              <i class="fas fa-angle-right"></i>
-            </a>
-          </div>
-          <div class="card-body d-flex justify-content-between align-items-start">
-            <div>
-              <h5 class="card-title">LOT NAME</h5>
-              <h5 class="card-title">QUITO, UIO</h5>
-              <p class="card-text">SCHEDULED CLOSURE DATE: DECEMBER 1, 2024, 09:00<br>GMT-0500
-                (COLOMBIA STANDARD TIME)</p>
-            </div>
-            <!-- Action Icons -->
-            <div class="action-icons d-flex flex-column align-items-center">
-              <a href="#" class="nav-item text-primary" data-bs-toggle="modal"
-                 data-bs-target="#LOT_FORM" title="Edit">
-                <i class="fas fa-edit"></i>
-              </a>
-              <a href="#" class="text-danger" title="Delete" data-bs-toggle="modal"
-                 data-bs-target="#DELETE_LOT">
-                <i class="fas fa-trash-alt"></i>
-              </a>
-            </div>
-          </div>
-          <div class="stats row text-center">
-            <div class="stat col-6 border">
-              <h3>150</h3>
-              <p><i class="fas fa-box"></i> Products in Auction</p>
-            </div>
-            <div class="stat col-6 border">
-              <h3>16</h3>
-              <p><i class="fas fa-clock"></i> Hours to Close</p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Card 2 -->
-      <div class="col-md-6 col-lg-6 mb-4">
-        <div class="card">
-          <div class="card-header">
-            <span class="badge bg-success p-2"><i class="fas fa-gavel"></i> ACTIVE</span>
-            <!-- Functional icon -->
-            <a href="AUCTIONEER_LOT.html" class="text-white" title="Go to Details">
-              <i class="fas fa-angle-right"></i>
-            </a>
-          </div>
-          <div class="card-body d-flex justify-content-between align-items-start">
-            <div>
-              <h5 class="card-title">LOT NAME</h5>
-              <h5 class="card-title">GUAYAQUIL, GYE</h5>
-              <p class="card-text">SCHEDULED CLOSURE DATE: DECEMBER 1, 2024, 09:00<br>GMT-0500
-                (COLOMBIA STANDARD TIME)</p>
-            </div>
-            <!-- Action Icons -->
-            <div class="action-icons d-flex flex-column align-items-center">
-              <a href="#" class="nav-item text-primary" data-bs-toggle="modal"
-                 data-bs-target="#LOT_FORM" title="Edit">
-                <i class="fas fa-edit"></i>
-              </a>
+      <!-- Bucle para mostrar cada lote -->
+      <c:forEach var="lot" items="${lots}">
+        <div class="col-md-6 col-lg-6 mb-4">
+          <div class="card">
+            <div class="card-header">
+              <!-- Estado del lote: puedes ajustar color según 'ACTIVE' / 'INACTIVE' -->
+              <c:choose>
+                <c:when test="${lot.state == 'ACTIVE'}">
+                  <span class="badge bg-success p-2">
+                    <i class="fas fa-gavel"></i> ACTIVE
+                  </span>
+                </c:when>
+                <c:otherwise>
+                  <span class="badge bg-secondary p-2">
+                    <i class="fas fa-gavel"></i> INACTIVE
+                  </span>
+                </c:otherwise>
+              </c:choose>
 
-              <a href="#" class="text-danger" title="Delete" data-bs-toggle="modal"
-                 data-bs-target="#DELETE_LOT">
-                <i class="fas fa-trash-alt"></i>
+              <!-- Enlace a detalles -->
+              <a href="AUCTIONEER_LOT.html" class="text-white" title="Go to Details">
+                <i class="fas fa-angle-right"></i>
               </a>
             </div>
-          </div>
-          <div class="stats row text-center">
-            <div class="stat col-6 border">
-              <h3>150</h3>
-              <p><i class="fas fa-box"></i> Product in Auction</p>
+            <div class="card-body d-flex justify-content-between align-items-start">
+              <div>
+                <!-- Título del lote y ciudad -->
+                <h5 class="card-title">${lot.title}</h5>
+                <h5 class="card-title">${lot.city}</h5>
+                <!-- Fecha de cierre (ejemplo) -->
+                <p class="card-text">
+                  SCHEDULED CLOSURE DATE:
+                  <c:out value="${lot.dateClosing}" />
+                  <br>
+                  GMT-0500 (COLOMBIA STANDARD TIME)
+                </p>
+              </div>
+              <!-- Action Icons -->
+              <div class="action-icons d-flex flex-column align-items-center">
+                <!-- EDIT -->
+                <a href="#"
+                   class="nav-item text-primary"
+                   data-bs-toggle="modal"
+                   data-bs-target="#LOT_FORM"
+                   title="Edit">
+                  <i class="fas fa-edit"></i>
+                </a>
+                <!-- DELETE -->
+                <a href="#"
+                   class="text-danger"
+                   title="Delete"
+                   data-bs-toggle="modal"
+                   data-bs-target="#DELETE_LOT">
+                  <i class="fas fa-trash-alt"></i>
+                </a>
+              </div>
             </div>
-            <div class="stat col-6 border">
-              <h3>16</h3>
-              <p><i class="fas fa-clock"></i> Hours to Close</p>
+            <div class="stats row text-center">
+              <div class="stat col-6 border">
+                <h3>${lot.quantityProducts}</h3>
+                <p><i class="fas fa-box"></i> Products in Auction</p>
+              </div>
+              <div class="stat col-6 border">
+                <!-- Simple placeholder para "hours to close" -->
+                <h3>??</h3>
+                <p><i class="fas fa-clock"></i> Hours to Close</p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </c:forEach>
     </div>
   </section>
 </main>

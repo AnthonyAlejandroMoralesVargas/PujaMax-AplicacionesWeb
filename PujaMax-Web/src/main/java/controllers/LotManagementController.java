@@ -5,8 +5,16 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import model.dao.AddressDAO;
+import model.entities.Address;
+import model.entities.Auctioneer;
+import model.entities.Lot;
+import model.service.LotService;
 
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
 
 @WebServlet("/LotManagementController")
 public class LotManagementController  extends HttpServlet {
@@ -51,7 +59,20 @@ public class LotManagementController  extends HttpServlet {
     }
 
     private void list(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.sendRedirect("jsp/AUCTIONEER_LOT_BOARD.jsp");
+        HttpSession session = req.getSession();
+        Auctioneer auctioneer = (Auctioneer) session.getAttribute("user");
+        List<Lot> lots;
+
+        try {
+            LotService lotService = new LotService();
+            lots = lotService.findLotsByIdAuctioneer(auctioneer.getId());
+            req.setAttribute("lots", lots);
+            req.getRequestDispatcher("jsp/AUCTIONEER_LOT_BOARD.jsp").forward(req, resp);
+            //getServletContext().getRequestDispatcher("/jsp/AUCTIONEER_PROFILE.jsp").forward(req, resp);
+        } catch (SQLException e) {
+            throw new ServletException("Error retrieving lots", e);
+        }
+
     }
 
     private void create(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
