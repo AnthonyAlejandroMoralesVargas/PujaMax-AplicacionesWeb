@@ -8,7 +8,7 @@ import java.util.List;
 
 public class LotService {
 
-    private LotDAO lotDAO;
+    private final LotDAO lotDAO;
 
     public LotService() {
         lotDAO = new LotDAO();
