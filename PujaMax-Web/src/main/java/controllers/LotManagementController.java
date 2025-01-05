@@ -10,16 +10,16 @@ import model.dao.AddressDAO;
 import model.entities.Address;
 import model.entities.Auctioneer;
 import model.entities.Lot;
-import model.service.AuctioneerService;
 import model.service.LotService;
 
 import java.io.IOException;
+import java.io.Serial;
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.List;
 
 @WebServlet("/LotManagementController")
 public class LotManagementController extends HttpServlet {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Override
@@ -96,7 +96,7 @@ public class LotManagementController extends HttpServlet {
         }
     }
 
-    private void saveNewLot(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    private void saveNewLot(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         Lot lot = parseLotFromRequest(req);
         LotService lotService = new LotService();
         if (lotService.createLot(lot)) {
@@ -126,7 +126,7 @@ public class LotManagementController extends HttpServlet {
         }
     }
 
-    private void saveExistingLot(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    private void saveExistingLot(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         Lot lot = parseLotFromRequest(req);
         LotService lotService = new LotService();
         if (lotService.updateLot(lot)) {
@@ -153,7 +153,7 @@ public class LotManagementController extends HttpServlet {
         }
     }
 
-    private void accept(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    private void accept(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         int idLot = Integer.parseInt(req.getParameter("idLot"));
         LotService lotService = new LotService();
         if (lotService.removeLot(idLot)) {
