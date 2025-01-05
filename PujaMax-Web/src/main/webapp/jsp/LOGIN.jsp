@@ -16,12 +16,6 @@
 
 <body>
 <div>
-    <div class ="d-flex justify-content-center">
-        <a href="BIDDER/BIDDER_LOTS_BOARD.html"
-           class="btn btn-primary w-20 m-3">Bidder Views</a>
-        <a href="AUCTIONEER/AUCTIONEER_LOT_BOARD.html"
-           class="btn btn-primary w-20 m-3">Auctioneer Views</a>
-    </div>
     <div class="container">
         <div class="row align-items-center" style="min-height: 100vh;">
             <!-- Left Section: Image -->
