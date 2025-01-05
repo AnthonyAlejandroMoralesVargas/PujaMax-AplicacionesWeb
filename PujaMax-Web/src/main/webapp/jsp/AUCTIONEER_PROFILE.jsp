@@ -25,7 +25,7 @@
 			<div class="d-flex align-items-center">
 				<img src="${pageContext.request.contextPath}/images/OnlyB.png" alt="Logo"
 					style="height: 40px; margin-right: 10px;">
-				<h1 class="app-name mb-0">PUJAMAX Online Auction</h1>
+				<h1 class="app-name mb-0">Online Auction</h1>
 			</div>
 			<div class="d-flex align-items-center">
 				<a href="${pageContext.request.contextPath}/LotManagementController?route=list"
@@ -351,7 +351,7 @@
 
 	<!-- Footer -->
 	<footer class="text-center bg-dark text-white py-3">
-		<p>&copy; 2024 PujaMax | All rights reserved</p>
+		<p>&copy; 2024 BIDMAX | All rights reserved</p>
 	</footer>
 
 	<!-- Bootstrap JS -->

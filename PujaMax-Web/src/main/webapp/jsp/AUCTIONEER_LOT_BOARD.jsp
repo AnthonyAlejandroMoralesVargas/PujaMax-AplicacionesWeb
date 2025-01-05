@@ -27,7 +27,7 @@
         <div class="d-flex align-items-center">
             <img src="${pageContext.request.contextPath}/images/OnlyB.png" alt="Logo"
                  style="height: 40px; margin-right: 10px;">
-            <h1 class="app-name mb-0">BIDMAX Online Auction</h1>
+            <h1 class="app-name mb-0">Online Auction</h1>
         </div>
         <div class="d-flex align-items-center">
             <div class="dropdown">
@@ -140,7 +140,7 @@
 </main>
 <!-- Footer -->
 <footer class="text-center bg-dark text-white py-3 mt-4">
-    <p>&copy; 2024 PujaMax | All rights reserved</p>
+    <p>&copy; 2024 BIDMAX | All rights reserved</p>
 </footer>
 <!-- Add Lot Modal -->
 <div class="modal fade" id="LOT_FORM" tabindex="-1" aria-labelledby="LOT_FORMLabel" aria-hidden="true">
