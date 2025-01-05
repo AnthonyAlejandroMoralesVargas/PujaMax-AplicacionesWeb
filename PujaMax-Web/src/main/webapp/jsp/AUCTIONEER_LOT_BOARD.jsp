@@ -25,8 +25,8 @@
 <header class="header-container">
     <div class="container d-flex justify-content-between align-items-center">
         <div class="d-flex align-items-center">
-            <img src="${pageContext.request.contextPath}/images/logo1.png" alt="Logo"
-                 style="height: 50px; margin-right: 10px;">
+            <img src="${pageContext.request.contextPath}/images/OnlyB.png" alt="Logo"
+                 style="height: 40px; margin-right: 10px;">
             <h1 class="app-name mb-0">BIDMAX Online Auction</h1>
         </div>
         <div class="d-flex align-items-center">
