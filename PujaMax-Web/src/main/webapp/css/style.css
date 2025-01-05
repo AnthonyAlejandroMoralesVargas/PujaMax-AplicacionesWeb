@@ -29,7 +29,14 @@ main {
 }
 
 .div-image {
-	background-color: rgb(0, 60, 143);
+	/*background-color: rgb(0, 60, 143);*/
+	overflow: hidden;  /* Asegura que la imagen no sobresalga */
+}
+
+.logo-image {
+	width: 40%;        /* Ajusta el ancho al 50% del contenedor */
+	height: auto;      /* Mantiene la relación de aspecto de la imagen */
+	object-fit: contain;  /* Asegura que la imagen se ajuste sin distorsionarse */
 }
 
 .height-div-image {
@@ -56,10 +63,12 @@ main {
 	margin-bottom: 20px;
 }
 
+
+
 .image-description {
 	text-align: center;
 	font-size: 1rem;
-	color: var(--background-light);
+	color: var(--black);
 	margin-top: 10px;
 }
 
