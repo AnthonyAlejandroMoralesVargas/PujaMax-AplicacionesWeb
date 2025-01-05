@@ -1,294 +1,306 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="jakarta.tags.core"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AUCTIONEER_LOT_BOARD</title>
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Font Awesome for icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <!-- Custom CSS -->
-  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AUCTIONEER_LOT_BOARD</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 
 <body>
 <!-- Header -->
 <header class="header-container">
-  <div class="container d-flex justify-content-between align-items-center">
-    <div class="d-flex align-items-center">
-      <img src="${pageContext.request.contextPath}/images/logo1.png" alt="Logo" style="height: 50px; margin-right: 10px;">
-      <h1 class="app-name mb-0">PUJAMAX Online Auction</h1>
+    <div class="container d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center">
+            <img src="${pageContext.request.contextPath}/images/logo1.png" alt="Logo"
+                 style="height: 50px; margin-right: 10px;">
+            <h1 class="app-name mb-0">PUJAMAX Online Auction</h1>
+        </div>
+        <div class="d-flex align-items-center">
+            <div class="dropdown">
+                <a href="#" class="dropdown-toggle" id="dropdownMenuButton" data-bs-toggle="dropdown"
+                   aria-expanded="false"><i class="fas fa-user"></i> User</a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
+                    <li><a class="dropdown-item"
+                           href="${pageContext.request.contextPath}/AddressManagmentController?route=list"><i
+                            class="fas fa-cogs"></i>
+                        Profile</a></li>
+                    <li><a class="dropdown-item" href="../index.html"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </li>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
-    <div class="d-flex align-items-center">
-      <div class="dropdown">
-        <a href="#" class="dropdown-toggle" id="dropdownMenuButton" data-bs-toggle="dropdown"
-           aria-expanded="false"><i class="fas fa-user"></i> User</a>
-        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
-          <li><a class="dropdown-item" href="${pageContext.request.contextPath}/AddressManagmentController?route=list"><i class="fas fa-cogs"></i>
-            Profile</a></li>
-          <li><a class="dropdown-item" href="../index.html"><i class="fas fa-sign-out-alt"></i> Logout</a>
-          </li>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </div>
 </header>
 
 <!-- Main Content -->
 <main class="container my-4">
-  <section class="home-container">
-    <nav class="nav-container">
-      <a href="AUCTIONEER_LOT_BOARD.html" class="nav-item"><i class="fas fa-home"></i> Home</a>
-      <a href="${pageContext.request.contextPath}/LotManagementController?route=add" class="nav-item">
-        <i class="fas fa-plus-circle"></i> Add Lot</a>
-      <a href="AUCTIONEER_HISTORY.html" class="nav-item"><i class="fas fa-history"></i>
-        History</a>
-    </nav>
-  </section>
+    <section class="home-container">
+        <nav class="nav-container">
+            <a href="AUCTIONEER_LOT_BOARD.html" class="nav-item"><i class="fas fa-home"></i> Home</a>
+            <a href="${pageContext.request.contextPath}/LotManagementController?route=add" class="nav-item">
+                <i class="fas fa-plus-circle"></i> Add Lot</a>
+            <a href="AUCTIONEER_HISTORY.html" class="nav-item"><i class="fas fa-history"></i>
+                History</a>
+        </nav>
+    </section>
 
-  <!-- Product Cards -->
-  <section class="lots-container">
-    <div class="row">
-      <!-- Bucle para mostrar cada lote -->
-      <c:forEach var="lot" items="${lots}">
-        <div class="col-md-6 col-lg-6 mb-4">
-          <div class="card">
-            <div class="card-header">
-              <!-- Estado del lote: puedes ajustar color según 'ACTIVE' / 'INACTIVE' -->
-              <c:choose>
-                <c:when test="${lot.state == 'ACTIVE'}">
+    <!-- Product Cards -->
+    <section class="lots-container">
+        <div class="row">
+            <!-- Bucle para mostrar cada lote -->
+            <c:forEach var="lot" items="${lots}">
+                <div class="col-md-6 col-lg-6 mb-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <!-- Estado del lote: puedes ajustar color según 'ACTIVE' / 'INACTIVE' -->
+                            <c:choose>
+                                <c:when test="${lot.state == 'ACTIVE'}">
                   <span class="badge bg-success p-2">
                     <i class="fas fa-gavel"></i> ACTIVE
                   </span>
-                </c:when>
-                <c:otherwise>
+                                </c:when>
+                                <c:otherwise>
                   <span class="badge bg-secondary p-2">
                     <i class="fas fa-gavel"></i> INACTIVE
                   </span>
-                </c:otherwise>
-              </c:choose>
+                                </c:otherwise>
+                            </c:choose>
 
-              <!-- Enlace a detalles -->
-              <a href="AUCTIONEER_LOT.html" class="text-white" title="Go to Details">
-                <i class="fas fa-angle-right"></i>
-              </a>
-            </div>
-            <div class="card-body d-flex justify-content-between align-items-start">
-              <div>
-                <!-- Título del lote y ciudad -->
-                <h5 class="card-title">${lot.title}</h5>
-                <h5 class="card-title">${lot.city}</h5>
-                <!-- Fecha de cierre (ejemplo) -->
-                <p class="card-text">
-                  SCHEDULED CLOSURE DATE:
-                  <c:out value="${lot.dateClosing}" />
-                  <br>
-                </p>
-              </div>
-              <!-- Action Icons -->
-              <div class="action-icons d-flex flex-column align-items-center">
-                <!-- EDIT -->
-                <a href="${pageContext.request.contextPath}/LotManagementController?route=edit&idLot=${lot.idLot}"
-                   class="nav-item text-primary"
-                   title="Edit">
-                  <i class="fas fa-edit"></i>
-                </a>
-                <!-- DELETE -->
-                <a href="${pageContext.request.contextPath}/LotManagementController?route=delete&idLot=${lot.idLot}"
-                   class="text-danger"
-                   title="Delete">
-                  <i class="fas fa-trash-alt"></i>
-                </a>
-              </div>
-            </div>
-            <div class="stats row text-center">
-              <div class="stat col-6 border">
-                <h3>${lot.quantityProducts}</h3>
-                <p><i class="fas fa-box"></i> Products in Auction</p>
-              </div>
-              <div class="stat col-6 border">
-                <!-- Simple placeholder para "hours to close" -->
-                <h3>??</h3>
-                <p><i class="fas fa-clock"></i> Hours to Close</p>
-              </div>
-            </div>
-          </div>
+                            <!-- Enlace a detalles -->
+                            <a href="AUCTIONEER_LOT.html" class="text-white" title="Go to Details">
+                                <i class="fas fa-angle-right"></i>
+                            </a>
+                        </div>
+                        <div class="card-body d-flex justify-content-between align-items-start">
+                            <div>
+                                <!-- Título del lote y ciudad -->
+                                <h5 class="card-title">${lot.title}</h5>
+                                <h5 class="card-title">${lot.city}</h5>
+                                <!-- Fecha de cierre (ejemplo) -->
+                                <p class="card-text">
+                                    SCHEDULED CLOSURE DATE:
+                                    <c:out value="${lot.dateClosing}"/>
+                                    <br>
+                                </p>
+                            </div>
+                            <!-- Action Icons -->
+                            <div class="action-icons d-flex flex-column align-items-center">
+                                <!-- EDIT -->
+                                <a href="${pageContext.request.contextPath}/LotManagementController?route=edit&idLot=${lot.idLot}"
+                                   class="nav-item text-primary"
+                                   title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <!-- DELETE -->
+                                <a href="${pageContext.request.contextPath}/LotManagementController?route=delete&idLot=${lot.idLot}"
+                                   class="text-danger"
+                                   title="Delete">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="stats row text-center">
+                            <div class="stat col-6 border">
+                                <h3>${lot.quantityProducts}</h3>
+                                <p><i class="fas fa-box"></i> Products in Auction</p>
+                            </div>
+                            <div class="stat col-6 border">
+                                <!-- Simple placeholder para "hours to close" -->
+                                <h3>??</h3>
+                                <p><i class="fas fa-clock"></i> Hours to Close</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </c:forEach>
         </div>
-      </c:forEach>
-    </div>
-  </section>
+    </section>
 </main>
 <!-- Footer -->
 <footer class="text-center bg-dark text-white py-3 mt-4">
-  <p>&copy; 2024 PujaMax | All rights reserved</p>
+    <p>&copy; 2024 PujaMax | All rights reserved</p>
 </footer>
 <!-- Add Lot Modal -->
 <div class="modal fade" id="LOT_FORM" tabindex="-1" aria-labelledby="LOT_FORMLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header bg-primary text-white">
-        <h5 class="modal-title" id="LOT_FORMLabel"><i class="fas fa-layer-group"></i> Lot</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form action="${pageContext.request.contextPath}/LotManagementController?route=saveNew" method="POST">
-          <div class="mb-3">
-            <input type="hidden" name="txtId" id="txtId">
-            <label for="txtTitle" class="form-label">Title</label>
-            <input type="text" class="form-control" id="txtTitle" name="txtTitle" placeholder="Enter title">
-            <input type="hidden" name="txtQuantityProducts" id="txtQuantityProducts" value="0">
-          </div>
-          <div class="mb-3">
-            <label for="txtOpeningDate" class="form-label">Opening Date</label>
-            <input type="date" class="form-control" id="txtOpeningDate" name="txtOpeningDate">
-          </div>
-          <div class="mb-3">
-            <label for="txtClosingDate" class="form-label">Closing Date</label>
-            <input type="date" class="form-control" id="txtClosingDate" name="txtClosingDate">
-          </div>
-          <div class="mb-3">
-            <label for="txtCity" class="form-label">City</label>
-            <input type="text" class="form-control" id="txtCity" name="txtCity" placeholder="Enter city">
-            <input type="hidden" name="txtState" id="txtState">
-          </div>
-          <div class="mb-3">
-            <label for="delivery" class="form-label">Address</label>
-            <select id="delivery" class="form-select" name="txtIdAddress">
-              <option selected disabled>Choose Address</option>
-              <c:forEach var="addr" items="${addresses}">
-                <option value="${addr.idAddress}" >${addr.name}</option>
-              </c:forEach>
-            </select>
-          </div>
-          <!-- Botones del modal -->
-          <div class="modal-footer justify-content-center">
-            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-            <!-- Importante: type="submit" para que envíe el form -->
-            <button type="submit" class="btn btn-primary">Save</button>
-          </div>
-        </form>
-      </div>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="LOT_FORMLabel"><i class="fas fa-layer-group"></i> Lot</h5>
+                <a href="LotManagementController?route=list" class="btn-close"
+                   aria-label="Close"></a>
+            </div>
+            <div class="modal-body">
+                <form action="${pageContext.request.contextPath}/LotManagementController?route=saveNew" method="POST">
+                    <div class="mb-3">
+                        <input type="hidden" name="txtId" id="txtId">
+                        <label for="txtTitle" class="form-label">Title</label>
+                        <input type="text" class="form-control" id="txtTitle" name="txtTitle" placeholder="Enter title">
+                        <input type="hidden" name="txtQuantityProducts" id="txtQuantityProducts" value="0">
+                    </div>
+                    <div class="mb-3">
+                        <label for="txtOpeningDate" class="form-label">Opening Date</label>
+                        <input type="date" class="form-control" id="txtOpeningDate" name="txtOpeningDate">
+                    </div>
+                    <div class="mb-3">
+                        <label for="txtClosingDate" class="form-label">Closing Date</label>
+                        <input type="date" class="form-control" id="txtClosingDate" name="txtClosingDate">
+                    </div>
+                    <div class="mb-3">
+                        <label for="txtCity" class="form-label">City</label>
+                        <input type="text" class="form-control" id="txtCity" name="txtCity" placeholder="Enter city">
+                        <input type="hidden" name="txtState" id="txtState">
+                    </div>
+                    <div class="mb-3">
+                        <label for="delivery" class="form-label">Address</label>
+                        <select id="delivery" class="form-select" name="txtIdAddress">
+                            <option selected disabled>Choose Address</option>
+                            <c:forEach var="addr" items="${addresses}">
+                                <option value="${addr.idAddress}">${addr.name}</option>
+                            </c:forEach>
+                        </select>
+                    </div>
+                    <!-- Botones del modal -->
+                    <div class="modal-footer justify-content-center">
+                        <a href="LotManagementController?route=list"
+                           class="btn btn-danger"> Cancel </a>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
 <!-- Edit Lot Modal -->
 <div class="modal fade" id="EDIT_LOT_MODAL" tabindex="-1" aria-labelledby="EDIT_LOT_MODALLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header bg-primary text-white">
-        <h5 class="modal-title" id="EDIT_LOT_MODALLabel"><i class="fas fa-edit"></i> Edit Lot</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <form action="${pageContext.request.contextPath}/LotManagementController?route=saveExisting" method="POST">
-        <div class="modal-body">
-          <!-- Hidden ID Field -->
-          <input type="hidden" name="txtId" id="editLotId" value="${lot.idLot}">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="EDIT_LOT_MODALLabel"><i class="fas fa-edit"></i> Edit Lot</h5>
+                <a href="LotManagementController?route=list" class="btn-close"
+                   aria-label="Close"></a>
+            </div>
+            <form action="${pageContext.request.contextPath}/LotManagementController?route=saveExisting" method="POST">
+                <div class="modal-body">
+                    <!-- Hidden ID Field -->
+                    <input type="hidden" name="txtId" id="editLotId" value="${lot.idLot}">
 
-          <!-- Title -->
-          <div class="mb-3">
-            <label for="editLotTitle" class="form-label">Title</label>
-            <input type="text" class="form-control" name="txtTitle" id="editLotTitle" value="${lot.title}" required>
-            <input type="hidden" name="txtQuantityProducts" id="editLotQuantityProducts" value="${lot.quantityProducts}">
-          </div>
+                    <!-- Title -->
+                    <div class="mb-3">
+                        <label for="editLotTitle" class="form-label">Title</label>
+                        <input type="text" class="form-control" name="txtTitle" id="editLotTitle" value="${lot.title}"
+                               required>
+                        <input type="hidden" name="txtQuantityProducts" id="editLotQuantityProducts"
+                               value="${lot.quantityProducts}">
+                    </div>
 
-          <!-- Opening Date -->
-          <div class="mb-3">
-            <label for="editLotOpeningDate" class="form-label">Opening Date</label>
-            <input type="date" class="form-control" name="txtOpeningDate" id="editLotOpeningDate" value="${lot.dateOpening}" required>
-          </div>
+                    <!-- Opening Date -->
+                    <div class="mb-3">
+                        <label for="editLotOpeningDate" class="form-label">Opening Date</label>
+                        <input type="date" class="form-control" name="txtOpeningDate" id="editLotOpeningDate"
+                               value="${lot.dateOpening}" required>
+                    </div>
 
-          <!-- Closing Date -->
-          <div class="mb-3">
-            <label for="editLotClosingDate" class="form-label">Closing Date</label>
-            <input type="date" class="form-control" name="txtClosingDate" id="editLotClosingDate" value="${lot.dateClosing}" required>
-          </div>
+                    <!-- Closing Date -->
+                    <div class="mb-3">
+                        <label for="editLotClosingDate" class="form-label">Closing Date</label>
+                        <input type="date" class="form-control" name="txtClosingDate" id="editLotClosingDate"
+                               value="${lot.dateClosing}" required>
+                    </div>
 
-          <!-- City -->
-          <div class="mb-3">
-            <label for="editLotCity" class="form-label">City</label>
-            <input type="text" class="form-control" name="txtCity" id="editLotCity" value="${lot.city}" required>
-          </div>
+                    <!-- City -->
+                    <div class="mb-3">
+                        <label for="editLotCity" class="form-label">City</label>
+                        <input type="text" class="form-control" name="txtCity" id="editLotCity" value="${lot.city}"
+                               required>
+                    </div>
 
-          <!-- Address Dropdown -->
-          <div class="mb-3">
-            <label for="editLotAddress" class="form-label">Address</label>
-            <select class="form-select" name="txtIdAddress" id="editLotAddress" required>
-              <option disabled>Select Address</option>
-              <c:forEach var="addr" items="${addresses}">
-                <option value="${addr.idAddress}" <c:if test="${lot.address.idAddress == addr.idAddress}">selected</c:if>>${addr.name}</option>
-              </c:forEach>
-            </select>
-          </div>
+                    <!-- Address Dropdown -->
+                    <div class="mb-3">
+                        <label for="editLotAddress" class="form-label">Address</label>
+                        <select class="form-select" name="txtIdAddress" id="editLotAddress" required>
+                            <option disabled>Select Address</option>
+                            <c:forEach var="addr" items="${addresses}">
+                                <option value="${addr.idAddress}"
+                                        <c:if test="${lot.address.idAddress == addr.idAddress}">selected</c:if>>${addr.name}</option>
+                            </c:forEach>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a href="LotManagementController?route=list" class="btn btn-danger"> Cancel </a>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-          <button type="submit" class="btn btn-primary">Save</button>
-        </div>
-      </form>
     </div>
-  </div>
 </div>
-
 
 
 <!-- Delete Lot Modal -->
 <div class="modal fade" id="DELETE_LOT_MODAL" tabindex="-1" aria-labelledby="DELETE_LOT_MODALLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header bg-danger text-white">
-        <h5 class="modal-title" id="DELETE_LOT_MODALLabel"><i class="fas fa-trash-alt"></i> Confirm Deletion</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body text-center">
-        <p>Are you sure you want to delete the following lot?</p>
-        <!-- Información del lote -->
-        <div class="text-start">
-          <p><strong>Title:</strong> ${lot.title}</p>
-          <p><strong>City:</strong> ${lot.city}</p>
-          <p><strong>Scheduled Closure Date:</strong> <c:out value="${lot.dateClosing}" /></p>
-          <p><strong>Products in Auction:</strong> ${lot.quantityProducts}</p>
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="DELETE_LOT_MODALLabel"><i class="fas fa-trash-alt"></i> Confirm Deletion
+                </h5>
+                <a href="LotManagementController?route=list" class="btn-close"
+                   aria-label="Close"></a>
+            </div>
+            <div class="modal-body text-center">
+                <p>Are you sure you want to delete the following lot?</p>
+                <!-- Información del lote -->
+                <div class="text-start">
+                    <p><strong>Title:</strong> ${lot.title}</p>
+                    <p><strong>City:</strong> ${lot.city}</p>
+                    <p><strong>Scheduled Closure Date:</strong> <c:out value="${lot.dateClosing}"/></p>
+                    <p><strong>Products in Auction:</strong> ${lot.quantityProducts}</p>
+                </div>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <a href="LotManagementController?route=list" class="btn btn-danger"> Cancel </a>
+                <!-- Formulario para confirmar la eliminación -->
+                <form action="${pageContext.request.contextPath}/LotManagementController?route=accept&idLot=${lot.idLot}"
+                      method="POST">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
         </div>
-      </div>
-      <div class="modal-footer justify-content-center">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        <!-- Formulario para confirmar la eliminación -->
-        <form action="${pageContext.request.contextPath}/LotManagementController?route=accept&idLot=${lot.idLot}" method="POST">
-          <button type="submit" class="btn btn-danger">Delete</button>
-        </form>
-      </div>
     </div>
-  </div>
 </div>
-
 
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
-  window.onload = function() {
-    var route = "${param.route}";
-    if (route === "add") {
-      var myModal = new bootstrap.Modal(document.getElementById('LOT_FORM'), {
-        keyboard: false,
-        backdrop: 'static'
-      });
-      myModal.show();
-    } else if (route === "edit" && "${param.idLot}") {
-      // Abre modal de Editar
-      var editModal = new bootstrap.Modal(document.getElementById('EDIT_LOT_MODAL'));
-      editModal.show();
-    } else if (route === "delete" && "${param.idLot}") {
-      // Abre modal de Delete
-      var deleteModal = new bootstrap.Modal(document.getElementById('DELETE_LOT_MODAL'));
-      deleteModal.show();
-    }
-  };
+    window.onload = function () {
+        var route = "${param.route}";
+        if (route === "add") {
+            var myModal = new bootstrap.Modal(document.getElementById('LOT_FORM'), {
+                keyboard: false,
+                backdrop: 'static'
+            });
+            myModal.show();
+        } else if (route === "edit" && "${param.idLot}") {
+            // Abre modal de Editar
+            var editModal = new bootstrap.Modal(document.getElementById('EDIT_LOT_MODAL'));
+            editModal.show();
+        } else if (route === "delete" && "${param.idLot}") {
+            // Abre modal de Delete
+            var deleteModal = new bootstrap.Modal(document.getElementById('DELETE_LOT_MODAL'));
+            deleteModal.show();
+        }
+    };
 </script>
 </body>
 </html>
