@@ -65,48 +65,48 @@
             <!-- Bucle para mostrar cada lote -->
             <c:forEach var="lot" items="${lots}">
                 <div class="col-md-6 col-lg-6 mb-4">
-                    <div class="card">
+                    <!-- Clase condicional -->
+                    <div class="card ${lot.state == 'INACTIVE' ? 'inactive-card' : ''}">
+                        <!-- Cabecera de la tarjeta -->
                         <div class="card-header">
-                            <!-- Estado del lote: puedes ajustar color según 'ACTIVE' / 'INACTIVE' -->
                             <c:choose>
                                 <c:when test="${lot.state == 'ACTIVE'}">
-                  <span class="badge bg-success p-2">
-                    <i class="fas fa-gavel"></i> ACTIVE
-                  </span>
+                    <span class="badge bg-success p-2">
+                        <i class="fas fa-gavel"></i> ACTIVE
+                    </span>
                                 </c:when>
                                 <c:otherwise>
-                  <span class="badge bg-secondary p-2">
-                    <i class="fas fa-gavel"></i> INACTIVE
-                  </span>
+                    <span class="badge bg-secondary p-2">
+                        <i class="fas fa-gavel"></i> INACTIVE
+                    </span>
                                 </c:otherwise>
                             </c:choose>
-
                             <!-- Enlace a detalles -->
                             <a href="AUCTIONEER_LOT.html" class="text-white" title="Go to Details">
                                 <i class="fas fa-angle-right"></i>
                             </a>
                         </div>
+
+                        <!-- Cuerpo de la tarjeta -->
                         <div class="card-body d-flex justify-content-between align-items-start">
                             <div>
-                                <!-- Título del lote y ciudad -->
                                 <h5 class="card-title">${lot.title}</h5>
                                 <h5 class="card-title">${lot.city}</h5>
-                                <!-- Fecha de cierre (ejemplo) -->
                                 <p class="card-text">
                                     SCHEDULED CLOSURE DATE:
                                     <c:out value="${lot.dateClosing}"/>
                                     <br>
                                 </p>
                             </div>
-                            <!-- Action Icons -->
+                            <!-- Iconos de acción -->
                             <div class="action-icons d-flex flex-column align-items-center">
-                                <!-- EDIT -->
+                                <!-- EDITAR -->
                                 <a href="${pageContext.request.contextPath}/LotManagementController?route=edit&idLot=${lot.idLot}"
                                    class="nav-item text-primary"
                                    title="Edit">
                                     <i class="fas fa-edit"></i>
                                 </a>
-                                <!-- DELETE -->
+                                <!-- ELIMINAR -->
                                 <a href="${pageContext.request.contextPath}/LotManagementController?route=delete&idLot=${lot.idLot}"
                                    class="text-danger"
                                    title="Delete">
@@ -114,14 +114,13 @@
                                 </a>
                             </div>
                         </div>
-                        <!-- Cálculos de horas restantes -->
-                        <c:set var="currentDateMillis" value="<%= currentDate.getTime() %>" /> <!-- Obtiene el tiempo actual en milisegundos -->
-                        <c:set var="dateClosingMillis" value="${lot.dateClosing.time}" /> <!-- Obtiene el tiempo de cierre en milisegundos -->
-                        <c:set var="diffInMillis" value="${dateClosingMillis - currentDateMillis}" /> <!-- Calcula la diferencia de tiempo -->
 
-                        <!-- Calculando las horas restantes (y redondeando) -->
-                        <c:set var="hoursRemaining" value="${diffInMillis / (60 * 60 * 1000)}" />
-                        <c:set var="roundedHoursRemaining" value="${(hoursRemaining < 0) ? 0 : Math.round(hoursRemaining)}" />
+                        <!-- Cálculos de tiempo restante -->
+                        <c:set var="currentDateMillis" value="<%= currentDate.getTime() %>"/>
+                        <c:set var="dateClosingMillis" value="${lot.dateClosing.time}"/>
+                        <c:set var="diffInMillis" value="${dateClosingMillis - currentDateMillis}"/>
+                        <c:set var="hoursRemaining" value="${diffInMillis / (60 * 60 * 1000)}"/>
+                        <c:set var="roundedHoursRemaining" value="${(hoursRemaining < 0) ? 0 : Math.round(hoursRemaining)}"/>
 
                         <div class="stats row text-center">
                             <div class="stat col-6 border">
@@ -129,13 +128,13 @@
                                 <p><i class="fas fa-box"></i> Products in Auction</p>
                             </div>
                             <div class="stat col-6 border">
-                                <!-- Simple placeholder para "hours to close" -->
                                 <h3>${roundedHoursRemaining}</h3>
                                 <p><i class="fas fa-clock"></i> Hours to Close</p>
                             </div>
                         </div>
                     </div>
                 </div>
+
             </c:forEach>
         </div>
     </section>
