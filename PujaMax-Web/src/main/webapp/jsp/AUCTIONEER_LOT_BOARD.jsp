@@ -27,7 +27,7 @@
         <div class="d-flex align-items-center">
             <img src="${pageContext.request.contextPath}/images/logo1.png" alt="Logo"
                  style="height: 50px; margin-right: 10px;">
-            <h1 class="app-name mb-0">PUJAMAX Online Auction</h1>
+            <h1 class="app-name mb-0">BIDMAX Online Auction</h1>
         </div>
         <div class="d-flex align-items-center">
             <div class="dropdown">
@@ -39,8 +39,6 @@
                             class="fas fa-cogs"></i>
                         Profile</a></li>
                     <li><a class="dropdown-item" href="../index.html"><i class="fas fa-sign-out-alt"></i> Logout</a>
-                    </li>
-                    </li>
                 </ul>
             </div>
         </div>
@@ -120,7 +118,8 @@
                         <c:set var="dateClosingMillis" value="${lot.dateClosing.time}"/>
                         <c:set var="diffInMillis" value="${dateClosingMillis - currentDateMillis}"/>
                         <c:set var="hoursRemaining" value="${diffInMillis / (60 * 60 * 1000)}"/>
-                        <c:set var="roundedHoursRemaining" value="${(hoursRemaining < 0) ? 0 : Math.round(hoursRemaining)}"/>
+                        <c:set var="roundedHoursRemaining"
+                               value="${(hoursRemaining < 0) ? 0 : Math.round(hoursRemaining)}"/>
 
                         <div class="stats row text-center">
                             <div class="stat col-6 border">
