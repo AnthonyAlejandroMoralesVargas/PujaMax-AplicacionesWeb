@@ -10,6 +10,7 @@ import model.dao.AddressDAO;
 import model.entities.Address;
 import model.entities.Auctioneer;
 import model.entities.Lot;
+import model.service.AddressService;
 import model.service.LotService;
 
 import java.io.IOException;
@@ -73,7 +74,6 @@ public class LotManagementController extends HttpServlet {
             lots = lotService.findLotsByIdAuctioneer(auctioneer.getId());
             req.setAttribute("lots", lots);
             req.getRequestDispatcher("jsp/AUCTIONEER_LOT_BOARD.jsp").forward(req, resp);
-            //getServletContext().getRequestDispatcher("/jsp/AUCTIONEER_PROFILE.jsp").forward(req, resp);
         } catch (SQLException e) {
             throw new ServletException("Error retrieving lots", e);
         }
@@ -83,10 +83,9 @@ public class LotManagementController extends HttpServlet {
     private void addLot(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
         Auctioneer auctioneer = (Auctioneer) session.getAttribute("user");
-        AddressDAO addressDAO = new AddressDAO();
         try {
             List<Lot> lots = new LotService().findLotsByIdAuctioneer(auctioneer.getId());
-            List<Address> addresses = addressDAO.findAddressesByAuctioneer(auctioneer.getId());
+            List<Address> addresses = new AddressService().findAddressesByIdAuctioneer(auctioneer.getId());
             req.setAttribute("addresses", addresses);
             req.setAttribute("lots", lots);
             req.setAttribute("route", "add");
@@ -112,10 +111,9 @@ public class LotManagementController extends HttpServlet {
         int idLot = Integer.parseInt(req.getParameter("idLot"));
         LotService lotService = new LotService();
         Lot lot = lotService.findLotById(idLot);
-        AddressDAO addressDAO = new AddressDAO();
         try {
             List<Lot> lots = new LotService().findLotsByIdAuctioneer(auctioneer.getId());
-            List<Address> addresses = addressDAO.findAddressesByAuctioneer(auctioneer.getId());
+            List<Address> addresses = new AddressService().findAddressesByIdAuctioneer(auctioneer.getId());
             req.setAttribute("addresses", addresses);
             req.setAttribute("lot", lot);
             req.setAttribute("lots", lots);
