@@ -1,5 +1,11 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ page import="java.util.Date" %>
+<%@ page import="java.util.Date" %>
+<%
+    Date currentDate = new Date();
+%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -108,6 +114,15 @@
                                 </a>
                             </div>
                         </div>
+                        <!-- Cálculos de horas restantes -->
+                        <c:set var="currentDateMillis" value="<%= currentDate.getTime() %>" /> <!-- Obtiene el tiempo actual en milisegundos -->
+                        <c:set var="dateClosingMillis" value="${lot.dateClosing.time}" /> <!-- Obtiene el tiempo de cierre en milisegundos -->
+                        <c:set var="diffInMillis" value="${dateClosingMillis - currentDateMillis}" /> <!-- Calcula la diferencia de tiempo -->
+
+                        <!-- Calculando las horas restantes (y redondeando) -->
+                        <c:set var="hoursRemaining" value="${diffInMillis / (60 * 60 * 1000)}" />
+                        <c:set var="roundedHoursRemaining" value="${(hoursRemaining < 0) ? 0 : Math.round(hoursRemaining)}" />
+
                         <div class="stats row text-center">
                             <div class="stat col-6 border">
                                 <h3>${lot.quantityProducts}</h3>
@@ -115,7 +130,7 @@
                             </div>
                             <div class="stat col-6 border">
                                 <!-- Simple placeholder para "hours to close" -->
-                                <h3>??</h3>
+                                <h3>${roundedHoursRemaining}</h3>
                                 <p><i class="fas fa-clock"></i> Hours to Close</p>
                             </div>
                         </div>
