@@ -11,7 +11,7 @@ public class DBConnection {
 
     private DBConnection() {
         String servidor = "localhost:3306";
-        String database = "pujamax";
+        String database = "bidmax";
         String usuario = "root";
         String password = "";
         String url = "jdbc:mysql://" + servidor + "/" + database;
