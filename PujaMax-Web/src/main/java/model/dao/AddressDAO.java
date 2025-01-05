@@ -11,40 +11,6 @@ import model.entities.Address;
 import model.entities.Auctioneer;
 
 public class AddressDAO {
-
-    public List<Address> getAddresses() throws SQLException {
-        List<Address> addresses = new ArrayList<>();
-
-        String _SQL_GET_ALL = "SELECT * FROM address";
-
-        try (PreparedStatement pstmt = DBConnection.getConnection().prepareStatement(_SQL_GET_ALL);
-             ResultSet rs = pstmt.executeQuery()) {
-            // Iterar el ResultSet para leer los datos
-            while (rs.next()) {
-                Address address = new Address();
-                address.setIdAddress(rs.getInt("idAddress"));
-                address.setName(rs.getString("name"));
-                address.setProvince(rs.getString("province"));
-                address.setCity(rs.getString("city"));
-                address.setMainStreet(rs.getString("mainStreet"));
-                address.setSecondaryStreet(rs.getString("secondaryStreet"));
-                address.setPostcode(rs.getString("postcode"));
-                address.setHouseNumber(rs.getString("houseNumber"));
-                address.setCompany(rs.getString("company"));
-
-                addresses.add(address);
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw e;
-        } finally {
-            DBConnection.close();
-        }
-
-        return addresses;
-    }
-
     public List<Address> findAddressesByIdAuctioneer(int idAuctioneer) throws SQLException {
         List<Address> addresses = new ArrayList<>();
 
@@ -149,13 +115,11 @@ public class AddressDAO {
                             rs.getString("postcode"), rs.getString("houseNumber"), rs.getString("company"));
                 }
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             DBConnection.close();
         }
-
         return address;
     }
 
