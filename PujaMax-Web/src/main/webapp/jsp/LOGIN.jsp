@@ -18,7 +18,6 @@
 <div>
     <div class="container">
         <div class="row align-items-center" style="min-height: 100vh;">
-            <!-- Left Section: Image -->
             <div class="col-md-6 text-center div-image height-div-image">
                 <img src="${pageContext.request.contextPath}/images/logo1.png" alt="Auction Image" class="logo-image">
                 <p class="image-description">
