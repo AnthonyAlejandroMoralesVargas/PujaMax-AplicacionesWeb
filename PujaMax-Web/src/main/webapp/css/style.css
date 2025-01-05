@@ -273,3 +273,15 @@ footer p {
 	object-fit: cover;
 	width: 100%;
 }
+
+.inactive-card {
+	filter: grayscale(100%);
+	opacity: 0.7;
+	pointer-events: auto;
+	transition: filter 0.3s, opacity 0.3s; /* Suaviza la transición */
+}
+
+.inactive-card:hover {
+	filter: grayscale(100%);
+	opacity: 0.9;
+}
