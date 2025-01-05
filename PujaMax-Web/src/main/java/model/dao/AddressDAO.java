@@ -19,7 +19,6 @@ public class AddressDAO {
 
         try (PreparedStatement pstmt = DBConnection.getConnection().prepareStatement(_SQL_GET_ALL);
              ResultSet rs = pstmt.executeQuery()) {
-
             // Iterar el ResultSet para leer los datos
             while (rs.next()) {
                 Address address = new Address();
@@ -46,7 +45,7 @@ public class AddressDAO {
         return addresses;
     }
 
-    public List<Address> findAddressesByAuctioneer(int idAuctioneer) throws SQLException {
+    public List<Address> findAddressesByIdAuctioneer(int idAuctioneer) throws SQLException {
         List<Address> addresses = new ArrayList<>();
 
         String _SQL_GET_BY_AUCTIONEER = "SELECT * FROM address WHERE idAuctioneer = ?";
@@ -62,7 +61,6 @@ public class AddressDAO {
 
                     address.setIdAddress(rs.getInt("idAddress"));
                     address.setAuctioneer(auctioneer);
-                    //address.setAuctioneer(new AuctioneerDAO().findAuctioneerById(rs.getInt("idAuctioneer")));
                     address.setName(rs.getString("name"));
                     address.setProvince(rs.getString("province"));
                     address.setCity(rs.getString("city"));
@@ -146,7 +144,7 @@ public class AddressDAO {
                 if (rs.next()) {
                     Auctioneer auctioneer = new Auctioneer();
                     auctioneer.setId(rs.getInt("idAuctioneer"));
-                    address = new Address(rs.getInt("idAddress"), auctioneer ,rs.getString("name"), rs.getString("province"),
+                    address = new Address(rs.getInt("idAddress"), auctioneer, rs.getString("name"), rs.getString("province"),
                             rs.getString("city"), rs.getString("mainStreet"), rs.getString("secondaryStreet"),
                             rs.getString("postcode"), rs.getString("houseNumber"), rs.getString("company"));
                 }
@@ -173,5 +171,4 @@ public class AddressDAO {
             DBConnection.close();
         }
     }
-
 }
