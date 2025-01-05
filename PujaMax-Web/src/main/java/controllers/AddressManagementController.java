@@ -1,6 +1,7 @@
 package controllers;
 
 import java.io.IOException;
+import java.io.Serial;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -10,12 +11,14 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import model.dao.AddressDAO;
 import model.entities.Address;
+import model.entities.Auctioneer;
+import model.service.AddressService;
 
-@WebServlet("/AddressManagmentController")
-public class AddressManagmentController extends HttpServlet {
+@WebServlet("/AddressManagementController")
+public class AddressManagementController extends HttpServlet {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Override
@@ -61,47 +64,46 @@ public class AddressManagmentController extends HttpServlet {
 
     private void accept(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         int idAddress = Integer.parseInt(req.getParameter("idAddress"));
-        AddressDAO addressDAO = new AddressDAO();
-        if (addressDAO.removeAddress(idAddress)) {
-            resp.sendRedirect("AddressManagmentController?route=list");
+        AddressService addressService = new AddressService();
+        if (addressService.removeAddress(idAddress)) {
+            resp.sendRedirect("AddressManagementController?route=list");
         } else {
             HttpSession session = req.getSession();
             session.setAttribute("message", "Could not delete address");
-
-            resp.sendRedirect("AddressManagmentController?route=list");
+            resp.sendRedirect("AddressManagementController?route=list");
         }
     }
 
     private void addAddress(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        AddressDAO addressDAO = new AddressDAO();
+        HttpSession session = req.getSession();
+        Auctioneer auctioneer = (Auctioneer) session.getAttribute("user");
+
         try {
-            List<Address> addresses = addressDAO.getAddresses();
+            List<Address> addresses = new AddressService().findAddressesByIdAuctioneer(auctioneer.getId());
             req.setAttribute("addresses", addresses);
+            req.setAttribute("route", "add");
+            req.getRequestDispatcher("jsp/AUCTIONEER_PROFILE.jsp").forward(req, resp);
         } catch (SQLException e) {
             throw new ServletException("Error retrieving addresses", e);
         }
-
-        req.setAttribute("route", "add");
-        req.getRequestDispatcher("jsp/AUCTIONEER_PROFILE.jsp").forward(req, resp);
     }
 
     private void deleteAddress(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+        HttpSession session = req.getSession();
+        Auctioneer auctioneer = (Auctioneer) session.getAttribute("user");
         int idAddress = Integer.parseInt(req.getParameter("idAddress"));
-        AddressDAO addressDAO = new AddressDAO();
-
+        AddressService addressService = new AddressService();
         try {
-            Address address = addressDAO.findAddressById(idAddress);
-            List<Address> addresses = addressDAO.getAddresses();
+            Address address = addressService.findAddressById(idAddress);
+            List<Address> addresses = addressService.findAddressesByIdAuctioneer(auctioneer.getId());
 
             if (address != null) {
                 req.setAttribute("address", address);
                 req.setAttribute("addresses", addresses);
                 req.getRequestDispatcher("jsp/AUCTIONEER_PROFILE.jsp").forward(req, resp);
             } else {
-                HttpSession session = req.getSession();
                 session.setAttribute("message", "Address could not be found");
-
-                resp.sendRedirect("AddressManagmentController?route=list");
+                resp.sendRedirect("AddressManagementController?route=list");
             }
         } catch (SQLException e) {
             throw new ServletException("Error retrieving addresses", e);
@@ -109,65 +111,61 @@ public class AddressManagmentController extends HttpServlet {
     }
 
     private void editAddress(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession();
+        Auctioneer auctioneer = (Auctioneer) session.getAttribute("user");
         int idAddress = Integer.parseInt(req.getParameter("idAddress"));
-        AddressDAO addressDAO = new AddressDAO();
-        Address address = addressDAO.findAddressById(idAddress);
+        AddressService addressService = new AddressService();
+        Address address = addressService.findAddressById(idAddress);
 
         try {
-            List<Address> addresses = addressDAO.getAddresses();
+            List<Address> addresses = addressService.findAddressesByIdAuctioneer(auctioneer.getId());
             req.setAttribute("addresses", addresses);
 
             if (address != null) {
                 req.setAttribute("address", address);
                 req.getRequestDispatcher("jsp/AUCTIONEER_PROFILE.jsp").forward(req, resp);
             } else {
-                HttpSession session = req.getSession();
                 session.setAttribute("message", "Address not found");
-
-                resp.sendRedirect("AddressManagmentController?route=list");
+                resp.sendRedirect("AddressManagementController?route=list");
             }
         } catch (SQLException e) {
             throw new ServletException("Error retrieving addresses", e);
         }
     }
 
-    private void saveExistingAddress(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
+    private void saveExistingAddress(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         Address address = parseAddressFromRequest(req);
-        AddressDAO addressDAO = new AddressDAO();
+        AddressService addressService = new AddressService();
 
-        if (addressDAO.updateAddress(address)) {
-            resp.sendRedirect("AddressManagmentController?route=list");
+        if (addressService.updateAddress(address)) {
+            resp.sendRedirect("AddressManagementController?route=list");
         } else {
-            // Almacena el mensaje en la sesión
             HttpSession session = req.getSession();
             session.setAttribute("message", "The address could not be updated");
-
-            resp.sendRedirect("AddressManagmentController?route=list");
+            resp.sendRedirect("AddressManagementController?route=list");
         }
     }
 
-    private void saveNewAddress(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    private void saveNewAddress(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         Address address = parseAddressFromRequest(req);
-        AddressDAO addressDAO = new AddressDAO();
-        if (addressDAO.createAddress(address)) {
-            resp.sendRedirect("AddressManagmentController?route=list");
+        AddressService addressService = new AddressService();
+        if (addressService.createAddress(address)) {
+            resp.sendRedirect("AddressManagementController?route=list");
         } else {
-            // Almacena el mensaje en la sesión
             HttpSession session = req.getSession();
             session.setAttribute("message", "The address could not be created");
-
-            resp.sendRedirect("AddressManagmentController?route=list");
+            resp.sendRedirect("AddressManagementController?route=list");
         }
     }
 
     private void viewAddresses(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession();
+        Auctioneer auctioneer = (Auctioneer) session.getAttribute("user");
         List<Address> addresses;
         try {
-            AddressDAO addressDAO = new AddressDAO();
-            addresses = addressDAO.getAddresses();
+            addresses = new AddressService().findAddressesByIdAuctioneer(auctioneer.getId());
             req.setAttribute("addresses", addresses);
-            getServletContext().getRequestDispatcher("/jsp/AUCTIONEER_PROFILE.jsp").forward(req, resp);
+            req.getRequestDispatcher("jsp/AUCTIONEER_PROFILE.jsp").forward(req, resp);
         } catch (SQLException e) {
             throw new ServletException("Error retrieving addresses", e);
         }
@@ -185,6 +183,9 @@ public class AddressManagmentController extends HttpServlet {
             }
         }
 
+        HttpSession session = req.getSession();
+        Auctioneer auctioneer = (Auctioneer) session.getAttribute("user");
+
         String name = req.getParameter("txtName");
         String province = req.getParameter("txtProvince");
         String city = req.getParameter("txtCity");
@@ -194,6 +195,6 @@ public class AddressManagmentController extends HttpServlet {
         String houseNumber = req.getParameter("txtHouseNumber");
         String company = req.getParameter("txtCompany");
 
-        return new Address(id, name, province, city, mainStreet, secondaryStreet, postcode, houseNumber, company);
+        return new Address(id, auctioneer, name, province, city, mainStreet, secondaryStreet, postcode, houseNumber, company);
     }
 }
