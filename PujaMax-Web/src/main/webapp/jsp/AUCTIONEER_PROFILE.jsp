@@ -85,7 +85,7 @@
 						Addresses <i class="fa-solid fa-map-location-dot"></i>
 					</h3>
 
-					<a href="AddressManagmentController?route=add"
+					<a href="AddressManagementController?route=add"
 						class="btn btn-primary"> <i class="fas fa-plus-circle"></i>
 						Add Address
 					</a>
@@ -108,13 +108,13 @@
 									<div class="d-flex justify-content-end">
 										<!-- Botón de editar -->
 										<a
-											href="AddressManagmentController?route=edit&idAddress=${address.idAddress}"
+											href="AddressManagementController?route=edit&idAddress=${address.idAddress}"
 											class="btn btn-primary btn-sm me-2 px-3"> <i
 											class="fas fa-pen"></i> Edit
 										</a>
 										<!-- Botón de eliminar -->
 										<a
-											href="AddressManagmentController?route=delete&idAddress=${address.idAddress}"
+											href="AddressManagementController?route=delete&idAddress=${address.idAddress}"
 											class="btn btn-danger btn-sm px-3"> <i
 											class="fas fa-trash-alt"></i> Delete
 										</a>
@@ -139,10 +139,10 @@
 					<h5 class="modal-title" id="ADD_ADDRESS_MODALLabel">
 						<i class="fa-solid fa-location-crosshairs"></i> Add Address
 					</h5>
-					<a href="AddressManagmentController?route=list" class="btn-close"
+					<a href="AddressManagementController?route=list" class="btn-close"
 						aria-label="Close"></a>
 				</div>
-				<form action="AddressManagmentController?route=saveNew"
+				<form action="AddressManagementController?route=saveNew"
 					method="POST">
 					<div class="modal-body">
 						<!-- Address Form Fields -->
@@ -202,7 +202,7 @@
 					</div>
 
 					<div class="modal-footer justify-content-center">
-						<a href="AddressManagmentController?route=list"
+						<a href="AddressManagementController?route=list"
 							class="btn btn-danger"> Cancel </a>
 						<button type="submit" class="btn btn-primary">Save</button>
 					</div>
@@ -220,10 +220,10 @@
 					<h5 class="modal-title" id="EDIT_ADDRESS_MODALLabel">
 						<i class="fas fa-edit"></i> Edit Address
 					</h5>
-					<a href="AddressManagmentController?route=list" class="btn-close"
+					<a href="AddressManagementController?route=list" class="btn-close"
 						aria-label="Close"></a>
 				</div>
-				<form action="AddressManagmentController?route=saveExisting"
+				<form action="AddressManagementController?route=saveExisting"
 					method="POST">
 					<div class="modal-body">
 						<!-- Form fields with pre-filled values from the retrieved address -->
@@ -290,7 +290,7 @@
 
 					</div>
 					<div class="modal-footer justify-content-center">
-						<a href="AddressManagmentController?route=list"
+						<a href="AddressManagementController?route=list"
 							class="btn btn-danger"> Cancel </a>
 						<button type="submit" class="btn btn-primary">Save</button>
 					</div>
@@ -309,7 +309,7 @@
 					<h5 class="modal-title" id="DELETE_ADDRESSLabel">
 						<i class="fa-solid fa-trash me-2"></i> Delete Address
 					</h5>
-					<a href="AddressManagmentController?route=list" class="btn-close"
+					<a href="AddressManagementController?route=list" class="btn-close"
 						aria-label="Close"></a>
 				</div>
 				<div class="modal-body text-center">
@@ -332,12 +332,12 @@
 				</div>
 				<div class="modal-footer justify-content-center">
 					<!-- Cancel button, closes the modal -->
-					<a href="AddressManagmentController?route=list"
+					<a href="AddressManagementController?route=list"
 						class="btn btn-danger">Cancel</a>
 
 					<!-- Form to confirm the deletion -->
 					<form
-						action="AddressManagmentController?route=accept&idAddress=${address.idAddress}"
+						action="AddressManagementController?route=accept&idAddress=${address.idAddress}"
 						method="POST">
 						<button type="submit" class="btn btn-success">Accept</button>
 					</form>

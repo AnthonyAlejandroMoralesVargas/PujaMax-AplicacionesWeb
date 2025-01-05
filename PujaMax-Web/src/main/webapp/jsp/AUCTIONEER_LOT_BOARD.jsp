@@ -35,7 +35,7 @@
                    aria-expanded="false"><i class="fas fa-user"></i> User</a>
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
                     <li><a class="dropdown-item"
-                           href="${pageContext.request.contextPath}/AddressManagmentController?route=list"><i
+                           href="${pageContext.request.contextPath}/AddressManagementController?route=list"><i
                             class="fas fa-cogs"></i>
                         Profile</a></li>
                     <li><a class="dropdown-item" href="../index.html"><i class="fas fa-sign-out-alt"></i> Logout</a>
