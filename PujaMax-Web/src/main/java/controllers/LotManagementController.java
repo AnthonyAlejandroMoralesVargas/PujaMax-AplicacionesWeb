@@ -187,7 +187,6 @@ public class LotManagementController extends HttpServlet {
         String city = req.getParameter("txtCity");
         String state = req.getParameter("txtState");
 
-
         return new Lot(id, title, quantityProducts, dateOpening, dateClosing, city, address, state, auctioneer);
     }
 }
