@@ -1,28 +1,19 @@
 package model.service;
 
-import model.dao.AuctioneerDAO;
+import model.jpa.AuctioneerJPA;
 import model.entities.Auctioneer;
 import org.mindrot.jbcrypt.BCrypt;
 
-
-import java.sql.SQLException;
-
 public class AuctioneerService {
-    private final AuctioneerDAO auctioneerDAO;
+    private final AuctioneerJPA auctioneerJPA;
 
     public AuctioneerService() {
-        auctioneerDAO = new AuctioneerDAO();
+        auctioneerJPA = new AuctioneerJPA();
     }
 
     public boolean createAuctioneer(Auctioneer auctioneer) {
-        try {
-            auctioneer.setPassword(hashPassword(auctioneer.getPassword()));
-            return auctioneerDAO.create(auctioneer);
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
+        auctioneer.setPassword(hashPassword(auctioneer.getPassword()));
+        return auctioneerJPA.create(auctioneer);
     }
 
     private String hashPassword(String password) {
