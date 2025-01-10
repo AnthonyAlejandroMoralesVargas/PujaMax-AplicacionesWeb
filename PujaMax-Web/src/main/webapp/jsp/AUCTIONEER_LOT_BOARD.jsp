@@ -168,11 +168,6 @@
                         <input type="date" class="form-control" id="txtClosingDate" name="txtClosingDate">
                     </div>
                     <div class="mb-3">
-                        <label for="txtCity" class="form-label">City</label>
-                        <input type="text" class="form-control" id="txtCity" name="txtCity" placeholder="Enter city">
-                        <input type="hidden" name="txtState" id="txtState">
-                    </div>
-                    <div class="mb-3">
                         <label for="delivery" class="form-label">Address</label>
                         <select id="delivery" class="form-select" name="txtIdAddress">
                             <option selected disabled>Choose Address</option>
