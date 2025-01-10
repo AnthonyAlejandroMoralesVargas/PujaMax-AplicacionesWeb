@@ -6,7 +6,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import model.dao.AddressDAO;
 import model.entities.Address;
 import model.entities.Auctioneer;
 import model.entities.Lot;
@@ -178,8 +177,8 @@ public class LotManagementController extends HttpServlet {
 
         HttpSession session = req.getSession();
         Auctioneer auctioneer = (Auctioneer) session.getAttribute("user");
-        AddressDAO addressDAO = new AddressDAO();
-        Address address = addressDAO.findAddressById(idAddress);
+        AddressService addressService = new AddressService();
+        Address address = addressService.findAddressById(idAddress);
 
         String title = req.getParameter("txtTitle");
         int quantityProducts = Integer.parseInt(req.getParameter("txtQuantityProducts"));
