@@ -195,6 +195,6 @@ public class AddressManagementController extends HttpServlet {
         String houseNumber = req.getParameter("txtHouseNumber");
         String company = req.getParameter("txtCompany");
 
-        return new Address(id, auctioneer, name, province, city, mainStreet, secondaryStreet, postcode, houseNumber, company);
+        return new Address(id, name, province, city, mainStreet, secondaryStreet, postcode, houseNumber, company, auctioneer);
     }
 }
