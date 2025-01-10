@@ -181,7 +181,7 @@
 							</div>
 							<div class="col-md-6">
 								<label for="txtSecondaryStreet" class="form-label fw-semibold">Secondary
-									Street (Optional)</label> <input type="text"
+									Street</label> <input type="text"
 									class="form-control rounded-3" name="txtSecondaryStreet"
 									id="txtSecondaryStreet" placeholder="Enter secondary street">
 							</div>
