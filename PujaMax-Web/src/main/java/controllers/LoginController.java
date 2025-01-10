@@ -50,7 +50,6 @@ public class LoginController extends HttpServlet {
     }
 
     private void login(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        System.out.println("Llego a Login de LoginController");
         String dni = req.getParameter("txtDni");
         String password = req.getParameter("txtPassword");
         String role = req.getParameter("role");
