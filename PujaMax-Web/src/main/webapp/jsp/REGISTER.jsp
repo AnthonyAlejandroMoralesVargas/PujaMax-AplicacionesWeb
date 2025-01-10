@@ -57,7 +57,7 @@
           </div>
           <div class="mb-3">
             <label for="txtRole" class="form-label">Role</label>
-            <select class="form-select" id="txtRole" name="txtRole" required>
+            <select class="form-select" id="txtRole" name="role" required>
               <option value="auctioneer">Auctioneer</option>
               <option value="bidder">Bidder</option>
             </select>
