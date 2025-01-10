@@ -32,12 +32,30 @@
                     <form method="POST" action="${pageContext.request.contextPath}/LoginController?route=login">
                         <div class="mb-3">
                             <label for="txtDni" class="form-label">DNI</label>
-                            <input type="text" class="form-control" id="txtDni" name="txtDni" placeholder="Enter your DNI">
+                            <input type="text" class="form-control" id="txtDni" name="txtDni"
+                                   placeholder="Enter your DNI">
                         </div>
                         <div class="mb-3">
                             <label for="txtPassword" class="form-label">Password</label>
                             <input type="password" class="form-control" id="txtPassword" name="txtPassword"
                                    placeholder="Enter your password">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Role</label>
+                            <div class="d-flex">
+                                <div class="form-check me-3">
+                                    <input class="form-check-input" type="radio" name="role" id="roleAuctioneer" value="auctioneer" required>
+                                    <label class="form-check-label" for="roleAuctioneer">
+                                        Auctioneer
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="role" id="roleBidder" value="bidder" required>
+                                    <label class="form-check-label" for="roleBidder">
+                                        Bidder
+                                    </label>
+                                </div>
+                            </div>
                         </div>
                         <button type="submit" class="btn btn-primary w-100 mb-3">Login</button>
                     </form>
