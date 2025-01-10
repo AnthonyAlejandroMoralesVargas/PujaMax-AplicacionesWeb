@@ -1,8 +1,6 @@
 package model.jpa;
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
+import jakarta.persistence.*;
 import model.entities.Lot;
 
 import java.util.ArrayList;
@@ -17,146 +15,124 @@ public class LotJPA {
     }
 
     public List<Lot> findLotsByIdAuctioneer(int idAuctioneer) {
-        EntityManager em = getEntityManager();
         List<Lot> lots = new ArrayList<>();
         Date now = new Date();
 
-        try {
-            // Consulta JPA para obtener los lotes
-            List<Lot> resultList = em.createQuery(
-                            "SELECT l FROM Lot l WHERE l.auctioneer.id = :idAuctioneer", Lot.class
-                    ).setParameter("idAuctioneer", idAuctioneer)
-                    .getResultList();
+        String jpql = "SELECT l FROM Lot l WHERE l.auctioneer.id = :idAuctioneer";
 
-            for (Lot lot : resultList) {
-                // Verificar si debería estar "ACTIVE" o "INACTIVE"
+        try (EntityManager em = getEntityManager()) {
+            Query query = em.createQuery(jpql);
+            query.setParameter("idAuctioneer", idAuctioneer);
+
+            lots = query.getResultList();
+
+            for (Lot lot : lots) {
                 boolean shouldBeActive = !now.before(lot.getDateOpening()) && !now.after(lot.getDateClosing());
 
-                // Si hay discrepancia entre shouldBeActive y lot.state, actualizar en la BD
-                em.getTransaction().begin();
-                if (shouldBeActive && "INACTIVE".equals(lot.getState())) {
-                    lot.setState("ACTIVE");
-                    em.merge(lot); // Actualizar estado
-                } else if (!shouldBeActive && "ACTIVE".equals(lot.getState())) {
-                    lot.setState("INACTIVE");
-                    em.merge(lot); // Actualizar estado
+                if (shouldBeActive) {
+                    if (!"ACTIVE".equals(lot.getState())) {
+                        lot.setState("ACTIVE");
+                        updateLotState(em, lot);
+                    }
+                } else {
+                    if (!"INACTIVE".equals(lot.getState())) {
+                        lot.setState("INACTIVE");
+                        updateLotState(em, lot);
+                    }
                 }
-                em.getTransaction().commit();
 
-                lots.add(lot);
+                System.out.println("Lot " + lot.getTitle() + " is " + lot.getState());
             }
+
         } catch (Exception e) {
-            if (em.getTransaction().isActive()) {
-                em.getTransaction().rollback();
-            }
-            System.out.println("Error when finding lots by ID Auctioneer");
-        } finally {
-            em.close();
+            System.err.println("Couldn't find lots by auctioneer ID: " + e.getMessage());
         }
         return lots;
     }
 
-    public boolean createLot(Lot lot) {
-        EntityManager em = getEntityManager();
+    private void updateLotState(EntityManager em, Lot lot) {
+        EntityTransaction transaction = em.getTransaction();
         try {
-            em.getTransaction().begin();
-            em.persist(lot);
-            em.getTransaction().commit();
-            return true;
-        } catch (Exception e) {
-            if (em.getTransaction().isActive()) {
-                em.getTransaction().rollback();
+            transaction.begin();
+            em.merge(lot);
+            transaction.commit();
+        } catch (RuntimeException e) {
+            if (transaction.isActive()) {
+                transaction.rollback();
             }
-            System.out.println("Error when creating lot");
-            return false;
-        } finally {
-            em.close();
+            throw e;
         }
     }
 
-    public Lot findLotById(int idLot) {
+    public boolean createLot(Lot lot) {
+        boolean result = false;
         try (EntityManager em = getEntityManager()) {
-            Lot lot = em.find(Lot.class, idLot);
+            EntityTransaction transaction = em.getTransaction();
+            transaction.begin();
+            em.persist(lot);
+            transaction.commit();
+
+            result = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public Lot findLotById(int idLot) {
+        Lot lot = null;
+        try (EntityManager em = getEntityManager()) {
+            lot = em.find(Lot.class, idLot);
 
             if (lot != null) {
                 Date now = new Date();
                 boolean shouldBeActive = !now.before(lot.getDateOpening()) && !now.after(lot.getDateClosing());
 
-                em.getTransaction().begin();
                 if (shouldBeActive && "INACTIVE".equals(lot.getState())) {
                     lot.setState("ACTIVE");
-                    em.merge(lot);
+                    updateLotState(em, lot);
                 } else if (!shouldBeActive && "ACTIVE".equals(lot.getState())) {
                     lot.setState("INACTIVE");
-                    em.merge(lot);
+                    updateLotState(em, lot);
                 }
-                em.getTransaction().commit();
             }
-
-            return lot;
         } catch (Exception e) {
-            System.out.println("Error when finding lot by ID");
-            return null;
+            e.printStackTrace();
         }
+        return lot;
     }
 
     public boolean updateLot(Lot lot) {
-        EntityManager em = getEntityManager();
-        try {
-            em.getTransaction().begin();
-            Lot existingLot = em.find(Lot.class, lot.getIdLot());
-            if (existingLot != null) {
-                copyLotProperties(existingLot, lot);
-                em.merge(existingLot);
-                em.getTransaction().commit();
-                return true;
-            } else {
-                em.getTransaction().rollback();
-                return false;
-            }
+        boolean result = false;
+        try (EntityManager em = getEntityManager()) {
+            EntityTransaction transaction = em.getTransaction();
+            transaction.begin();
+            em.merge(lot);
+            transaction.commit();
+
+            result = true;
         } catch (Exception e) {
-            if (em.getTransaction().isActive()) {
-                em.getTransaction().rollback();
-            }
-            System.out.println("Error when updating lot");
-            return false;
-        } finally {
-            em.close();
+            e.printStackTrace();
         }
+        return result;
     }
 
     public boolean removeLot(int idLot) {
-        EntityManager em = getEntityManager();
-        try {
-            em.getTransaction().begin();
+        boolean result = false;
+        try (EntityManager em = getEntityManager()) {
+            EntityTransaction transaction = em.getTransaction();
+            transaction.begin();
+
             Lot lot = em.find(Lot.class, idLot);
             if (lot != null) {
                 em.remove(lot);
-                em.getTransaction().commit();
-                return true;
-            } else {
-                em.getTransaction().rollback();
-                return false;
+                transaction.commit();
+                result = true;
             }
         } catch (Exception e) {
-            if (em.getTransaction().isActive()) {
-                em.getTransaction().rollback();
-            }
-            System.out.println("Error when removing lot");
-            return false;
-        } finally {
-            em.close();
+            e.printStackTrace();
         }
-    }
-
-    private void copyLotProperties(Lot target, Lot source) {
-        target.setTitle(source.getTitle());
-        target.setQuantityProducts(source.getQuantityProducts());
-        target.setDateOpening(source.getDateOpening());
-        target.setDateClosing(source.getDateClosing());
-        target.setCity(source.getCity());
-        target.setState(source.getState());
-        target.setAddress(source.getAddress());
-        target.setAuctioneer(source.getAuctioneer());
+        return result;
     }
 }
+
