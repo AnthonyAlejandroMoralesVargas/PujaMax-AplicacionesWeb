@@ -38,7 +38,6 @@ public class Lot {
     @JoinColumn(name = "idAuctioneer")
     private Auctioneer auctioneer;
 
-    // Constructor vacío
     public Lot() {
     }
 
@@ -49,7 +48,7 @@ public class Lot {
         this.quantityProducts = quantityProducts;
         this.dateOpening = dateOpening;
         this.dateClosing = dateClosing;
-        this.city = city;
+        this.city = address.getCity();
         this.address = address;
         this.state = state;
         this.auctioneer = auctioneer;
