@@ -11,10 +11,12 @@ import model.entities.User;
 import model.service.UserService;
 
 import java.io.IOException;
+import java.io.Serial;
 
 @WebServlet("/LoginController")
 public class LoginController extends HttpServlet {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Override
@@ -51,9 +53,10 @@ public class LoginController extends HttpServlet {
         System.out.println("Llego a Login de LoginController");
         String dni = req.getParameter("txtDni");
         String password = req.getParameter("txtPassword");
+        String role = req.getParameter("role");
 
         UserService userService = new UserService();
-        User user = userService.authenticate(dni, password);
+        User user = userService.authenticate(dni, password, role);
 
         if (user != null) {
             // Crear sesión y guardar el usuario autenticado
