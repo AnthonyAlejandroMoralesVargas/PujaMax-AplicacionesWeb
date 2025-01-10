@@ -1,24 +1,49 @@
 package model.entities;
 
+import jakarta.persistence.*;
+
 import java.util.Date;
 
+@Entity
 public class Lot {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idLot")
     private int idLot;
+
+    @Column(name = "title")
     private String title;
+
+    @Column(name = "quantityProducts")
     private int quantityProducts;
+
+    @Column(name = "dateOpening")
     private Date dateOpening;
+
+    @Column(name = "dateClosing")
     private Date dateClosing;
+
+    @Column(name = "city")
     private String city;
-    private Address address; // Relación con Address
+
+    @Column(name = "state")
     private String state; // Estado del lote (e.g., "Activo", "Inactivo")
-    private Auctioneer auctioneer; // Relación con Auctioneer// Relación con Address
+
+    @ManyToOne
+    @JoinColumn(name = "idAddress")
+    private Address address;
+
+    @ManyToOne
+    @JoinColumn(name = "idAuctioneer")
+    private Auctioneer auctioneer;
 
     // Constructor vacío
     public Lot() {
     }
 
     // Constructor con todos los atributos
-    public Lot(int idLot, String title, int quantityProducts,Date dateOpening, Date dateClosing, String city, Address address, String state, Auctioneer auctioneer) {
+    public Lot(int idLot, String title, int quantityProducts, Date dateOpening, Date dateClosing, String city, Address address, String state, Auctioneer auctioneer) {
         this.idLot = idLot;
         this.title = title;
         this.quantityProducts = quantityProducts;
@@ -29,6 +54,7 @@ public class Lot {
         this.state = state;
         this.auctioneer = auctioneer;
     }
+
     // Getters y setters
     public int getIdLot() {
         return idLot;
@@ -100,6 +126,31 @@ public class Lot {
 
     public void setAuctioneer(Auctioneer auctioneer) {
         this.auctioneer = auctioneer;
+    }
+
+    @Override
+    public String toString() {
+        return "Lot{" +
+                "idLot=" + idLot +
+                ", title='" + title + '\'' +
+                ", quantityProducts=" + quantityProducts +
+                ", dateOpening=" + dateOpening +
+                ", dateClosing=" + dateClosing +
+                ", city='" + city + '\'' +
+                ", state='" + state + '\'' +
+                ", address=" + address +
+                ", auctioneer=" + auctioneer +
+                '}';
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
     }
 }
 
