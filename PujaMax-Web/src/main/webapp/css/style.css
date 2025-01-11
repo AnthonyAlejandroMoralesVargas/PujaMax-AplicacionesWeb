@@ -166,10 +166,16 @@ footer p {
 }
 
 .card-title {
-	font-size: 1.25rem;
+	font-size: 2rem;
 	font-weight: bold;
-	color: var(--info-color);
 	margin-bottom: 10px;
+	color: var(--black);
+}
+
+.card-subtitle {
+	font-size: 1.2rem;
+	margin-bottom: 10px;
+	color:var(--text-muted)
 }
 
 .card-text {
