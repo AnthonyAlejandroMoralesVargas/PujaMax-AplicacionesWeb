@@ -40,10 +40,7 @@ public class LotJPA {
                         updateLotState(em, lot);
                     }
                 }
-
-                System.out.println("Lot " + lot.getTitle() + " is " + lot.getState());
             }
-
         } catch (Exception e) {
             System.err.println("Couldn't find lots by auctioneer ID: " + e.getMessage());
         }
