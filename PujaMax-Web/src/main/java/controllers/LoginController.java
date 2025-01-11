@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.entities.Auctioneer;
+import model.entities.Bidder;
 import model.entities.User;
 import model.service.UserService;
 
@@ -65,11 +66,11 @@ public class LoginController extends HttpServlet {
             // Redirigir según el rol
             if (user instanceof Auctioneer) {
                 resp.sendRedirect("LotManagementController?route=list");
-            } /* else {
-                resp.sendRedirect("jsp/USER_LOT_BOARD.jsp");
-            }*/
+            }  else if(user instanceof Bidder) {
+                resp.sendRedirect("LotManagementController?route=list");
+            }
         } else {
-            req.setAttribute("error", "Invalid credentials");
+            req.setAttribute("message", "Invalid credentials");
             req.getRequestDispatcher("jsp/LOGIN.jsp").forward(req, resp);
         }
     }
