@@ -1,7 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ page import="java.util.Date" %>
-<%@ page import="java.util.Date" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+
 <%
     Date currentDate = new Date();
 %>
@@ -215,21 +216,14 @@
                     <div class="mb-3">
                         <label for="editLotOpeningDate" class="form-label">Opening Date</label>
                         <input type="date" class="form-control" name="txtOpeningDate" id="editLotOpeningDate"
-                               value="${lot.dateOpening}" required>
+                               value="<fmt:formatDate value='${lot.dateOpening}' pattern='yyyy-MM-dd' />" required>
                     </div>
 
                     <!-- Closing Date -->
                     <div class="mb-3">
                         <label for="editLotClosingDate" class="form-label">Closing Date</label>
                         <input type="date" class="form-control" name="txtClosingDate" id="editLotClosingDate"
-                               value="${lot.dateClosing}" required>
-                    </div>
-
-                    <!-- City -->
-                    <div class="mb-3">
-                        <label for="editLotCity" class="form-label">City</label>
-                        <input type="text" class="form-control" name="txtCity" id="editLotCity" value="${lot.city}"
-                               required>
+                               value="<fmt:formatDate value='${lot.dateClosing}' pattern='yyyy-MM-dd' />" required>
                     </div>
 
                     <!-- Address Dropdown -->
