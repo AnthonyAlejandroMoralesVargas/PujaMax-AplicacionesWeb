@@ -74,7 +74,7 @@ public class LotJPA {
 
             result = true;
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Couldn't create lot: " + e.getMessage());
         }
         return result;
     }
@@ -88,16 +88,20 @@ public class LotJPA {
                 Date now = new Date();
                 boolean shouldBeActive = !now.before(lot.getDateOpening()) && !now.after(lot.getDateClosing());
 
-                if (shouldBeActive && "INACTIVE".equals(lot.getState())) {
-                    lot.setState("ACTIVE");
-                    updateLotState(em, lot);
-                } else if (!shouldBeActive && "ACTIVE".equals(lot.getState())) {
-                    lot.setState("INACTIVE");
-                    updateLotState(em, lot);
+                if (shouldBeActive) {
+                    if (!"ACTIVE".equals(lot.getState())) {
+                        lot.setState("ACTIVE");
+                        updateLotState(em, lot);
+                    }
+                } else {
+                    if (!"INACTIVE".equals(lot.getState())) {
+                        lot.setState("INACTIVE");
+                        updateLotState(em, lot);
+                    }
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Couldn't find lot by ID: " + e.getMessage());
         }
         return lot;
     }
@@ -112,7 +116,7 @@ public class LotJPA {
 
             result = true;
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Couldn't update lot: " + e.getMessage());
         }
         return result;
     }
@@ -130,7 +134,7 @@ public class LotJPA {
                 result = true;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Couldn't remove lot: " + e.getMessage());
         }
         return result;
     }
