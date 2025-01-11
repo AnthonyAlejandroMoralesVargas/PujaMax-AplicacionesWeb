@@ -50,7 +50,7 @@
 <main class="container my-4">
     <section class="home-container">
         <nav class="nav-container">
-            <a href="AUCTIONEER_LOT_BOARD.html" class="nav-item"><i class="fas fa-home"></i> Home</a>
+            <a href="${pageContext.request.contextPath}/LotManagementController?route=list" class="nav-item"><i class="fas fa-home"></i> Home</a>
             <a href="${pageContext.request.contextPath}/LotManagementController?route=add" class="nav-item">
                 <i class="fas fa-plus-circle"></i> Add Lot</a>
             <a href="AUCTIONEER_HISTORY.html" class="nav-item"><i class="fas fa-history"></i>
