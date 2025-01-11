@@ -37,7 +37,7 @@ public class RegisterController extends HttpServlet {
 
         switch (route) {
             case "enter":
-                this.enter(req, resp);
+                this.enter(resp);
                 break;
             case "save":
                 this.save(req, resp);
@@ -47,7 +47,7 @@ public class RegisterController extends HttpServlet {
         }
     }
 
-    private void enter(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    private void enter(HttpServletResponse resp) throws IOException {
         resp.sendRedirect("jsp/REGISTER.jsp");
     }
 
