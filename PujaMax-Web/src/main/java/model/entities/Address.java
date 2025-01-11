@@ -39,7 +39,7 @@ public class Address implements Serializable {
     @Column(name = "company")
     private String company;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "idAuctioneer")
     private Auctioneer auctioneer;
 

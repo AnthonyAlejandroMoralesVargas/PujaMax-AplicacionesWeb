@@ -30,11 +30,11 @@ public class Lot {
     @Column(name = "state")
     private String state; // Estado del lote (e.g., "Activo", "Inactivo")
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "idAddress")
     private Address address;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "idAuctioneer")
     private Auctioneer auctioneer;
 
