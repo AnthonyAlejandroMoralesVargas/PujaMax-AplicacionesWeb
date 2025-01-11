@@ -140,63 +140,69 @@
                 <h5 class="modal-title" id="ADD_ADDRESS_MODALLabel">
                     <i class="fa-solid fa-location-crosshairs"></i> Add Address
                 </h5>
-                <a href="AddressManagementController?route=list" class="btn-close"
-                   aria-label="Close"></a>
+                <a href="AddressManagementController?route=list" class="btn-close" aria-label="Close"></a>
             </div>
-            <form action="AddressManagementController?route=saveNew"
-                  method="POST">
+            <form action="AddressManagementController?route=saveNew" method="POST">
                 <div class="modal-body">
                     <!-- Address Form Fields -->
                     <div class="row g-4">
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold">Name</label>
-                            <input type="text" class="form-control rounded-3" name="txtName"
-                                   placeholder="Enter name" required>
+                            <label for="NameAddAddress" class="form-label fw-semibold">Name</label>
+                            <input id="NameAddAddress" type="text" class="form-control rounded-3" name="txtName"
+                                   placeholder="Enter name"
+                                   required>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold">Company
-                                (Optional)</label> <input type="text" class="form-control rounded-3"
-                                                          name="txtCompany" placeholder="Enter company">
+                            <label for="CompanyAddAddress" class="form-label fw-semibold">Company (Optional)</label>
+                            <input id="CompanyAddAddress"
+                                   type="text"
+                                   class="form-control rounded-3"
+                                   name="txtCompany"
+                                   placeholder="Enter company">
                         </div>
                     </div>
                     <div class="row g-4 mt-2">
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold">Province</label>
-                            <input type="text" class="form-control rounded-3"
+                            <label for="ProvinceAddAddress" class="form-label fw-semibold">Province</label>
+                            <input id="ProvinceAddAddress"
+                                   type="text" class="form-control rounded-3"
                                    name="txtProvince"
                                    placeholder="Enter province" required>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold">City</label>
-                            <input type="text" class="form-control rounded-3" name="txtCity"
+                            <label for="CityAddAddress" class="form-label fw-semibold">City</label>
+                            <input id="CityAddAddress"
+                                   type="text" class="form-control rounded-3" name="txtCity"
                                    placeholder="Enter city" required>
                         </div>
                     </div>
                     <div class="row g-4 mt-2">
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold">Main
-                                Street</label> <input type="text" class="form-control rounded-3"
-                                                      name="txtMainStreet" placeholder="Enter main street" required>
+                            <label for="MSAddAddress" class="form-label fw-semibold">Main Street</label>
+                            <input id="MSAddAddress" type="text" class="form-control rounded-3"
+                                   name="txtMainStreet" placeholder="Enter main street" required>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold">Secondary
-                                Street</label> <input type="text"
-                                                      class="form-control rounded-3" name="txtSecondaryStreet"
-                                                      placeholder="Enter secondary street">
+                            <label for="SSAddAddress" class="form-label fw-semibold">Secondary Street</label>
+                            <input id="SSAddAddress"
+                                   type="text"
+                                   class="form-control rounded-3" name="txtSecondaryStreet"
+                                   placeholder="Enter secondary street" required>
                         </div>
                     </div>
                     <div class="row g-4 mt-2">
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold">Postcode</label>
-                            <input type="text" class="form-control rounded-3"
+                            <label for="PostCodeAddAddress" class="form-label fw-semibold">Postcode</label>
+                            <input id="PostCodeAddAddress" type="text" class="form-control rounded-3"
                                    name="txtPostcode"
                                    placeholder="Enter postcode" required>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold">House/Apartment
-                                No.</label> <input type="text" class="form-control rounded-3"
-                                                   name="txtHouseNumber"
-                                                   placeholder="Enter house/apartment no." required>
+                            <label for="HouseAddAddress" class="form-label fw-semibold">House/Apartment No.</label>
+                            <input id="HouseAddAddress"
+                                   type="text" class="form-control rounded-3"
+                                   name="txtHouseNumber"
+                                   placeholder="Enter house/apartment no." required>
                         </div>
                     </div>
                 </div>
@@ -230,68 +236,67 @@
                     <div class="row">
                         <input type="hidden" name="txtId" value="${address.idAddress}">
                         <div class="col-md-6 mb-3">
-                            <label class="form-label fw-bold">Name</label> <input
+                            <label for="NameEditAddress" class="form-label fw-bold">Name</label> <input
+                                id="NameEditAddress"
                                 type="text" class="form-control" name="txtName"
-                                value="${address.name}" placeholder="Enter name">
+                                value="${address.name}" placeholder="Enter name" required>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label fw-bold">Company
-                                (Optional)</label> <input type="text" class="form-control"
-                                                          name="txtCompany" value="${address.company}"
-                                                          placeholder="Enter company">
+                            <label for="CompanyEditAddress" class="form-label fw-bold">Company (Optional)</label>
+                            <input id="CompanyEditAddress" type="text" class="form-control"
+                                   name="txtCompany" value="${address.company}"
+                                   placeholder="Enter company">
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label class="form-label fw-bold">Province</label>
-                            <input type="text" class="form-control" name="txtProvince"
+                            <label for="ProvinceEditAddress" class="form-label fw-bold">Province</label>
+                            <input id="ProvinceEditAddress" type="text" class="form-control" name="txtProvince"
                                    value="${address.province}"
-                                   placeholder="Enter province">
+                                   placeholder="Enter province" required>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label fw-bold">City</label> <input
-                                type="text" class="form-control" name="txtCity"
-                                value="${address.city}" placeholder="Enter city">
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label fw-bold">Main
-                                Street</label> <input type="text" class="form-control"
-                                                      name="txtMainStreet"
-                                                      value="${address.mainStreet}" placeholder="Enter main street">
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label fw-bold">Secondary
-                                Street </label> <input type="text" class="form-control"
-                                                       name="txtSecondaryStreet"
-                                                       value="${address.secondaryStreet}"
-                                                       placeholder="Enter secondary street">
+                            <label for="CityEditAddress" class="form-label fw-bold">City</label>
+                            <input id="CityEditAddress" type="text" class="form-control" name="txtCity"
+                                   value="${address.city}" placeholder="Enter city" required>
                         </div>
                     </div>
-
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label class="form-label fw-bold">Postcode</label>
-                            <input type="text" class="form-control" name="txtPostcode"
+                            <label for="MSEditAddress" class="form-label fw-bold">Main Street</label>
+                            <input id="MSEditAddress" type="text" class="form-control"
+                                   name="txtMainStreet"
+                                   value="${address.mainStreet}" placeholder="Enter main street" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="SSEditAddress" class="form-label fw-bold">Secondary Street </label>
+                            <input id="SSEditAddress" type="text" class="form-control"
+                                   name="txtSecondaryStreet"
+                                   value="${address.secondaryStreet}"
+                                   placeholder="Enter secondary street" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="PostCodeEditAddress" class="form-label fw-bold">Postcode</label>
+                            <input id="PostCodeEditAddress" type="text" class="form-control" name="txtPostcode"
                                    value="${address.postcode}"
-                                   placeholder="Enter postcode">
+                                   placeholder="Enter postcode" required>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label class="form-label fw-bold">House/Apartment
-                                No.</label> <input type="text" class="form-control"
-                                                   name="txtHouseNumber"
-                                                   value="${address.houseNumber}"
-                                                   placeholder="Enter house/apartment no.">
+                            <label for="HouseEditAddress" class="form-label fw-bold">House/Apartment No.</label>
+                            <input id="HouseEditAddress"
+                                   type="text" class="form-control"
+                                   name="txtHouseNumber"
+                                   value="${address.houseNumber}"
+                                   placeholder="Enter house/apartment no." required>
                         </div>
                     </div>
 
                 </div>
                 <div class="modal-footer justify-content-center">
-                    <a href="AddressManagementController?route=list"
-                       class="btn btn-danger"> Cancel </a>
+                    <a href="AddressManagementController?route=list" class="btn btn-danger"> Cancel </a>
                     <button type="submit" class="btn btn-primary">Save</button>
                 </div>
             </form>
