@@ -184,9 +184,8 @@ public class LotManagementController extends HttpServlet {
         int quantityProducts = Integer.parseInt(req.getParameter("txtQuantityProducts"));
         java.sql.Date dateOpening = java.sql.Date.valueOf(req.getParameter("txtOpeningDate"));
         java.sql.Date dateClosing = java.sql.Date.valueOf(req.getParameter("txtClosingDate"));
-        String city = req.getParameter("txtCity");
         String state = req.getParameter("txtState");
 
-        return new Lot(id, title, quantityProducts, dateOpening, dateClosing, city, address, state, auctioneer);
+        return new Lot(id, title, quantityProducts, dateOpening, dateClosing, address, state, auctioneer);
     }
 }
