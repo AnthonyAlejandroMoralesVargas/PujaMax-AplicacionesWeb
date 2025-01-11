@@ -1,6 +1,5 @@
-
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="jakarta.tags.core"%>
+<%@ page contentType="text/html;charset=UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -44,13 +43,15 @@
                             <label class="form-label">Role</label>
                             <div class="d-flex">
                                 <div class="form-check me-3">
-                                    <input class="form-check-input" type="radio" name="role" id="roleAuctioneer" value="auctioneer" required>
+                                    <input class="form-check-input" type="radio" name="role" id="roleAuctioneer"
+                                           value="auctioneer" required>
                                     <label class="form-check-label" for="roleAuctioneer">
                                         Auctioneer
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="role" id="roleBidder" value="bidder" required>
+                                    <input class="form-check-input" type="radio" name="role" id="roleBidder"
+                                           value="bidder" required>
                                     <label class="form-check-label" for="roleBidder">
                                         Bidder
                                     </label>
@@ -60,7 +61,8 @@
                         <button type="submit" class="btn btn-primary w-100 mb-3">Login</button>
                     </form>
                     <div class="text-center">
-                        <a href="${pageContext.request.contextPath}/RegisterController?route=enter" class="text-decoration-none">Don't have an account? Register here</a>
+                        <a href="${pageContext.request.contextPath}/RegisterController?route=enter"
+                           class="text-decoration-none">Don't have an account? Register here</a>
                     </div>
                 </div>
             </div>
