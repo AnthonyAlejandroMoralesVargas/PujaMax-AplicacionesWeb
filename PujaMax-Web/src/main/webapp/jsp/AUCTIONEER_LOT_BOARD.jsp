@@ -263,7 +263,7 @@
                 <!-- Información del lote -->
                 <div class="text-start">
                     <p><strong>Title:</strong> ${lot.title}</p>
-                    <p><strong>City:</strong> ${lot.city}</p>
+                    <p><strong>City:</strong> ${lot.address.city}</p>
                     <p><strong>Scheduled Closure Date:</strong> <c:out value="${lot.dateClosing}"/></p>
                     <p><strong>Products in Auction:</strong> ${lot.quantityProducts}</p>
                 </div>
