@@ -24,9 +24,6 @@ public class Lot {
     @Column(name = "dateClosing")
     private Date dateClosing;
 
-    @Column(name = "city")
-    private String city;
-
     @Column(name = "state")
     private String state; // Estado del lote (e.g., "Activo", "Inactivo")
 
@@ -42,13 +39,12 @@ public class Lot {
     }
 
     // Constructor con todos los atributos
-    public Lot(int idLot, String title, int quantityProducts, Date dateOpening, Date dateClosing, String city, Address address, String state, Auctioneer auctioneer) {
+    public Lot(int idLot, String title, int quantityProducts, Date dateOpening, Date dateClosing, Address address, String state, Auctioneer auctioneer) {
         this.idLot = idLot;
         this.title = title;
         this.quantityProducts = quantityProducts;
         this.dateOpening = dateOpening;
         this.dateClosing = dateClosing;
-        this.city = address.getCity();
         this.address = address;
         this.state = state;
         this.auctioneer = auctioneer;
@@ -95,14 +91,6 @@ public class Lot {
         this.dateClosing = dateClosing;
     }
 
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
     public Address getAddress() {
         return address;
     }
@@ -135,7 +123,6 @@ public class Lot {
                 ", quantityProducts=" + quantityProducts +
                 ", dateOpening=" + dateOpening +
                 ", dateClosing=" + dateClosing +
-                ", city='" + city + '\'' +
                 ", state='" + state + '\'' +
                 ", address=" + address +
                 ", auctioneer=" + auctioneer +
