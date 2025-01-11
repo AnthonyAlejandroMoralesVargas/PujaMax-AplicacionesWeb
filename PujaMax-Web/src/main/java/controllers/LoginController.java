@@ -36,7 +36,7 @@ public class LoginController extends HttpServlet {
 
         switch (route) {
             case "enter":
-                this.enter(req, resp);
+                this.enter(resp);
                 break;
             case "login":
                 this.login(req, resp);
@@ -46,10 +46,9 @@ public class LoginController extends HttpServlet {
         }
     }
 
-    private void enter(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    private void enter(HttpServletResponse resp) throws IOException {
         resp.sendRedirect("jsp/LOGIN.jsp");
     }
-
     private void login(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String dni = req.getParameter("txtDni");
         String password = req.getParameter("txtPassword");
