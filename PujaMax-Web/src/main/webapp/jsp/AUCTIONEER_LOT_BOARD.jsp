@@ -88,8 +88,8 @@
                         <!-- Cuerpo de la tarjeta -->
                         <div class="card-body d-flex justify-content-between align-items-start">
                             <div>
-                                <h5 class="card-title">${lot.title}</h5>
-                                <h5 class="card-title">${lot.city}</h5>
+                                <h3 class="card-title">${lot.title}</h3>
+                                <h5 class="card-subtitle">${lot.address.city}</h5>
                                 <p class="card-text">
                                     SCHEDULED CLOSURE DATE:
                                     <c:out value="${lot.dateClosing}"/>
