@@ -133,16 +133,19 @@ public class AddressManagementController extends HttpServlet {
         }
     }
 
-    private void saveExistingAddress(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    private void saveExistingAddress(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         Address address = parseAddressFromRequest(req);
         AddressService addressService = new AddressService();
 
         if (addressService.updateAddress(address)) {
-            resp.sendRedirect("AddressManagementController?route=list");
+            req.setAttribute("messageType", "info");
+            req.setAttribute("message", "Address updated successfully.");
+            req.getRequestDispatcher("AddressManagementController?route=list").forward(req, resp);
+            //resp.sendRedirect("AddressManagementController?route=list");
         } else {
-            HttpSession session = req.getSession();
-            session.setAttribute("message", "The address could not be updated");
-            resp.sendRedirect("AddressManagementController?route=list");
+            req.setAttribute("messageType", "error");
+            req.setAttribute("message", "Failed to update address.");
+            req.getRequestDispatcher("AddressManagementController?route=list").forward(req, resp);
         }
     }
 
