@@ -88,9 +88,40 @@
         </div>
     </div>
 </footer>
+<!-- Modal para mensajes informativos y de error -->
+<div class="modal modal-info" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body ${messageType == 'info' ? 'info' : 'error'}">
+                <i class="fas ${messageType == 'info' ? 'fa-info-circle text-info' : 'fa-exclamation-circle text-danger'}"></i>
+                <span>${message}</span>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
 
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const infoModalElement = document.getElementById("infoModal");
+
+        if (infoModalElement && "${message}" !== "") {
+            const infoModal = new bootstrap.Modal(infoModalElement, {
+                backdrop: false, // Sin fondo oscuro
+                keyboard: false  // Desactiva cerrar con el teclado
+            });
+
+            // Mostrar el modal
+            infoModal.show();
+
+            // Cerrar automáticamente después de 5 segundos
+            setTimeout(() => {
+                infoModal.hide();
+            }, 5000);
+        }
+    });
+</script>
+</body>
 </html>
