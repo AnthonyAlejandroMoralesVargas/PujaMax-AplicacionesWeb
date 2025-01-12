@@ -11,7 +11,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Font Awesome for icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 
 <body>
@@ -19,7 +19,7 @@
   <div class="row align-items-center" style="min-height: 100vh;">
     <!-- Left Section: Image -->
     <div class="col-md-6 text-center div-image height-div-image">
-      <img src="../images/logo1.png" alt="Auction Image" class="logo-image">
+      <img src="${pageContext.request.contextPath}/images/logo1.png" alt="Auction Image" class="logo-image">
       <p class="image-description">
         Join our platform and start bidding or managing auctions today!
       </p>
@@ -90,9 +90,44 @@
     </div>
   </div>
 </footer>
+<!-- Modal para mensajes informativos y de error -->
+<div class="modal modal-info" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body ${messageType == 'info' ? 'info' : 'error'}">
+        <i class="fas ${messageType == 'info' ? 'fa-info-circle text-info' : 'fa-exclamation-circle text-danger'}"></i>
+        <span>${message}</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
 
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const infoModalElement = document.getElementById("infoModal");
+
+    if (infoModalElement && "${message}" !== "") {
+      const infoModal = new bootstrap.Modal(infoModalElement, {
+        backdrop: false, // Sin fondo oscuro
+        keyboard: false  // Desactiva cerrar con el teclado
+      });
+
+      // Mostrar el modal
+      infoModal.show();
+
+      // Cerrar automáticamente después de 5 segundos
+      setTimeout(() => {
+        infoModal.hide();
+      }, 5000);
+    }
+  });
+</script>
+</body>
 </html>
