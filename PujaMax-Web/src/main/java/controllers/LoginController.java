@@ -41,6 +41,9 @@ public class LoginController extends HttpServlet {
             case "login":
                 this.login(req, resp);
                 break;
+                case"logOut":
+                    this.logout(req, resp);
+                    break;
             default:
                 throw new IllegalArgumentException("Unknown route: " + route);
         }
@@ -77,5 +80,15 @@ public class LoginController extends HttpServlet {
             req.setAttribute("message", "Invalid credentials. Please try again.");
             req.getRequestDispatcher("jsp/LOGIN.jsp").forward(req, resp);
         }
+    }
+
+    private void logout(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession();
+        if (session != null) {
+            session.invalidate();
+        }
+        req.setAttribute("messageType", "info");
+        req.setAttribute("message", "You have successfully logged out.");
+        req.getRequestDispatcher("jsp/LOGIN.jsp").forward(req, resp);
     }
 }
