@@ -11,6 +11,10 @@ public class BidderService {
         bidderJPA = new BidderJPA();
     }
     public boolean createBidder(Bidder bidder) {
+        // Verifica si ya existe un Bidder con el mismo DNI
+        if (bidderJPA.findByDni(bidder.getDni()) != null) {
+            throw new IllegalArgumentException("El DNI ya está registrado para un postor.");
+        }
         bidder.setPassword(hashPassword(bidder.getPassword()));
         return bidderJPA.create(bidder);
     }
