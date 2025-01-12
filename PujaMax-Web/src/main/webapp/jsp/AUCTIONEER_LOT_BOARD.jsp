@@ -261,19 +261,29 @@
             <div class="modal-body text-center">
                 <p>Are you sure you want to delete the following lot?</p>
                 <!-- Información del lote -->
-                <div class="text-start">
-                    <p><strong>Title:</strong> ${lot.title}</p>
-                    <p><strong>City:</strong> ${lot.address.city}</p>
-                    <p><strong>Scheduled Closure Date:</strong> <c:out value="${lot.dateClosing}"/></p>
-                    <p><strong>Products in Auction:</strong> ${lot.quantityProducts}</p>
+                <div class="modal-body text-center">
+                    <h3>${lot.title}</h3>
+                    <p class="card-text text-secondary small mb-4">
+                        <i class="fas fa-map-marker-alt me-2"></i>${lot.address.province}, ${lot.address.city}
+                    </p>
+                    <p class="card-text text-secondary small mb-4">
+                        <i class="fa-solid fa-hourglass-end"></i>  ${lot.dateClosing}
+                    </p>
+                    <p class="card-text text-secondary small mb-4">
+                        <i class="fas fa-box"></i>  ${lot.quantityProducts}
+                    </p>
                 </div>
             </div>
             <div class="modal-footer justify-content-center">
-                <a href="LotManagementController?route=list" class="btn btn-danger"> Cancel </a>
-                <!-- Formulario para confirmar la eliminación -->
-                <form action="${pageContext.request.contextPath}/LotManagementController?route=accept&idLot=${lot.idLot}"
-                      method="POST">
-                    <button type="submit" class="btn btn-danger">Delete</button>
+                <!-- Cancel button, closes the modal -->
+                <a href="LotManagementController?route=list"
+                   class="btn btn-danger">Cancel</a>
+
+                <!-- Form to confirm the deletion -->
+                <form
+                        action="${pageContext.request.contextPath}/LotManagementController?route=accept&idLot=${lot.idLot}"
+                        method="POST">
+                    <button type="submit" class="btn btn-success">Accept</button>
                 </form>
             </div>
         </div>
