@@ -158,15 +158,17 @@ public class LotManagementController extends HttpServlet {
         }
     }
 
-    private void accept(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    private void accept(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         int idLot = Integer.parseInt(req.getParameter("idLot"));
         LotService lotService = new LotService();
         if (lotService.removeLot(idLot)) {
-            resp.sendRedirect("LotManagementController?route=list");
+            req.setAttribute("messageType", "info");
+            req.setAttribute("message", "Lot deleted successfully.");
+            req.getRequestDispatcher("LotManagementController?route=list").forward(req, resp);
         } else {
-            HttpSession session = req.getSession();
-            session.setAttribute("message", "Could not delete lot");
-            resp.sendRedirect("LotManagementController?route=list");
+            req.setAttribute("messageType", "error");
+            req.setAttribute("message", "Failed to delete lot.");
+            req.getRequestDispatcher("LotManagementController?route=list").forward(req, resp);
         }
     }
 
