@@ -62,15 +62,17 @@ public class AddressManagementController extends HttpServlet {
         }
     }
 
-    private void accept(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    private void accept(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         int idAddress = Integer.parseInt(req.getParameter("idAddress"));
         AddressService addressService = new AddressService();
         if (addressService.removeAddress(idAddress)) {
-            resp.sendRedirect("AddressManagementController?route=list");
+            req.setAttribute("messageType", "info");
+            req.setAttribute("message", "Address deleted successfully.");
+            req.getRequestDispatcher("AddressManagementController?route=list").forward(req, resp);
         } else {
-            HttpSession session = req.getSession();
-            session.setAttribute("message", "Could not delete address");
-            resp.sendRedirect("AddressManagementController?route=list");
+            req.setAttribute("messageType", "error");
+            req.setAttribute("message", "Failed to delete address.");
+            req.getRequestDispatcher("AddressManagementController?route=list").forward(req, resp);
         }
     }
 
