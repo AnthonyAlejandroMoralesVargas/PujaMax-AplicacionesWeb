@@ -62,14 +62,19 @@ public class LoginController extends HttpServlet {
             HttpSession session = req.getSession();
             session.setAttribute("user", user);
 
+            // Message Login success
+            req.setAttribute("messageType", "info");
+            req.setAttribute("message", "Login successful! Welcome to your dashboard.");
             // Redirigir según el rol
             if (user instanceof Auctioneer) {
-                resp.sendRedirect("LotManagementController?route=list");
+                req.getRequestDispatcher("LotManagementController?route=list").forward(req, resp);
+                //resp.sendRedirect("LotManagementController?route=list");
             }  else if(user instanceof Bidder) {
                 resp.sendRedirect("LotManagementController?route=list");
             }
         } else {
-            req.setAttribute("message", "Invalid credentials");
+            req.setAttribute("messageType", "error");
+            req.setAttribute("message", "Invalid credentials. Please try again.");
             req.getRequestDispatcher("jsp/LOGIN.jsp").forward(req, resp);
         }
     }
