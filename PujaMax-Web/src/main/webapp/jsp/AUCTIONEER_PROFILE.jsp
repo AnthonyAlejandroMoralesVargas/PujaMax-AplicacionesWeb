@@ -42,7 +42,7 @@
                            href="${pageContext.request.contextPath}/AddressManagementController?route=list"><i
                             class="fas fa-cogs"></i> Profile</a></li>
                     <li><a class="dropdown-item"
-                           href="${pageContext.request.contextPath}/LoginController?route=login"><i
+                           href="${pageContext.request.contextPath}/LoginController?route=logOut"><i
                             class="fas fa-sign-out-alt"></i> Logout</a></li>
                 </ul>
             </div>
