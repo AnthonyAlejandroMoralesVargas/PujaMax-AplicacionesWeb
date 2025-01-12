@@ -94,13 +94,17 @@ public class LotManagementController extends HttpServlet {
         }
     }
 
-    private void saveNewLot(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    private void saveNewLot(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         Lot lot = parseLotFromRequest(req);
         LotService lotService = new LotService();
         if (lotService.createLot(lot)) {
-            resp.sendRedirect("LotManagementController?route=list");
+            req.setAttribute("messageType", "info");
+            req.setAttribute("message", "Lot created successfully.");
+            req.getRequestDispatcher("LotManagementController?route=list").forward(req, resp);
         } else {
-            resp.sendRedirect("LotManagementController?route=add");
+            req.setAttribute("messageType", "error");
+            req.setAttribute("message", "Failed to create lot.");
+            req.getRequestDispatcher("LotManagementController?route=list").forward(req, resp);
         }
     }
 
