@@ -53,25 +53,44 @@ public class RegisterController extends HttpServlet {
 
     private void save(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String role = req.getParameter("role");
+        try {
             if ("auctioneer".equalsIgnoreCase(role)) {
                 Auctioneer auctioneer = parseAuctioneerFromRequest(req);
                 AuctioneerService auctioneerService = new AuctioneerService();
                 if (auctioneerService.createAuctioneer(auctioneer)) {
-                    resp.sendRedirect("LoginController?route=enter");
+                    req.setAttribute("messageType", "info");
+                    req.setAttribute("message", "Successful registration! You can now log in as an auctioneer.");
+                    req.getRequestDispatcher("jsp/LOGIN.jsp").forward(req, resp);
+                    return;
+                    //resp.sendRedirect("LoginController?route=enter");
                 } else {
-                    req.setAttribute("error", "Failed to register Auctioneer. Please try again.");
+                    req.setAttribute("messageType", "error");
+                    req.setAttribute("message", "Failed to register auctioneer. Please try again.");
                     req.getRequestDispatcher("jsp/REGISTER.jsp").forward(req, resp);
+                    return;
                 }
             } else if ("bidder".equalsIgnoreCase(role)) {
                 Bidder bidder = parseBidderFromRequest(req);
                 BidderService bidderService = new BidderService();
                 if (bidderService.createBidder(bidder)) {
-                    resp.sendRedirect("LoginController?route=enter");
+                    req.setAttribute("messageType", "info");
+                    req.setAttribute("message", "Registration successful! You can now log in as a bidder.");
+                    req.getRequestDispatcher("jsp/LOGIN.jsp").forward(req, resp);
+                    return;
+                    //resp.sendRedirect("LoginController?route=enter");
                 } else {
-                    req.setAttribute("error", "Failed to register Bidder. Please try again.");
+                    req.setAttribute("messageType", "error");
+                    req.setAttribute("message", "Failed to register bidder. Please try again.");
                     req.getRequestDispatcher("jsp/REGISTER.jsp").forward(req, resp);
+                    return;
                 }
             }
+        } catch (IllegalArgumentException e) {
+            req.setAttribute("messageType", "error");
+            req.setAttribute("message", e.getMessage());
+            req.getRequestDispatcher("jsp/REGISTER.jsp").forward(req, resp);
+            return;
+        }
     }
 
     private Bidder parseBidderFromRequest(HttpServletRequest req) {
