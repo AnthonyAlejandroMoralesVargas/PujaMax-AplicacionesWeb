@@ -146,15 +146,18 @@ public class AddressManagementController extends HttpServlet {
         }
     }
 
-    private void saveNewAddress(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    private void saveNewAddress(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         Address address = parseAddressFromRequest(req);
         AddressService addressService = new AddressService();
         if (addressService.createAddress(address)) {
-            resp.sendRedirect("AddressManagementController?route=list");
+            req.setAttribute("messageType", "info");
+            req.setAttribute("message", "Address created successfully.");
+            req.getRequestDispatcher("AddressManagementController?route=list").forward(req, resp);
+            //resp.sendRedirect("AddressManagementController?route=list");
         } else {
-            HttpSession session = req.getSession();
-            session.setAttribute("message", "The address could not be created");
-            resp.sendRedirect("AddressManagementController?route=list");
+            req.setAttribute("messageType", "error");
+            req.setAttribute("message", "Failed to create address.");
+            req.getRequestDispatcher("AddressManagementController?route=list").forward(req, resp);
         }
     }
 
