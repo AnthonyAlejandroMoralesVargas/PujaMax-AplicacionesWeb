@@ -12,6 +12,11 @@ public class AuctioneerService {
     }
 
     public boolean createAuctioneer(Auctioneer auctioneer) {
+
+        // Verifica si ya existe un Auctioneer con el mismo DNI
+        if (auctioneerJPA.findByDni(auctioneer.getDni()) != null) {
+            throw new IllegalArgumentException("El DNI ya está registrado para un subastador.");
+        }
         auctioneer.setPassword(hashPassword(auctioneer.getPassword()));
         return auctioneerJPA.create(auctioneer);
     }
