@@ -37,9 +37,10 @@
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
                     <li><a class="dropdown-item"
                            href="${pageContext.request.contextPath}/AddressManagementController?route=list"><i
-                            class="fas fa-cogs"></i>
-                        Profile</a></li>
-                    <li><a class="dropdown-item" href="${pageContext.request.contextPath}/LoginController?route=login"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                            class="fas fa-cogs"></i> Profile</a></li>
+                    <li><a class="dropdown-item"
+                           href="${pageContext.request.contextPath}/LoginController?route=logOut"><i
+                            class="fas fa-sign-out-alt"></i> Logout</a>
                 </ul>
             </div>
         </div>
@@ -322,23 +323,7 @@
             var deleteModal = new bootstrap.Modal(document.getElementById('DELETE_LOT_MODAL'));
             deleteModal.show();
         }
-        // Mostrar modal informativo si hay mensaje
-        const message = "${message}";
-        if (message !== "") {
-            const infoModalElement = document.getElementById("infoModal");
-            if (infoModalElement) {
-                const infoModal = new bootstrap.Modal(infoModalElement, {
-                    backdrop: false, // Sin fondo oscuro
-                    keyboard: false  // Desactiva cerrar con teclado
-                });
-                infoModal.show();
-
-                // Cerrar automáticamente después de 5 segundos
-                setTimeout(() => {
-                    infoModal.hide();
-                }, 5000);
-            }
-        }
+        F
     };
 </script>
 </body>
