@@ -30,8 +30,9 @@
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
                         <li><a class="dropdown-item" href="UserProfileController"><i class="fas fa-cogs"></i>
                                 Profile</a></li>
-                        <li><a class="dropdown-item" href="LogoutController"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
-                    </ul>
+                        <li><a class="dropdown-item"
+                           href="${pageContext.request.contextPath}/LoginController?route=logOut"><i
+                            class="fas fa-sign-out-alt"></i> Logout</a>
                 </div>
             </div>
         </div>
