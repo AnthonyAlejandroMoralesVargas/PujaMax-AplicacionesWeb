@@ -1,35 +1,39 @@
 package model.service;
 
-import model.jpa.AddressJPA;
+import model.dao.AddressDAO;
 import model.entities.Address;
 
 import java.sql.SQLException;
 import java.util.List;
 
 public class AddressService {
-    private final AddressJPA addressJPA;
+    private final AddressDAO addressDAO;
 
     public AddressService() {
-        addressJPA = new AddressJPA();
+        addressDAO = new AddressDAO();
     }
 
     public List<Address> findAddressesByIdAuctioneer(int idAuctioneer) throws SQLException {
-        return addressJPA.findAddressesByIdAuctioneer(idAuctioneer);
+        try {
+            return addressDAO.findAddressesByIdAuctioneer(idAuctioneer);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public boolean createAddress(Address address) {
-        return addressJPA.createAddress(address);
+        return addressDAO.createAddress(address);
     }
 
     public Address findAddressById(int idAddress) {
-        return addressJPA.findAddressById(idAddress);
+        return addressDAO.findAddressById(idAddress);
     }
 
     public boolean updateAddress(Address address) {
-        return addressJPA.updateAddress(address);
+        return addressDAO.updateAddress(address);
     }
 
     public boolean removeAddress(int idAddress) {
-        return addressJPA.removeAddress(idAddress);
+        return addressDAO.removeAddress(idAddress);
     }
 }

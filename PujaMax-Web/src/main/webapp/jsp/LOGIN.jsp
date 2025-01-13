@@ -1,5 +1,6 @@
-<%@ page contentType="text/html;charset=UTF-8"%>
-<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -43,15 +44,13 @@
                             <label class="form-label">Role</label>
                             <div class="d-flex">
                                 <div class="form-check me-3">
-                                    <input class="form-check-input" type="radio" name="role" id="roleAuctioneer"
-                                           value="auctioneer" required>
+                                    <input class="form-check-input" type="radio" name="role" id="roleAuctioneer" value="auctioneer" required>
                                     <label class="form-check-label" for="roleAuctioneer">
                                         Auctioneer
                                     </label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="role" id="roleBidder"
-                                           value="bidder" required>
+                                    <input class="form-check-input" type="radio" name="role" id="roleBidder" value="bidder" required>
                                     <label class="form-check-label" for="roleBidder">
                                         Bidder
                                     </label>
@@ -61,8 +60,7 @@
                         <button type="submit" class="btn btn-primary w-100 mb-3">Login</button>
                     </form>
                     <div class="text-center">
-                        <a href="${pageContext.request.contextPath}/RegisterController?route=enter"
-                           class="text-decoration-none">Don't have an account? Register here</a>
+                        <a href="${pageContext.request.contextPath}/RegisterController?route=enter" class="text-decoration-none">Don't have an account? Register here</a>
                     </div>
                 </div>
             </div>
@@ -88,40 +86,9 @@
         </div>
     </div>
 </footer>
-<!-- Modal para mensajes informativos y de error -->
-<div class="modal modal-info" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-body ${messageType == 'info' ? 'info' : 'error'}">
-                <i class="fas ${messageType == 'info' ? 'fa-info-circle text-info' : 'fa-exclamation-circle text-danger'}"></i>
-                <span>${message}</span>
-            </div>
-        </div>
-    </div>
-</div>
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const infoModalElement = document.getElementById("infoModal");
-
-        if (infoModalElement && "${message}" !== "") {
-            const infoModal = new bootstrap.Modal(infoModalElement, {
-                backdrop: false, // Sin fondo oscuro
-                keyboard: false  // Desactiva cerrar con el teclado
-            });
-
-            // Mostrar el modal
-            infoModal.show();
-
-            // Cerrar automáticamente después de 5 segundos
-            setTimeout(() => {
-                infoModal.hide();
-            }, 5000);
-        }
-    });
-</script>
 </body>
+
 </html>

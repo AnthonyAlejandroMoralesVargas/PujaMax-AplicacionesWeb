@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import model.dao.AddressDAO;
 import model.entities.Address;
 import model.entities.Auctioneer;
 import model.entities.Lot;
@@ -94,17 +95,13 @@ public class LotManagementController extends HttpServlet {
         }
     }
 
-    private void saveNewLot(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    private void saveNewLot(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         Lot lot = parseLotFromRequest(req);
         LotService lotService = new LotService();
         if (lotService.createLot(lot)) {
-            req.setAttribute("messageType", "info");
-            req.setAttribute("message", "Lot created successfully.");
-            req.getRequestDispatcher("LotManagementController?route=list").forward(req, resp);
+            resp.sendRedirect("LotManagementController?route=list");
         } else {
-            req.setAttribute("messageType", "error");
-            req.setAttribute("message", "Failed to create lot.");
-            req.getRequestDispatcher("LotManagementController?route=list").forward(req, resp);
+            resp.sendRedirect("LotManagementController?route=add");
         }
     }
 
@@ -127,17 +124,13 @@ public class LotManagementController extends HttpServlet {
         }
     }
 
-    private void saveExistingLot(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    private void saveExistingLot(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         Lot lot = parseLotFromRequest(req);
         LotService lotService = new LotService();
         if (lotService.updateLot(lot)) {
-            req.setAttribute("messageType", "info");
-            req.setAttribute("message", "Lot updated successfully.");
-            req.getRequestDispatcher("LotManagementController?route=list").forward(req, resp);
+            resp.sendRedirect("LotManagementController?route=list");
         } else {
-            req.setAttribute("messageType", "error");
-            req.setAttribute("message", "Failed to update lot.");
-            req.getRequestDispatcher("LotManagementController?route=list").forward(req, resp);
+            resp.sendRedirect("LotManagementController?route=edit&idLot=" + lot.getIdLot());
         }
     }
 
@@ -158,17 +151,15 @@ public class LotManagementController extends HttpServlet {
         }
     }
 
-    private void accept(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+    private void accept(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         int idLot = Integer.parseInt(req.getParameter("idLot"));
         LotService lotService = new LotService();
         if (lotService.removeLot(idLot)) {
-            req.setAttribute("messageType", "info");
-            req.setAttribute("message", "Lot deleted successfully.");
-            req.getRequestDispatcher("LotManagementController?route=list").forward(req, resp);
+            resp.sendRedirect("LotManagementController?route=list");
         } else {
-            req.setAttribute("messageType", "error");
-            req.setAttribute("message", "Failed to delete lot.");
-            req.getRequestDispatcher("LotManagementController?route=list").forward(req, resp);
+            HttpSession session = req.getSession();
+            session.setAttribute("message", "Could not delete lot");
+            resp.sendRedirect("LotManagementController?route=list");
         }
     }
 
@@ -187,15 +178,17 @@ public class LotManagementController extends HttpServlet {
 
         HttpSession session = req.getSession();
         Auctioneer auctioneer = (Auctioneer) session.getAttribute("user");
-        AddressService addressService = new AddressService();
-        Address address = addressService.findAddressById(idAddress);
+        AddressDAO addressDAO = new AddressDAO();
+        Address address = addressDAO.findAddressById(idAddress);
 
         String title = req.getParameter("txtTitle");
         int quantityProducts = Integer.parseInt(req.getParameter("txtQuantityProducts"));
         java.sql.Date dateOpening = java.sql.Date.valueOf(req.getParameter("txtOpeningDate"));
         java.sql.Date dateClosing = java.sql.Date.valueOf(req.getParameter("txtClosingDate"));
+        String city = req.getParameter("txtCity");
         String state = req.getParameter("txtState");
 
-        return new Lot(id, title, quantityProducts, dateOpening, dateClosing, address, state, auctioneer);
+
+        return new Lot(id, title, quantityProducts, dateOpening, dateClosing, city, address, state, auctioneer);
     }
 }

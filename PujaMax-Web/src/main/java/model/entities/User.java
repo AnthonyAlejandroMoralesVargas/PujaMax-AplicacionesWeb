@@ -1,38 +1,19 @@
 package model.entities;
 
-import jakarta.persistence.*;
-
 import java.io.Serial;
 import java.io.Serializable;
 
-@Entity
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
-public abstract class User implements Serializable {
+public class User implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    protected int id;
-
-    @Column(name = "dni",unique = true)
-    protected String dni;
-
-    @Column(name = "name")
-    protected String name;
-
-    @Column(name = "lastName")
-    protected String lastName;
-
-    @Column(name = "email", unique = true)
-    protected String email;
-
-    @Column(name = "password")
-    protected String password;
-
-    @Column(name = "phoneNumber", unique = true)
-    protected String phoneNumber;
+    private int id;
+    private String dni;
+    private String name;
+    private String lastName;
+    private String email;
+    private String password;
+    private String phoneNumber;
 
     // Constructor vacío
     public User() {
@@ -54,11 +35,9 @@ public abstract class User implements Serializable {
     public int getId() {
         return id;
     }
-
     public void setId(int id) {
         this.id = id;
     }
-
     public String getDni() {
         return dni;
     }
@@ -117,16 +96,6 @@ public abstract class User implements Serializable {
                 ", password='[PROTECTED]'" +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 '}';
-    }
-
-    @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return super.equals(obj);
     }
 }
 
