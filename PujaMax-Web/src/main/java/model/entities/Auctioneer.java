@@ -1,12 +1,16 @@
 package model.entities;
 
+import jakarta.persistence.*;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
+@AttributeOverrides({
+        @AttributeOverride(name = "id", column = @Column(name = "idAuctioneer"))
+})
 public class Auctioneer extends User implements Serializable {
-    private static final long serialVersionUID = 1L;
-
     // Relación con Lot
     private List<Lot> lots;
 
@@ -22,9 +26,6 @@ public class Auctioneer extends User implements Serializable {
     }
 
     // Getters y Setters para Lots
-    public List<Lot> getLots() {
-        return lots;
-    }
 
     public void setLots(List<Lot> lots) {
         this.lots = lots;

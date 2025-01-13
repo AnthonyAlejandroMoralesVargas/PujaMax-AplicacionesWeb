@@ -7,6 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.entities.Auctioneer;
+import model.entities.Bidder;
 import model.entities.User;
 import model.service.UserService;
 
@@ -35,22 +36,23 @@ public class LoginController extends HttpServlet {
 
         switch (route) {
             case "enter":
-                this.enter(req, resp);
+                this.enter(resp);
                 break;
             case "login":
                 this.login(req, resp);
                 break;
+                case"logOut":
+                    this.logout(req, resp);
+                    break;
             default:
                 throw new IllegalArgumentException("Unknown route: " + route);
         }
     }
 
-    private void enter(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    private void enter(HttpServletResponse resp) throws IOException {
         resp.sendRedirect("jsp/LOGIN.jsp");
     }
-
     private void login(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        System.out.println("Llego a Login de LoginController");
         String dni = req.getParameter("txtDni");
         String password = req.getParameter("txtPassword");
         String role = req.getParameter("role");
@@ -63,15 +65,30 @@ public class LoginController extends HttpServlet {
             HttpSession session = req.getSession();
             session.setAttribute("user", user);
 
+            // Message Login success
+            req.setAttribute("messageType", "info");
+            req.setAttribute("message", "Login successful! Welcome to your dashboard.");
             // Redirigir según el rol
             if (user instanceof Auctioneer) {
+                req.getRequestDispatcher("LotManagementController?route=list").forward(req, resp);
+                //resp.sendRedirect("LotManagementController?route=list");
+            }  else if(user instanceof Bidder) {
                 resp.sendRedirect("LotManagementController?route=list");
-            } /* else {
-                resp.sendRedirect("jsp/USER_LOT_BOARD.jsp");
-            }*/
+            }
         } else {
-            req.setAttribute("error", "Invalid credentials");
+            req.setAttribute("messageType", "error");
+            req.setAttribute("message", "Invalid credentials. Please try again.");
             req.getRequestDispatcher("jsp/LOGIN.jsp").forward(req, resp);
         }
+    }
+
+    private void logout(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession();
+        if (session != null) {
+            session.invalidate();
+        }
+        req.setAttribute("messageType", "info");
+        req.setAttribute("message", "You have successfully logged out.");
+        req.getRequestDispatcher("jsp/LOGIN.jsp").forward(req, resp);
     }
 }

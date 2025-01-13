@@ -62,15 +62,17 @@ public class AddressManagementController extends HttpServlet {
         }
     }
 
-    private void accept(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    private void accept(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         int idAddress = Integer.parseInt(req.getParameter("idAddress"));
         AddressService addressService = new AddressService();
         if (addressService.removeAddress(idAddress)) {
-            resp.sendRedirect("AddressManagementController?route=list");
+            req.setAttribute("messageType", "info");
+            req.setAttribute("message", "Address deleted successfully.");
+            req.getRequestDispatcher("AddressManagementController?route=list").forward(req, resp);
         } else {
-            HttpSession session = req.getSession();
-            session.setAttribute("message", "Could not delete address");
-            resp.sendRedirect("AddressManagementController?route=list");
+            req.setAttribute("messageType", "error");
+            req.setAttribute("message", "Failed to delete address.");
+            req.getRequestDispatcher("AddressManagementController?route=list").forward(req, resp);
         }
     }
 
@@ -133,28 +135,34 @@ public class AddressManagementController extends HttpServlet {
         }
     }
 
-    private void saveExistingAddress(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    private void saveExistingAddress(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         Address address = parseAddressFromRequest(req);
         AddressService addressService = new AddressService();
 
         if (addressService.updateAddress(address)) {
-            resp.sendRedirect("AddressManagementController?route=list");
+            req.setAttribute("messageType", "info");
+            req.setAttribute("message", "Address updated successfully.");
+            req.getRequestDispatcher("AddressManagementController?route=list").forward(req, resp);
+            //resp.sendRedirect("AddressManagementController?route=list");
         } else {
-            HttpSession session = req.getSession();
-            session.setAttribute("message", "The address could not be updated");
-            resp.sendRedirect("AddressManagementController?route=list");
+            req.setAttribute("messageType", "error");
+            req.setAttribute("message", "Failed to update address.");
+            req.getRequestDispatcher("AddressManagementController?route=list").forward(req, resp);
         }
     }
 
-    private void saveNewAddress(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    private void saveNewAddress(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         Address address = parseAddressFromRequest(req);
         AddressService addressService = new AddressService();
         if (addressService.createAddress(address)) {
-            resp.sendRedirect("AddressManagementController?route=list");
+            req.setAttribute("messageType", "info");
+            req.setAttribute("message", "Address created successfully.");
+            req.getRequestDispatcher("AddressManagementController?route=list").forward(req, resp);
+            //resp.sendRedirect("AddressManagementController?route=list");
         } else {
-            HttpSession session = req.getSession();
-            session.setAttribute("message", "The address could not be created");
-            resp.sendRedirect("AddressManagementController?route=list");
+            req.setAttribute("messageType", "error");
+            req.setAttribute("message", "Failed to create address.");
+            req.getRequestDispatcher("AddressManagementController?route=list").forward(req, resp);
         }
     }
 
@@ -195,6 +203,6 @@ public class AddressManagementController extends HttpServlet {
         String houseNumber = req.getParameter("txtHouseNumber");
         String company = req.getParameter("txtCompany");
 
-        return new Address(id, auctioneer, name, province, city, mainStreet, secondaryStreet, postcode, houseNumber, company);
+        return new Address(id, name, province, city, mainStreet, secondaryStreet, postcode, houseNumber, company, auctioneer);
     }
 }

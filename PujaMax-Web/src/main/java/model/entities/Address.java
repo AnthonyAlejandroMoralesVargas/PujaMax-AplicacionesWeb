@@ -1,33 +1,53 @@
 package model.entities;
 
+import jakarta.persistence.*;
+
 import java.io.Serial;
 import java.io.Serializable;
 
+@Entity
 public class Address implements Serializable {
-
     @Serial
     private static final long serialVersionUID = 1L;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idAddress")
     private int idAddress;
-    private Auctioneer auctioneer;
+
+    @Column(name = "name")
     private String name;
+
+    @Column(name = "province")
     private String province;
+
+    @Column(name = "city")
     private String city;
+
+    @Column(name = "mainStreet")
     private String mainStreet;
+
+    @Column(name = "secondaryStreet")
     private String secondaryStreet;
+
+    @Column(name = "postcode")
     private String postcode;
+
+    @Column(name = "houseNumber")
     private String houseNumber;
+
+    @Column(name = "company")
     private String company;
 
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "idAuctioneer")
+    private Auctioneer auctioneer;
 
     public Address() {
     }
 
-    public Address(int idAddress, Auctioneer auctioneer,String name, String province, String city, String mainStreet, String secondaryStreet,
-                   String postcode, String houseNumber, String company) {
-        super();
+    public Address(int idAddress, String name, String province, String city, String mainStreet, String secondaryStreet, String postcode, String houseNumber, String company, Auctioneer auctioneer) {
         this.idAddress = idAddress;
-        this.auctioneer = auctioneer;
         this.name = name;
         this.province = province;
         this.city = city;
@@ -36,6 +56,7 @@ public class Address implements Serializable {
         this.postcode = postcode;
         this.houseNumber = houseNumber;
         this.company = company;
+        this.auctioneer = auctioneer;
     }
 
     public int getIdAddress() {
@@ -118,7 +139,29 @@ public class Address implements Serializable {
         this.company = company;
     }
 
-    public static long getSerialversionuid() {
-        return serialVersionUID;
+    @Override
+    public String toString() {
+        return "Address{" +
+                "idAddress=" + idAddress +
+                ", auctioneer=" + auctioneer +
+                ", name='" + name + '\'' +
+                ", province='" + province + '\'' +
+                ", city='" + city + '\'' +
+                ", mainStreet='" + mainStreet + '\'' +
+                ", secondaryStreet='" + secondaryStreet + '\'' +
+                ", postcode='" + postcode + '\'' +
+                ", houseNumber='" + houseNumber + '\'' +
+                ", company='" + company + '\'' +
+                '}';
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
     }
 }

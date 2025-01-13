@@ -1,7 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ page import="java.util.Date" %>
-<%@ page import="java.util.Date" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+
 <%
     Date currentDate = new Date();
 %>
@@ -36,9 +37,10 @@
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
                     <li><a class="dropdown-item"
                            href="${pageContext.request.contextPath}/AddressManagementController?route=list"><i
-                            class="fas fa-cogs"></i>
-                        Profile</a></li>
-                    <li><a class="dropdown-item" href="${pageContext.request.contextPath}/LoginController?route=login"><i class="fas fa-sign-out-alt"></i> Logout</a>
+                            class="fas fa-cogs"></i> Profile</a></li>
+                    <li><a class="dropdown-item"
+                           href="${pageContext.request.contextPath}/LoginController?route=logOut"><i
+                            class="fas fa-sign-out-alt"></i> Logout</a>
                 </ul>
             </div>
         </div>
@@ -49,7 +51,7 @@
 <main class="container my-4">
     <section class="home-container">
         <nav class="nav-container">
-            <a href="AUCTIONEER_LOT_BOARD.html" class="nav-item"><i class="fas fa-home"></i> Home</a>
+            <a href="${pageContext.request.contextPath}/LotManagementController?route=list" class="nav-item"><i class="fas fa-home"></i> Home</a>
             <a href="${pageContext.request.contextPath}/LotManagementController?route=add" class="nav-item">
                 <i class="fas fa-plus-circle"></i> Add Lot</a>
             <a href="AUCTIONEER_HISTORY.html" class="nav-item"><i class="fas fa-history"></i>
@@ -80,16 +82,16 @@
                                 </c:otherwise>
                             </c:choose>
                             <!-- Enlace a detalles -->
-                            <a href="AUCTIONEER_LOT.html" class="text-white" title="Go to Details">
-                                <i class="fas fa-angle-right"></i>
-                            </a>
+                            <a href="${pageContext.request.contextPath}/ProductManagementController?route=list&idLot=${lot.idLot}" class="text-white" title="Go to Details">
+    									<i class="fas fa-angle-right"></i>
+									</a>
                         </div>
 
                         <!-- Cuerpo de la tarjeta -->
                         <div class="card-body d-flex justify-content-between align-items-start">
                             <div>
-                                <h5 class="card-title">${lot.title}</h5>
-                                <h5 class="card-title">${lot.city}</h5>
+                                <h3 class="card-title">${lot.title}</h3>
+                                <h5 class="card-subtitle">${lot.address.city}</h5>
                                 <p class="card-text">
                                     SCHEDULED CLOSURE DATE:
                                     <c:out value="${lot.dateClosing}"/>
@@ -168,11 +170,6 @@
                         <input type="date" class="form-control" id="txtClosingDate" name="txtClosingDate">
                     </div>
                     <div class="mb-3">
-                        <label for="txtCity" class="form-label">City</label>
-                        <input type="text" class="form-control" id="txtCity" name="txtCity" placeholder="Enter city">
-                        <input type="hidden" name="txtState" id="txtState">
-                    </div>
-                    <div class="mb-3">
                         <label for="delivery" class="form-label">Address</label>
                         <select id="delivery" class="form-select" name="txtIdAddress">
                             <option selected disabled>Choose Address</option>
@@ -220,21 +217,14 @@
                     <div class="mb-3">
                         <label for="editLotOpeningDate" class="form-label">Opening Date</label>
                         <input type="date" class="form-control" name="txtOpeningDate" id="editLotOpeningDate"
-                               value="${lot.dateOpening}" required>
+                               value="<fmt:formatDate value='${lot.dateOpening}' pattern='yyyy-MM-dd' />" required>
                     </div>
 
                     <!-- Closing Date -->
                     <div class="mb-3">
                         <label for="editLotClosingDate" class="form-label">Closing Date</label>
                         <input type="date" class="form-control" name="txtClosingDate" id="editLotClosingDate"
-                               value="${lot.dateClosing}" required>
-                    </div>
-
-                    <!-- City -->
-                    <div class="mb-3">
-                        <label for="editLotCity" class="form-label">City</label>
-                        <input type="text" class="form-control" name="txtCity" id="editLotCity" value="${lot.city}"
-                               required>
+                               value="<fmt:formatDate value='${lot.dateClosing}' pattern='yyyy-MM-dd' />" required>
                     </div>
 
                     <!-- Address Dropdown -->
@@ -272,26 +262,46 @@
             <div class="modal-body text-center">
                 <p>Are you sure you want to delete the following lot?</p>
                 <!-- Información del lote -->
-                <div class="text-start">
-                    <p><strong>Title:</strong> ${lot.title}</p>
-                    <p><strong>City:</strong> ${lot.city}</p>
-                    <p><strong>Scheduled Closure Date:</strong> <c:out value="${lot.dateClosing}"/></p>
-                    <p><strong>Products in Auction:</strong> ${lot.quantityProducts}</p>
+                <div class="modal-body text-center">
+                    <h3>${lot.title}</h3>
+                    <p class="card-text text-secondary small mb-4">
+                        <i class="fas fa-map-marker-alt me-2"></i>${lot.address.province}, ${lot.address.city}
+                    </p>
+                    <p class="card-text text-secondary small mb-4">
+                        <i class="fa-solid fa-hourglass-end"></i>  ${lot.dateClosing}
+                    </p>
+                    <p class="card-text text-secondary small mb-4">
+                        <i class="fas fa-box"></i>  ${lot.quantityProducts}
+                    </p>
                 </div>
             </div>
             <div class="modal-footer justify-content-center">
-                <a href="LotManagementController?route=list" class="btn btn-danger"> Cancel </a>
-                <!-- Formulario para confirmar la eliminación -->
-                <form action="${pageContext.request.contextPath}/LotManagementController?route=accept&idLot=${lot.idLot}"
-                      method="POST">
-                    <button type="submit" class="btn btn-danger">Delete</button>
+                <!-- Cancel button, closes the modal -->
+                <a href="LotManagementController?route=list"
+                   class="btn btn-danger">Cancel</a>
+
+                <!-- Form to confirm the deletion -->
+                <form
+                        action="${pageContext.request.contextPath}/LotManagementController?route=accept&idLot=${lot.idLot}"
+                        method="POST">
+                    <button type="submit" class="btn btn-success">Accept</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
 
-
+<!-- Modal para mensajes informativos y de error -->
+<div class="modal modal-info" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body ${messageType == 'info' ? 'info' : 'error'}">
+                <i class="fas ${messageType == 'info' ? 'fa-info-circle text-info' : 'fa-exclamation-circle text-danger'}"></i>
+                <span>${message}</span>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -313,6 +323,7 @@
             var deleteModal = new bootstrap.Modal(document.getElementById('DELETE_LOT_MODAL'));
             deleteModal.show();
         }
+        F
     };
 </script>
 </body>
