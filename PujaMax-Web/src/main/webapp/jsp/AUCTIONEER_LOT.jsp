@@ -70,7 +70,7 @@
                             </div>
                             <div class="card-footer d-flex justify-content-between">
                                 <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#EDIT_PRODUCT_MODAL_${product.idProduct}">Edit</a>
-                                <a href="ProductManagementController?route=delete&idProduct=${product.idProduct}&idLot=${idLot}" class="btn btn-danger">Delete</a>
+                                <a href="#" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#DELETE_MODAL_${product.idProduct}">Delete</a>
                             </div>
                         </div>
                     </div>
@@ -112,6 +112,30 @@
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                                             <button type="submit" class="btn btn-primary">Save</button>
                                         </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Delete Product Modal -->
+                    <div class="modal fade" id="DELETE_MODAL_${product.idProduct}" tabindex="-1" aria-labelledby="DELETE_MODAL_Label" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header bg-danger text-white">
+                                    <h5 class="modal-title" id="DELETE_MODAL_Label">Confirm Deletion</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Are you sure you want to delete the product <strong>${product.title}</strong>?</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <form action="ProductManagementController" method="post">
+                                        <input type="hidden" name="route" value="delete">
+                                        <input type="hidden" name="idProduct" value="${product.idProduct}">
+                                        <input type="hidden" name="idLot" value="${idLot}">
+                                        <button type="submit" class="btn btn-danger">Delete</button>
                                     </form>
                                 </div>
                             </div>
