@@ -82,9 +82,9 @@
                                 </c:otherwise>
                             </c:choose>
                             <!-- Enlace a detalles -->
-                            <a href="AUCTIONEER_LOT.html" class="text-white" title="Go to Details">
-                                <i class="fas fa-angle-right"></i>
-                            </a>
+                            <a href="${pageContext.request.contextPath}/ProductManagementController?route=list&idLot=${lot.idLot}" class="text-white" title="Go to Details">
+    									<i class="fas fa-angle-right"></i>
+									</a>
                         </div>
 
                         <!-- Cuerpo de la tarjeta -->
