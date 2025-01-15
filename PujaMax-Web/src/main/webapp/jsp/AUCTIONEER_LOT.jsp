@@ -28,7 +28,7 @@
                     <a href="#" class="dropdown-toggle" id="dropdownMenuButton" data-bs-toggle="dropdown"
                         aria-expanded="false"><i class="fas fa-user"></i> User</a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
-                        <li><a class="dropdown-item" href="UserProfileController"><i class="fas fa-cogs"></i>
+                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/AddressManagementController?route=list"><i class="fas fa-cogs"></i>
                                 Profile</a></li>
                         <li><a class="dropdown-item"
                            href="${pageContext.request.contextPath}/LoginController?route=logOut"><i
@@ -62,7 +62,8 @@
                 <c:forEach var="product" items="${products}">
                     <div class="col-md-4 mb-4">
                         <div class="card h-100">
-                            <img src="ProductImage?idProduct=${product.idProduct}" class="card-img-top" alt="Product Image">
+                            <img src="ProductManagementController?route=list&idProduct=${product.idProduct}" class="card-img-top" alt="Product Image">
+
                             <div class="card-body">
                                 <h5 class="card-title">${product.title}</h5>
                                 <p class="card-text">${product.description}</p>

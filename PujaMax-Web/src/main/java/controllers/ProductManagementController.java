@@ -66,8 +66,34 @@ public class ProductManagementController extends HttpServlet {
 		}
 	}
 
-	private void list(HttpServletRequest req, HttpServletResponse resp)
-			throws ServletException, IOException, SQLException {
+	private void list(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException, SQLException {
+		// Verificar si se solicita una imagen específica
+		String idProductParam = req.getParameter("idProduct");
+		if (idProductParam != null) {
+			try {
+				int idProduct = Integer.parseInt(idProductParam);
+				ProductService productService = new ProductService();
+				Product product = productService.findProductById(idProduct);
+
+				if (product == null || product.getPhoto() == null) {
+					resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Image not found");
+					return;
+				}
+
+				// Configurar el tipo de contenido y enviar la imagen
+				resp.setContentType("image/jpeg");
+				resp.setContentLength(product.getPhoto().length);
+				resp.getOutputStream().write(product.getPhoto());
+			} catch (NumberFormatException e) {
+				resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid Product ID");
+			} catch (Exception e) {
+				resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
+						"Error retrieving image: " + e.getMessage());
+			}
+			return; // Salir después de procesar la imagen
+		}
+
+		// Lógica para listar productos
 		try {
 			int idLot = Integer.parseInt(req.getParameter("idLot"));
 			ProductService productService = new ProductService();
