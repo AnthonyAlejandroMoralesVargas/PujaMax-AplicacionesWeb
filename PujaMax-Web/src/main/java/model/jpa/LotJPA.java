@@ -135,5 +135,37 @@ public class LotJPA {
         }
         return result;
     }
+    
+    public List<Lot> findLotsByState(String state) {
+        List<Lot> lots = new ArrayList<>();
+        Date now = new Date();
+
+        String jpql = "SELECT l FROM Lot l WHERE l.state = :state";
+
+        try (EntityManager em = getEntityManager()) {
+            Query query = em.createQuery(jpql);
+            query.setParameter("state", state);
+            lots = query.getResultList();
+
+            for (Lot lot : lots) {
+                boolean shouldBeActive = !now.before(lot.getDateOpening()) && !now.after(lot.getDateClosing());
+
+                if ("ACTIVE".equals(state) && !shouldBeActive) {
+                    lot.setState("INACTIVE");
+                    updateLotState(em, lot);
+                }
+            }
+
+            if ("ACTIVE".equals(state)) {
+                lots.removeIf(lot -> "INACTIVE".equals(lot.getState()));
+            }
+        } catch (Exception e) {
+            System.err.println("Couldn't find lots by state: " + e.getMessage());
+        }
+        return lots;
+    }
+
+
+
 }
 

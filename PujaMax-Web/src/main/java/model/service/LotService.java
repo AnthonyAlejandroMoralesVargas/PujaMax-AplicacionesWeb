@@ -17,6 +17,10 @@ public class LotService {
     public List<Lot> findLotsByIdAuctioneer(int idAuctioneer) throws SQLException {
         return lotJPA.findLotsByIdAuctioneer(idAuctioneer);
     }
+    
+    public List<Lot> findLotsByState(String state) throws SQLException {
+        return lotJPA.findLotsByState(state);
+    }
 
     public boolean createLot(Lot lot) {
         return lotJPA.createLot(lot);

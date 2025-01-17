@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.entities.Address;
 import model.entities.Auctioneer;
+import model.entities.Bidder;
 import model.entities.Lot;
 import model.service.AddressService;
 import model.service.LotService;
@@ -40,6 +41,9 @@ public class LotManagementController extends HttpServlet {
             case "list":
                 this.list(req, resp);
                 break;
+            case "listBidder":
+                this.listLotFromBidder(req, resp);
+                break;
             case "add":
                 this.addLot(req, resp);
                 break;
@@ -63,36 +67,65 @@ public class LotManagementController extends HttpServlet {
         }
     }
 
+
     private void list(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
-        Auctioneer auctioneer = (Auctioneer) session.getAttribute("user");
+        Object user = session.getAttribute("user");
+
+        if (user instanceof Auctioneer) {
+            Auctioneer auctioneer = (Auctioneer) user;
+            List<Lot> lots;
+            try {
+                LotService lotService = new LotService();
+                lots = lotService.findLotsByIdAuctioneer(auctioneer.getId());
+                req.setAttribute("lots", lots);
+                req.getRequestDispatcher("jsp/AUCTIONEER_LOT_BOARD.jsp").forward(req, resp);
+            } catch (SQLException e) {
+                throw new ServletException("Error retrieving lots for auctioneer", e);
+            }
+        } else if (user instanceof Bidder) {
+            listLotFromBidder(req, resp);
+        } else {
+            throw new IllegalArgumentException("Unknown user type in session.");
+        }
+    }
+
+    
+    private void listLotFromBidder(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        HttpSession session = req.getSession();
         List<Lot> lots;
 
         try {
             LotService lotService = new LotService();
-            lots = lotService.findLotsByIdAuctioneer(auctioneer.getId());
+            lots = lotService.findLotsByState("ACTIVE");
             req.setAttribute("lots", lots);
-            req.getRequestDispatcher("jsp/AUCTIONEER_LOT_BOARD.jsp").forward(req, resp);
+            req.getRequestDispatcher("jsp/BIDDER_LOTS_BOARD.jsp").forward(req, resp);
         } catch (SQLException e) {
-            throw new ServletException("Error retrieving lots", e);
+            throw new ServletException("Error retrieving lots for bidder", e);
         }
-
     }
 
     private void addLot(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
-        Auctioneer auctioneer = (Auctioneer) session.getAttribute("user");
-        try {
-            List<Lot> lots = new LotService().findLotsByIdAuctioneer(auctioneer.getId());
-            List<Address> addresses = new AddressService().findAddressesByIdAuctioneer(auctioneer.getId());
-            req.setAttribute("addresses", addresses);
-            req.setAttribute("lots", lots);
-            req.setAttribute("route", "add");
-            req.getRequestDispatcher("jsp/AUCTIONEER_LOT_BOARD.jsp").forward(req, resp);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        Object user = session.getAttribute("user");
+
+        if (user instanceof Auctioneer) {
+            Auctioneer auctioneer = (Auctioneer) user;
+            try {
+                List<Lot> lots = new LotService().findLotsByIdAuctioneer(auctioneer.getId());
+                List<Address> addresses = new AddressService().findAddressesByIdAuctioneer(auctioneer.getId());
+                req.setAttribute("addresses", addresses);
+                req.setAttribute("lots", lots);
+                req.setAttribute("route", "add");
+                req.getRequestDispatcher("jsp/AUCTIONEER_LOT_BOARD.jsp").forward(req, resp);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        } else {
+            throw new IllegalArgumentException("Only auctioneers can add lots.");
         }
     }
+
 
     private void saveNewLot(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
         Lot lot = parseLotFromRequest(req);
