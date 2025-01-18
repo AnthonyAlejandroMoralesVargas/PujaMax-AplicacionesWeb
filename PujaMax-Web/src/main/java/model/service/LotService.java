@@ -33,4 +33,8 @@ public class LotService {
     public boolean removeLot(int idLot) {
         return lotJPA.removeLot(idLot);
     }
+    
+    public List<Lot> findLotsByState(String state) throws SQLException {
+        return lotJPA.findLotsByState(state);
+    }
 }
