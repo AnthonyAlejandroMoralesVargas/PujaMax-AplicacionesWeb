@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core"%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -19,7 +19,7 @@
     <header class="header-container">
         <div class="container d-flex justify-content-between align-items-center">
             <div class="d-flex align-items-center">
-                <img src="../images/logo1.png" alt="Logo" style="height: 50px; margin-right: 10px;">
+                <img src="${pageContext.request.contextPath}/images/OnlyB.png" alt="Logo" style="height: 50px; margin-right: 10px;">
                 <h1 class="app-name mb-0">PUJAMAX Online Auction</h1>
             </div>
             <div class="d-flex align-items-center">
@@ -27,11 +27,8 @@
                     <a href="#" class="dropdown-toggle" id="dropdownMenuButton" data-bs-toggle="dropdown"
                         aria-expanded="false"><i class="fas fa-user"></i> User</a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
-                        <li><a class="dropdown-item" href="BIDDER_PROFILE.html"><i class="fas fa-cogs"></i> Profile</a>
-                        </li>
-                        <li><a class="dropdown-item" href="../index.html"><i class="fas fa-sign-out-alt"></i> Logout</a>
-                        </li>
-                        </li>
+                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/AddressManagementController?route=list"><i class="fas fa-cogs"></i> Profile</a></li>
+                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/LoginController?route=logOut"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
                     </ul>
                 </div>
             </div>
@@ -43,91 +40,48 @@
         <!-- Filter Section -->
         <section class="home-container">
             <nav class="nav-container">
-                <a href="BIDDER_LOTS_BOARD.html" class="nav-item"><i class="fas fa-home"></i> Home</a>
-                <a href="BIDDER_HISTORY.html" class="nav-item"><i class="fas fa-history"></i>
-                    History</a>
+                <a href="LotManagementController?route=listBidder&idLot=${idLot}" class="nav-item"><i class="fas fa-home"></i> Home</a>
+                <a href="${pageContext.request.contextPath}/PlaceBidController?route=history" class="nav-item"><i class="fas fa-history"></i>
+                History</a>
             </nav>
         </section>
 
-        <!-- Framed Content -->
-        <div class="product-card">
-            <div class="row">
-                <!-- Product Photo -->
-                <div class="col-md-4">
-                    <img src="https://via.placeholder.com/300x200" alt="Product Image" class="product-img mb-3">
-                    <a href="PRODUCT.html" class="btn btn-view w-100">VIEW THIS LOT</a>
-                </div>
+        <!-- Bid History Section -->
+        <div>
+            <c:if test="${not empty bids}">
+                <c:forEach var="bid" items="${bids}">
+                    <div class="product-card">
+                        <div class="row">
+                            <!-- Product Photo -->
+                            <div class="col-md-4">
+                                <img src="PlaceBidController?route=list&idProduct=${bid.product.idProduct}" alt="Product Image" class="product-img mb-3">
+                                <a href="PlaceBidController?route=productDetails&idProduct=${bid.product.idProduct}" class="btn btn-view w-100">VIEW THIS LOT</a>
+                            </div>
 
-                <!-- Product Information -->
-                <div class="col-md-4">
-                    <div>
-                        <strong>Title:</strong> Product Title<br>
-                        <strong>Price:</strong> $290.00<br>
-                        <strong>Description:</strong> Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                            <!-- Product Information -->
+                            <div class="col-md-4">
+                                <div>
+                                    <strong>Title:</strong> ${bid.product.title}<br>
+                                    <strong>Price:</strong> $${bid.currentPrice}<br>
+                                    <strong>Description:</strong> ${bid.product.description}
+                                </div>
+                            </div>
+
+                            <!-- Status and Options -->
+                            <div class="col-md-4">
+                                <div class="status-box ${bid.state == 'WON' ? 'status-win' : 'status-lose'}">
+                                    ${bid.state}
+                                </div>
+                                <button class="btn-option" data-bs-toggle="modal"
+                                    data-bs-target="#${bid.state == 'WON' ? 'SUBMIT_RECEIPT_PAYMENT' : 'DESCRIPTION_REJECTION'}">Options</button>
+                            </div>
+                        </div>
                     </div>
-                </div>
-
-                <!-- Status and Options -->
-                <div class="col-md-4">
-                    <div class="status-box status-lose">Lose</div>
-                    <button class="btn-option" data-bs-toggle="modal"
-                        data-bs-target="#DESCRIPTION_REJECTION">Options</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Second Product -->
-        <div class="product-card">
-            <div class="row">
-                <!-- Product Photo -->
-                <div class="col-md-4">
-                    <img src="https://via.placeholder.com/300x200" alt="Product Image" class="product-img mb-3">
-                    <a href="PRODUCT.html" class="btn btn-view w-100">VIEW THIS LOT</a>
-                </div>
-
-                <!-- Product Information -->
-                <div class="col-md-4">
-                    <div>
-                        <strong>Title:</strong> Another Product Title<br>
-                        <strong>Price:</strong> $150.00<br>
-                        <strong>Description:</strong> Consequatur explicabo illo sunt repudiandae quos.
-                    </div>
-                </div>
-
-                <!-- Status and Options -->
-                <div class="col-md-4">
-                    <div class="status-box status-win">Win</div>
-                    <button class="btn-option" data-bs-toggle="modal"
-                        data-bs-target="#SUBMIT_RECEIPT_PAYMENT">Options</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Third Product -->
-        <div class="product-card">
-            <div class="row">
-                <!-- Product Photo -->
-                <div class="col-md-4">
-                    <img src="https://via.placeholder.com/300x200" alt="Product Image" class="product-img mb-3">
-                    <a href="PRODUCT.html" class="btn btn-view w-100">VIEW THIS LOT</a>
-                </div>
-
-                <!-- Product Information -->
-                <div class="col-md-4">
-                    <div>
-                        <strong>Title:</strong> Another Product Title<br>
-                        <strong>Price:</strong> $3000.00<br>
-                        <strong>Description:</strong> Consequatur explicabo illo sunt repudiandae quos.
-                    </div>
-                </div>
-
-                <!-- Status and Options -->
-                <div class="col-md-4">
-                    <div class="status-box status-win">Delivery</div>
-                    <button class="btn-option" data-bs-toggle="modal"
-                        data-bs-target="#DESCRIPTION_ADDRESS">Options</button>
-                </div>
-            </div>
+                </c:forEach>
+            </c:if>
+            <c:if test="${empty bids}">
+                <p class="text-center mt-4">You haven't placed any bids yet.</p>
+            </c:if>
         </div>
     </main>
 
@@ -139,7 +93,6 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 <div class="modal fade" id="SUBMIT_RECEIPT_PAYMENT" tabindex="-1" aria-labelledby="SUBMIT_RECEIPT_PAYMENTLabel"
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">

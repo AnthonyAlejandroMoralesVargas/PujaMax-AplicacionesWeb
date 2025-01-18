@@ -40,8 +40,9 @@
         <section class="home-container mb-3">
             <nav class="nav-container">
                 <div class="d-flex flex-column flex-md-row">
-                    <a href="${pageContext.request.contextPath}/LotManagementController?route=listBidder" class="nav-item me-3"><i class="fas fa-home"></i> Home</a>
-                    <a href="BIDDER_HISTORY.jsp" class="nav-item"><i class="fas fa-history"></i> History</a>
+                    <a href="LotManagementController?route=listBidder&idLot=${idLot}" class="nav-item"><i class="fas fa-home"></i> Home</a>
+                <a href="${pageContext.request.contextPath}/PlaceBidController?route=history" class="nav-item"><i class="fas fa-history"></i>
+                History</a>
                 </div>
             </nav>
         </section>

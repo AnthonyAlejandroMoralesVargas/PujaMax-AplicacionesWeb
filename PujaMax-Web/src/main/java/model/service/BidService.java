@@ -35,6 +35,20 @@ public class BidService {
         return bidJPA.createBid(bid);
     }
     
+    public List<Bid> findActiveBidsByProductId(int productId) {
+        return bidJPA.findActiveBidsByProductId(productId);
+    }
+    
+    
+    public List<Bid> findBidsByUserId(int userId) {
+        return bidJPA.findBidsByUserId(userId);
+    }
+
+
+    public void expireActiveBidsForProduct(int productId) {
+        bidJPA.expireActiveBidsForProduct(productId);
+    }
+    
     public boolean updateBid(Bid bid) {
         return bidJPA.updateBid(bid);
     }
