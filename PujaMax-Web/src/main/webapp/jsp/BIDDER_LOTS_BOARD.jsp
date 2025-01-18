@@ -52,8 +52,6 @@
     <section class="home-container">
         <nav class="nav-container">
             <a href="${pageContext.request.contextPath}/LotManagementController?route=list" class="nav-item"><i class="fas fa-home"></i> Home</a>
-            <a href="${pageContext.request.contextPath}/LotManagementController?route=add" class="nav-item">
-                <i class="fas fa-plus-circle"></i> Add Lot</a>
             <a href="BIDDER_HISTORY.html" class="nav-item"><i class="fas fa-history"></i>
                 History</a>
         </nav>
@@ -82,7 +80,7 @@
                                 </c:otherwise>
                             </c:choose>
                             <!-- Enlace a detalles -->
-                            <a href="${pageContext.request.contextPath}/ProductManagementController?route=list&idLot=${lot.idLot}" class="text-white" title="Go to Details">
+                            <a href="${pageContext.request.contextPath}/PlaceBidController?route=list&idLot=${lot.idLot}" class="text-white" title="Go to Details">
     									<i class="fas fa-angle-right"></i>
 									</a>
                         </div>
@@ -97,21 +95,6 @@
                                     <c:out value="${lot.dateClosing}"/>
                                     <br>
                                 </p>
-                            </div>
-                            <!-- Iconos de acción -->
-                            <div class="action-icons d-flex flex-column align-items-center">
-                                <!-- EDITAR -->
-                                <a href="${pageContext.request.contextPath}/LotManagementController?route=edit&idLot=${lot.idLot}"
-                                   class="nav-item text-primary"
-                                   title="Edit">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                                <!-- ELIMINAR -->
-                                <a href="${pageContext.request.contextPath}/LotManagementController?route=delete&idLot=${lot.idLot}"
-                                   class="text-danger"
-                                   title="Delete">
-                                    <i class="fas fa-trash-alt"></i>
-                                </a>
                             </div>
                         </div>
 
@@ -184,107 +167,6 @@
                            class="btn btn-danger"> Cancel </a>
                         <button type="submit" class="btn btn-primary">Save</button>
                     </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Edit Lot Modal -->
-<div class="modal fade" id="EDIT_LOT_MODAL" tabindex="-1" aria-labelledby="EDIT_LOT_MODALLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title" id="EDIT_LOT_MODALLabel"><i class="fas fa-edit"></i> Edit Lot</h5>
-                <a href="LotManagementController?route=list" class="btn-close"
-                   aria-label="Close"></a>
-            </div>
-            <form action="${pageContext.request.contextPath}/LotManagementController?route=saveExisting" method="POST">
-                <div class="modal-body">
-                    <!-- Hidden ID Field -->
-                    <input type="hidden" name="txtId" id="editLotId" value="${lot.idLot}">
-
-                    <!-- Title -->
-                    <div class="mb-3">
-                        <label for="editLotTitle" class="form-label">Title</label>
-                        <input type="text" class="form-control" name="txtTitle" id="editLotTitle" value="${lot.title}"
-                               required>
-                        <input type="hidden" name="txtQuantityProducts" id="editLotQuantityProducts"
-                               value="${lot.quantityProducts}">
-                    </div>
-
-                    <!-- Opening Date -->
-                    <div class="mb-3">
-                        <label for="editLotOpeningDate" class="form-label">Opening Date</label>
-                        <input type="date" class="form-control" name="txtOpeningDate" id="editLotOpeningDate"
-                               value="<fmt:formatDate value='${lot.dateOpening}' pattern='yyyy-MM-dd' />" required>
-                    </div>
-
-                    <!-- Closing Date -->
-                    <div class="mb-3">
-                        <label for="editLotClosingDate" class="form-label">Closing Date</label>
-                        <input type="date" class="form-control" name="txtClosingDate" id="editLotClosingDate"
-                               value="<fmt:formatDate value='${lot.dateClosing}' pattern='yyyy-MM-dd' />" required>
-                    </div>
-
-                    <!-- Address Dropdown -->
-                    <div class="mb-3">
-                        <label for="editLotAddress" class="form-label">Address</label>
-                        <select class="form-select" name="txtIdAddress" id="editLotAddress" required>
-                            <option disabled>Select Address</option>
-                            <c:forEach var="addr" items="${addresses}">
-                                <option value="${addr.idAddress}"
-                                        <c:if test="${lot.address.idAddress == addr.idAddress}">selected</c:if>>${addr.name}</option>
-                            </c:forEach>
-                        </select>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <a href="LotManagementController?route=list" class="btn btn-danger"> Cancel </a>
-                    <button type="submit" class="btn btn-primary">Save</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-
-<!-- Delete Lot Modal -->
-<div class="modal fade" id="DELETE_LOT_MODAL" tabindex="-1" aria-labelledby="DELETE_LOT_MODALLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header bg-danger text-white">
-                <h5 class="modal-title" id="DELETE_LOT_MODALLabel"><i class="fas fa-trash-alt"></i> Confirm Deletion
-                </h5>
-                <a href="LotManagementController?route=list" class="btn-close"
-                   aria-label="Close"></a>
-            </div>
-            <div class="modal-body text-center">
-                <p>Are you sure you want to delete the following lot?</p>
-                <!-- Información del lote -->
-                <div class="modal-body text-center">
-                    <h3>${lot.title}</h3>
-                    <p class="card-text text-secondary small mb-4">
-                        <i class="fas fa-map-marker-alt me-2"></i>${lot.address.province}, ${lot.address.city}
-                    </p>
-                    <p class="card-text text-secondary small mb-4">
-                        <i class="fa-solid fa-hourglass-end"></i>  ${lot.dateClosing}
-                    </p>
-                    <p class="card-text text-secondary small mb-4">
-                        <i class="fas fa-box"></i>  ${lot.quantityProducts}
-                    </p>
-                </div>
-            </div>
-            <div class="modal-footer justify-content-center">
-                <!-- Cancel button, closes the modal -->
-                <a href="LotManagementController?route=list"
-                   class="btn btn-danger">Cancel</a>
-
-                <!-- Form to confirm the deletion -->
-                <form
-                        action="${pageContext.request.contextPath}/LotManagementController?route=accept&idLot=${lot.idLot}"
-                        method="POST">
-                    <button type="submit" class="btn btn-success">Accept</button>
                 </form>
             </div>
         </div>

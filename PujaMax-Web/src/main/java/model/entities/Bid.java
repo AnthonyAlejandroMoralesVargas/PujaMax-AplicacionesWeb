@@ -7,6 +7,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 
 @Entity
 public class Bid {
@@ -18,25 +21,62 @@ public class Bid {
 	@Column(name = "dateBid")
 	private Date dateBid;
 	
+	@Column(name = "currentPrice")
+	private Double currentPrice;
+	
 	@Column(name = "price")
 	private Double price;
 	
 	@Column(name = "state")
     private String state;
+	
+	@ManyToOne
+	@JoinColumn(name = "idProduct")
+	private Product product;
+
+
+	
 
 	public Bid() {
 		
 	} 
-	
-	public Bid(Date dateBid, Double price, String state) {
-		super();
-		this.dateBid = dateBid;
-		this.price = price;
-		this.state = state;
-	}
 
 	public Date getDateBid() {
 		return dateBid;
+	}
+
+
+	public Bid(int idBid, Date dateBid, Double currentPrice, Double price, String state, Product product) {
+		super();
+		this.idBid = idBid;
+		this.dateBid = dateBid;
+		this.currentPrice = currentPrice;
+		this.price = price;
+		this.state = state;
+		this.product = product;
+	}
+
+	public Product getProduct() {
+			return product;
+		}
+	
+		public void setProduct(Product product) {
+			this.product = product;
+		}
+	public int getIdBid() {
+		return idBid;
+	}
+
+	public void setIdBid(int idBid) {
+		this.idBid = idBid;
+	}
+
+	public Double getCurrentPrice() {
+		return currentPrice;
+	}
+
+	public void setCurrentPrice(Double currentPrice) {
+		this.currentPrice = currentPrice;
 	}
 
 	public void setDateBid(Date dateBid) {
@@ -65,6 +105,7 @@ public class Bid {
                 "dateBid=" + dateBid +
                 ", price='" + price + '\'' +
                 ", state=" + state +
+                ", product=" + product +
                 '}';
     }
 	

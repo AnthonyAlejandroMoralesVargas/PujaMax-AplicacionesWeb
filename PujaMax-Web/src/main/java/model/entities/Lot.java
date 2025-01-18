@@ -35,15 +35,11 @@ public class Lot {
     @JoinColumn(name = "idAuctioneer")
     private Auctioneer auctioneer;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "idBidder")
-    private Bidder bidder;
-    
     public Lot() {
     }
 
     // Constructor con todos los atributos
-    public Lot(int idLot, String title, int quantityProducts, Date dateOpening, Date dateClosing, Address address, String state, Auctioneer auctioneer, Bidder bidder) {
+    public Lot(int idLot, String title, int quantityProducts, Date dateOpening, Date dateClosing, Address address, String state, Auctioneer auctioneer) {
         this.idLot = idLot;
         this.title = title;
         this.quantityProducts = quantityProducts;
@@ -52,7 +48,6 @@ public class Lot {
         this.address = address;
         this.state = state;
         this.auctioneer = auctioneer;
-        this.bidder = bidder;
     }
 
     // Getters y setters
@@ -116,17 +111,11 @@ public class Lot {
         return auctioneer;
     }
     
-    public Bidder getBidder() {
-        return bidder;
-    }
 
     public void setAuctioneer(Auctioneer auctioneer) {
         this.auctioneer = auctioneer;
     }
     
-    public void setBidder(Bidder bidder) {
-        this.bidder = bidder;
-    }
 
     @Override
     public String toString() {
@@ -139,7 +128,6 @@ public class Lot {
                 ", state='" + state + '\'' +
                 ", address=" + address +
                 ", auctioneer=" + auctioneer +
-                ", bidder=" + bidder +
                 '}';
     }
 

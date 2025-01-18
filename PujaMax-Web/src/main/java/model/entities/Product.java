@@ -1,5 +1,8 @@
 package model.entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -29,6 +32,10 @@ public class Product {
     @JoinColumn(name = "idLot", nullable = false)
     private Lot lot;
 
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Bid> bid = new ArrayList<>();
+
+    
     public Product() {
     }
 
@@ -59,6 +66,27 @@ public class Product {
     public void setLot(Lot lot) {
         this.lot = lot;
     }
+    
+    public List<Bid> getBid() {
+        return bid;
+    }
+
+    public void setBid(List<Bid> bid) {
+        this.bid = bid;
+    }
+    
+    public String getBidStatus() {
+        if (bid == null || bid.isEmpty()) {
+            return "No status available";
+        }
+
+        // Obtener la última puja en la lista
+        Bid latestBid = bid.get(bid.size() - 1);
+        String state = latestBid.getState();
+        return (state != null && !state.isEmpty()) ? state : "State not defined";
+    }
+
+
 
     public String getTitle() {
         return title;
@@ -99,12 +127,19 @@ public class Product {
     public void setPhoto(byte[] photo) {
         this.photo = photo;
     }
+    
+    public void addBid(Bid newBid) {
+        newBid.setProduct(this); // Establece la relación inversa
+        this.bid.add(newBid);    // Agrega la puja al producto
+    }
+
 
     @Override
     public String toString() {
         return "Product{" +
                 "idProduct=" + idProduct +
                 ", lot=" + lot +
+                ", bid=" + bid +
                 ", title='" + title + '\'' +
                 ", category='" + category + '\'' +
                 ", priceInitial=" + priceInitial +

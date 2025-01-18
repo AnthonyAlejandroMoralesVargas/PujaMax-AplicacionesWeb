@@ -7,6 +7,8 @@ import model.entities.Product;
 import java.sql.SQLException;
 import java.util.List;
 
+import jakarta.persistence.EntityManager;
+
 public class BidService {
 
     private final BidJPA bidJPA;
@@ -20,12 +22,19 @@ public class BidService {
     public List<Product> findProductsByLotId(int idLot) throws SQLException {
         return productJPA.findProductsByLotId(idLot);
     }
+    
+    public Product findProductById(int idProduct) {
+        return productJPA.findProductById(idProduct);
+    }
+
 
     public boolean updateBid(Bid bid) {
         return bidJPA.updateBid(bid);
     }
-
-    public boolean removeBid(int idBid) {
-        return bidJPA.removeBid(idBid);
+    
+    public List<Bid> findBidsByProductId(int productId) {
+        return bidJPA.findBidsByProductId(productId);
     }
+
+
 }

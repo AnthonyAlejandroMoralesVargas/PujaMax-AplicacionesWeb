@@ -29,8 +29,7 @@ public class BidJPA {
         return products;
     }
     
-
-
+/*
     public boolean updateBid(Bid bid) {
         boolean result = false;
         try (EntityManager em = getEntityManager()) {
@@ -45,22 +44,61 @@ public class BidJPA {
         }
         return result;
     }
-
-    public boolean removeBid(int idBid) {
+  */  
+    public boolean updateBid(Bid bid) {
         boolean result = false;
-        try (EntityManager em = getEntityManager()) {
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
             EntityTransaction transaction = em.getTransaction();
             transaction.begin();
 
-            Bid bid = em.find(Bid.class, idBid);
-            if (bid != null) {
-                em.remove(bid);
-                transaction.commit();
-                result = true;
+            // Verificar si es nuevo o existente
+            if (bid.getIdBid() == 0) { // Si no tiene ID, es nuevo
+                em.persist(bid);
+                System.out.println("Persisting new Bid: " + bid);
+            } else {
+                em.merge(bid);
+                System.out.println("Merging existing Bid: " + bid);
             }
+
+            transaction.commit();
+            result = true;
+            System.out.println("Bid saved successfully");
         } catch (Exception e) {
-            System.out.println("Couldn't remove bid: " + e.getMessage());
+            System.err.println("Couldn't update bid: " + e.getMessage());
+            if (em != null && em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
+        } finally {
+            if (em != null) {
+                em.close();
+            }
         }
         return result;
     }
+
+
+    public List<Bid> findBidsByProductId(int productId) {
+        List<Bid> bids = new ArrayList<>();
+        String jpql = "SELECT b FROM Bid b WHERE b.product.idProduct = :productId";
+
+        EntityManager em = null;
+        try {
+            em = getEntityManager();
+            Query query = em.createQuery(jpql, Bid.class);
+            query.setParameter("productId", productId);
+            bids = query.getResultList();
+        } catch (Exception e) {
+            System.err.println("Couldn't find bids for product ID " + productId + ": " + e.getMessage());
+        } finally {
+            if (em != null) {
+                em.close();
+            }
+        }
+        return bids;
+    }
+
+
+
 }
