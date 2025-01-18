@@ -2,6 +2,7 @@ package model.jpa;
 
 import jakarta.persistence.*;
 import model.entities.Bid;
+import model.entities.Lot;
 import model.entities.Product;
 
 import java.util.ArrayList;
@@ -28,23 +29,7 @@ public class BidJPA {
         }
         return products;
     }
-    
-/*
-    public boolean updateBid(Bid bid) {
-        boolean result = false;
-        try (EntityManager em = getEntityManager()) {
-            EntityTransaction transaction = em.getTransaction();
-            transaction.begin();
-            em.merge(bid);
-            transaction.commit();
-
-            result = true;
-        } catch (Exception e) {
-            System.out.println("Couldn't update bid: " + e.getMessage());
-        }
-        return result;
-    }
-  */  
+    /*
     public boolean updateBid(Bid bid) {
         boolean result = false;
         EntityManager em = null;
@@ -77,7 +62,7 @@ public class BidJPA {
         }
         return result;
     }
-
+*/
 
     public List<Bid> findBidsByProductId(int productId) {
         List<Bid> bids = new ArrayList<>();
@@ -98,7 +83,37 @@ public class BidJPA {
         }
         return bids;
     }
+    
+    public boolean createBid(Bid bid) {
+        boolean result = false;
+        try (EntityManager em = getEntityManager()) {
+            EntityTransaction transaction = em.getTransaction();
+            transaction.begin();
+            em.persist(bid);
+            transaction.commit();
 
+            result = true;
+        } catch (Exception e) {
+            System.out.println("Couldn't create bid: " + e.getMessage());
+        }
+        return result;
+    }
+
+    
+    public boolean saveBid(Bid bid) {
+        boolean result = false;
+        try (EntityManager em = getEntityManager()) {
+            EntityTransaction transaction = em.getTransaction();
+            transaction.begin();
+            em.merge(bid);
+            transaction.commit();
+
+            result = true;
+        } catch (Exception e) {
+            System.out.println("Couldn't update bid: " + e.getMessage());
+        }
+        return result;
+    }
 
 
 }

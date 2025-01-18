@@ -14,37 +14,33 @@ import jakarta.persistence.OneToOne;
 @Entity
 public class Bid {
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "idBid")
 	private int idBid;
 
 	@Column(name = "dateBid")
 	private Date dateBid;
-	
+
 	@Column(name = "currentPrice")
 	private Double currentPrice;
-	
+
 	@Column(name = "price")
 	private Double price;
-	
+
 	@Column(name = "state")
-    private String state;
-	
+	private String state;
+
 	@ManyToOne
 	@JoinColumn(name = "idProduct")
 	private Product product;
 
-
-	
-
 	public Bid() {
-		
-	} 
+
+	}
 
 	public Date getDateBid() {
 		return dateBid;
 	}
-
 
 	public Bid(int idBid, Date dateBid, Double currentPrice, Double price, String state, Product product) {
 		super();
@@ -57,12 +53,13 @@ public class Bid {
 	}
 
 	public Product getProduct() {
-			return product;
-		}
-	
-		public void setProduct(Product product) {
-			this.product = product;
-		}
+		return product;
+	}
+
+	public void setProduct(Product product) {
+		this.product = product;
+	}
+
 	public int getIdBid() {
 		return idBid;
 	}
@@ -100,24 +97,19 @@ public class Bid {
 	}
 
 	@Override
-    public String toString() {
-        return "Bid{" +
-                "dateBid=" + dateBid +
-                ", price='" + price + '\'' +
-                ", state=" + state +
-                ", product=" + product +
-                '}';
-    }
-	
-	@Override
-    public int hashCode() {
-        return super.hashCode();
-    }
+	public String toString() {
+		return "Bid{" + "dateBid=" + dateBid + ", price='" + price + '\'' + ", state=" + state + ", product=" + product
+				+ '}';
+	}
 
-    @Override
-    public boolean equals(Object obj) {
-        return super.equals(obj);
-    }
-	
-	
+	@Override
+	public int hashCode() {
+		return super.hashCode();
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		return super.equals(obj);
+	}
+
 }

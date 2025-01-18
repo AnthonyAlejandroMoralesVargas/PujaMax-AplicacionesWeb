@@ -3,6 +3,7 @@ package model.service;
 import model.jpa.BidJPA;
 import model.jpa.ProductJPA;
 import model.entities.Bid;
+import model.entities.Lot;
 import model.entities.Product;
 import java.sql.SQLException;
 import java.util.List;
@@ -28,13 +29,18 @@ public class BidService {
     }
 
 
-    public boolean updateBid(Bid bid) {
-        return bidJPA.updateBid(bid);
+    public boolean saveBid(Bid bid) {
+        return bidJPA.saveBid(bid);
     }
     
     public List<Bid> findBidsByProductId(int productId) {
         return bidJPA.findBidsByProductId(productId);
     }
+    
+    public boolean createBid(Bid bid) {
+        return bidJPA.createBid(bid);
+    }
+    
 
 
 }
