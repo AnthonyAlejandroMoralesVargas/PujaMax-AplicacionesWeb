@@ -50,7 +50,7 @@
         <!-- Navigation -->
         <section class="home-container">
             <nav class="nav-container">
-                <a href="LotManagementController?route=list&idLot=${idLot}" class="nav-item"><i class="fas fa-home"></i> Home</a>
+                <a href="${pageContext.request.contextPath}/LotManagementController?route=list&idLot=${idLot}" class="nav-item"><i class="fas fa-home"></i> Home</a>
                 <a href="#" class="nav-item" data-bs-toggle="modal" data-bs-target="#PRODUCT_FORM"><i
                         class="fas fa-plus-circle"></i> Add Product</a>
             </nav>
@@ -62,7 +62,7 @@
                 <c:forEach var="product" items="${products}">
                     <div class="col-md-4 mb-4">
                         <div class="card h-100">
-                            <img src="ProductManagementController?route=list&idProduct=${product.idProduct}" class="card-img-top" alt="Product Image">
+                            <img src="${pageContext.request.contextPath}/ProductManagementController?route=list&idProduct=${product.idProduct}" class="card-img-top" alt="Product Image">
 
                             <div class="card-body">
                                 <h5 class="card-title">${product.title}</h5>
@@ -86,8 +86,7 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <form action="ProductManagementController" method="post" enctype="multipart/form-data">
-                                        <input type="hidden" name="route" value="saveExisting">
+                                    <form action="${pageContext.request.contextPath}/ProductManagementController?route=saveExisting" method="post" enctype="multipart/form-data">
                                         <input type="hidden" name="txtId" value="${product.idProduct}">
                                         <input type="hidden" name="txtIdLot" value="${idLot}">
                                         <div class="mb-3">
@@ -133,8 +132,7 @@
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                    <form action="ProductManagementController" method="post">
-                                        <input type="hidden" name="route" value="delete">
+                                    <form action="${pageContext.request.contextPath}/ProductManagementController?route=delete" method="post">
                                         <input type="hidden" name="idProduct" value="${product.idProduct}">
                                         <input type="hidden" name="idLot" value="${idLot}">
                                         <button type="submit" class="btn btn-danger">Delete</button>
@@ -157,8 +155,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="ProductManagementController" method="post" enctype="multipart/form-data">
-                        <input type="hidden" name="route" value="saveNew">
+                    <form action="${pageContext.request.contextPath}/ProductManagementController?route=saveNew" method="post" enctype="multipart/form-data">
                         <input type="hidden" name="txtIdLot" value="${idLot}">
                         <div class="mb-3">
                             <label for="productTitle" class="form-label">Title</label>
