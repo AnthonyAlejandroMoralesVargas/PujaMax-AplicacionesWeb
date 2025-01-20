@@ -84,4 +84,16 @@ public class ProductJPA {
         }
         return result;
     }
+    
+    public List<Product> getAllProducts() {
+        List<Product> products = new ArrayList<>();
+        String jpql = "SELECT p FROM Product p";
+        try (EntityManager em = getEntityManager()) {
+            TypedQuery<Product> query = em.createQuery(jpql, Product.class);
+            products = query.getResultList();
+        } catch (Exception e) {
+            System.err.println("Couldn't fetch all products: " + e.getMessage());
+        }
+        return products;
+    }
 }

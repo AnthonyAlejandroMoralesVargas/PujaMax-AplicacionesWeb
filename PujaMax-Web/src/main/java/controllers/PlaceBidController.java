@@ -55,8 +55,8 @@ public class PlaceBidController extends HttpServlet {
             case "placeBid":
                 this.placeBid(req, resp);
                 break;
-            case "history":
-                this.showUserBids(req, resp);
+            case "viewHistory":
+                req.getRequestDispatcher("/PayBidController?route=viewHistory").forward(req, resp);
                 break;
             default:
                 throw new IllegalArgumentException("Unknown route: " + route);
@@ -173,6 +173,13 @@ public class PlaceBidController extends HttpServlet {
         HttpSession session = req.getSession();
         Object user = session.getAttribute("user");
 
+        if (user == null || !(user instanceof Bidder)) {
+            System.out.println("No user found in session or user is not a Bidder.");
+        } else {
+            Bidder bidder = (Bidder) user;
+            System.out.println("Authenticated Bidder: " + bidder.getDni());
+        }
+        
         // Validación del usuario en sesión
         if (user == null || !(user instanceof Bidder)) {
             req.setAttribute("messageType", "error");

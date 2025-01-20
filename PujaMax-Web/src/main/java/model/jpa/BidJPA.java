@@ -57,9 +57,10 @@ public class BidJPA {
         return bids;
     }
 
+    
     public List<Bid> findBidsByUserId(int userId) {
         List<Bid> bids = new ArrayList<>();
-        String jpql = "SELECT b FROM Bid b WHERE b.user.id = :userId";
+        String jpql = "SELECT b FROM Bid b WHERE b.user.id = :userId"; // Esto ya funciona correctamente
 
         try (EntityManager em = getEntityManager()) {
             Query query = em.createQuery(jpql, Bid.class);
@@ -71,6 +72,7 @@ public class BidJPA {
         return bids;
     }
 
+
     public Bid findBidById(int idBid) {
         Bid bid = null;
         try (EntityManager em = getEntityManager()) {
@@ -80,6 +82,20 @@ public class BidJPA {
         }
         return bid;
     }
+    
+    public List<Bid> getBids(String dni) {
+        String jpql = "SELECT b FROM Bid b JOIN FETCH b.product WHERE b.bidder.dni = :dni";
+        List<Bid> bids = new ArrayList<>();
+        try (EntityManager em = getEntityManager()) {
+            TypedQuery<Bid> query = em.createQuery(jpql, Bid.class);
+            query.setParameter("dni", dni);
+            bids = query.getResultList();
+        } catch (Exception e) {
+            System.err.println("Couldn't fetch bids for bidder DNI: " + e.getMessage());
+        }
+        return bids;
+    }
+
 
     public boolean createBid(Bid bid) {
         boolean result = false;

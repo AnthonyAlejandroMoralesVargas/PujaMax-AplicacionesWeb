@@ -1,5 +1,7 @@
 package model.entities;
 
+import java.util.List;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -28,6 +30,10 @@ public class Product {
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "idLot", nullable = false)
     private Lot lot;
+    
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private List<Bid> bids;
+
 
     public Product() {
     }
@@ -41,6 +47,7 @@ public class Product {
         this.priceInitial = priceInitial;
         this.description = description;
         this.photo = photo;
+        this.bids = bids;
     }
 
     // Getters y setters
@@ -121,5 +128,13 @@ public class Product {
     @Override
     public boolean equals(Object obj) {
         return super.equals(obj);
+    }
+    
+    public List<Bid> getBids() {
+        return bids;
+    }
+    
+    public void setBids(List<Bid> bids) {
+        this.bids = bids;
     }
 }
