@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core"%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -25,14 +25,11 @@
             </div>
             <div class="d-flex align-items-center">
                 <div class="dropdown">
-                    <a href="#" class="dropdown-toggle" id="dropdownMenuButton" data-bs-toggle="dropdown"
-                        aria-expanded="false"><i class="fas fa-user"></i> User</a>
+                    <a href="#" class="dropdown-toggle" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user"></i> User</a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
-                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/AddressManagementController?route=list"><i class="fas fa-cogs"></i>
-                                Profile</a></li>
-                        <li><a class="dropdown-item"
-                           href="${pageContext.request.contextPath}/LoginController?route=logOut"><i
-                            class="fas fa-sign-out-alt"></i> Logout</a>
+                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/AddressManagementController?route=list"><i class="fas fa-cogs"></i> Profile</a></li>
+                        <li><a class="dropdown-item" href="${pageContext.request.contextPath}/LoginController?route=logOut"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -50,9 +47,8 @@
         <!-- Navigation -->
         <section class="home-container">
             <nav class="nav-container">
-                <a href="${pageContext.request.contextPath}/LotManagementController?route=list&idLot=${idLot}" class="nav-item"><i class="fas fa-home"></i> Home</a>
-                <a href="#" class="nav-item" data-bs-toggle="modal" data-bs-target="#PRODUCT_FORM"><i
-                        class="fas fa-plus-circle"></i> Add Product</a>
+                <a href="${pageContext.request.contextPath}/LotManagementController?route=list" class="nav-item"><i class="fas fa-home"></i> Home</a>
+                <a href="#" class="nav-item" data-bs-toggle="modal" data-bs-target="#PRODUCT_FORM"><i class="fas fa-plus-circle"></i> Add Product</a>
             </nav>
         </section>
 
@@ -62,7 +58,12 @@
                 <c:forEach var="product" items="${products}">
                     <div class="col-md-4 mb-4">
                         <div class="card h-100">
-                            <img src="${pageContext.request.contextPath}/ProductManagementController?route=list&idProduct=${product.idProduct}" class="card-img-top" alt="Product Image">
+                            <c:if test="${product.base64Photo != null}">
+                                <img src="data:image/jpeg;base64,${product.base64Photo}" class="card-img-top" alt="Product Image">
+                            </c:if>
+                            <c:if test="${product.base64Photo == null}">
+                                <img src="${pageContext.request.contextPath}/images/default-product.jpg" class="card-img-top" alt="No Image">
+                            </c:if>
 
                             <div class="card-body">
                                 <h5 class="card-title">${product.title}</h5>
@@ -72,7 +73,7 @@
                             </div>
                             <div class="card-footer d-flex justify-content-between">
                                 <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#EDIT_PRODUCT_MODAL_${product.idProduct}">Edit</a>
-                                <a href="#" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#DELETE_MODAL_${product.idProduct}">Delete</a>
+                                <a href="#" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#DELETE_PRODUCT_MODAL_${product.idProduct}">Delete</a>
                             </div>
                         </div>
                     </div>
@@ -120,21 +121,19 @@
                     </div>
 
                     <!-- Delete Product Modal -->
-                    <div class="modal fade" id="DELETE_MODAL_${product.idProduct}" tabindex="-1" aria-labelledby="DELETE_MODAL_Label" aria-hidden="true">
+                    <div class="modal fade" id="DELETE_PRODUCT_MODAL_${product.idProduct}" tabindex="-1" aria-labelledby="DELETE_PRODUCT_MODALLabel" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="modal-header bg-danger text-white">
-                                    <h5 class="modal-title" id="DELETE_MODAL_Label">Confirm Deletion</h5>
+                                    <h5 class="modal-title" id="DELETE_PRODUCT_MODALLabel">Confirm Deletion</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
-                                <div class="modal-body">
+                                <div class="modal-body text-center">
                                     <p>Are you sure you want to delete the product <strong>${product.title}</strong>?</p>
                                 </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                    <form action="${pageContext.request.contextPath}/ProductManagementController?route=delete" method="post">
-                                        <input type="hidden" name="idProduct" value="${product.idProduct}">
-                                        <input type="hidden" name="idLot" value="${idLot}">
+                                <div class="modal-footer justify-content-center">
+                                    <a href="ProductManagementController?route=list&idLot=${idLot}" class="btn btn-secondary">Cancel</a>
+                                    <form action="${pageContext.request.contextPath}/ProductManagementController?route=acceptDelete&idProduct=${product.idProduct}&idLot=${idLot}" method="POST">
                                         <button type="submit" class="btn btn-danger">Delete</button>
                                     </form>
                                 </div>
@@ -189,6 +188,15 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        window.onload = function () {
+            var route = "${param.route}";
+            if (route === "delete" && "${param.idProduct}") {
+                var deleteModal = new bootstrap.Modal(document.getElementById('DELETE_PRODUCT_MODAL_${param.idProduct}'));
+                deleteModal.show();
+            }
+        };
+    </script>
 </body>
 
 </html>
