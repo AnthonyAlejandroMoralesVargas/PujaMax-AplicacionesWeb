@@ -96,7 +96,6 @@ public class BidJPA {
         return bids;
     }
 
-
     public boolean createBid(Bid bid) {
         boolean result = false;
         try (EntityManager em = getEntityManager()) {

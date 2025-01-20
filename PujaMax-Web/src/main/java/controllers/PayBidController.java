@@ -83,25 +83,21 @@ public class PayBidController extends HttpServlet {
 
     private void viewHistory(HttpServletRequest request, HttpServletResponse response, EntityManager entityManager)
             throws ServletException, IOException {
-        String dni = request.getParameter("dni");
-        if (dni == null || dni.trim().isEmpty()) {
-            HttpSession session = request.getSession();
-            Bidder bidder = (Bidder) session.getAttribute("user");
-            if (bidder != null) {
-                dni = bidder.getDni();
-            } else {
-                request.setAttribute("message", "You must provide a valid ID to continue.");
-                getServletContext().getRequestDispatcher("/jsp/LOGIN.jsp").forward(request, response);
-                return;
-            }
+        HttpSession session = request.getSession();
+        Bidder bidder = (Bidder) session.getAttribute("user");
+
+        if (bidder == null) {
+            request.setAttribute("message", "You must log in to view your history.");
+            getServletContext().getRequestDispatcher("/jsp/LOGIN.jsp").forward(request, response);
+            return;
         }
 
         BidJPA bidJPA = new BidJPA();
-        List<Bid> bids = bidJPA.getBids(dni);
-
+        List<Bid> bids = bidJPA.getBids(bidder.getDni()); // Consulta directa
         request.setAttribute("bids", bids);
         getServletContext().getRequestDispatcher("/jsp/BIDDER_HISTORY.jsp").forward(request, response);
     }
+
 
     private void payWinningBid(HttpServletRequest request, HttpServletResponse response, EntityManager entityManager)
             throws ServletException, IOException {

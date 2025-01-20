@@ -51,8 +51,9 @@
 		<!-- Filter Section -->
 		<section class="home-container">
 			<nav class="nav-container">
-				<a href="BIDDER_LOTS_BOARD.html" class="nav-item"><i
-					class="fas fa-home"></i> Home</a> <a href="BIDDER_HISTORY.html"
+				<a href="LotManagementController?route=listBidder&idLot=${idLot}"
+					class="nav-item"><i class="fas fa-home"></i> Home</a> <a
+					href="${pageContext.request.contextPath}/PlaceBidController?route=viewHistory"
 					class="nav-item"><i class="fas fa-history"></i> History</a>
 			</nav>
 		</section>
@@ -73,16 +74,16 @@
 						<div>
 							<strong>Title:</strong> ${bid.product != null ? bid.product.title : 'No Title'}<br>
 							<strong>Price:</strong> $${bid.currentPrice != null ?
-							bid.currentPrice : '0.00'}<br>
-							<strong>Date:</strong> ${bid.dateBid != null ? bid.dateBid : 'N/A'}<br>
-							<strong>Description:</strong> ${bid.product != null && bid.product.description != null ? bid.product.description : 'No Description'}
+							bid.currentPrice : '0.00'}<br> <strong>Date:</strong>
+							${bid.dateBid != null ? bid.dateBid : 'N/A'}<br> <strong>Description:</strong>
+							${bid.product != null && bid.product.description != null ? bid.product.description : 'No Description'}
 						</div>
 					</div>
-<div
+					<div
 						class="col-md-4 d-flex flex-column justify-content-center align-items-center">
 						<c:choose>
 							<c:when test="${bid.state == 'WON'}">
-								<div class="btn btn-success w-50 mb-2">WON</div>
+								<div class="btn btn-success w-50 mb-2">Won</div>
 								<button class="btn btn-primary w-50" data-bs-toggle="modal"
 									data-bs-target="#SUBMIT_RECEIPT_PAYMENT"
 									data-bid-id="${bid.idBid}">Submit Receipt</button>
