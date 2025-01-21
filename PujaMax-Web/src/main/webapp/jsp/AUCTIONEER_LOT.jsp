@@ -25,7 +25,9 @@
             </div>
             <div class="d-flex align-items-center">
                 <div class="dropdown">
-                    <a href="#" class="dropdown-toggle" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-user"></i> User</a>
+                    <a href="#" class="dropdown-toggle" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-user"></i> User
+                    </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
                         <li><a class="dropdown-item" href="${pageContext.request.contextPath}/AddressManagementController?route=list"><i class="fas fa-cogs"></i> Profile</a></li>
                         <li><a class="dropdown-item" href="${pageContext.request.contextPath}/LoginController?route=logOut"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
@@ -47,8 +49,12 @@
         <!-- Navigation -->
         <section class="home-container">
             <nav class="nav-container">
-                <a href="${pageContext.request.contextPath}/LotManagementController?route=list" class="nav-item"><i class="fas fa-home"></i> Home</a>
-                <a href="#" class="nav-item" data-bs-toggle="modal" data-bs-target="#PRODUCT_FORM"><i class="fas fa-plus-circle"></i> Add Product</a>
+                <a href="${pageContext.request.contextPath}/LotManagementController?route=list" class="nav-item">
+                    <i class="fas fa-home"></i> Home
+                </a>
+                <a href="#" class="nav-item" data-bs-toggle="modal" data-bs-target="#PRODUCT_FORM">
+                    <i class="fas fa-plus-circle"></i> Add Product
+                </a>
             </nav>
         </section>
 
@@ -125,11 +131,23 @@
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="modal-header bg-danger text-white">
-                                    <h5 class="modal-title" id="DELETE_PRODUCT_MODALLabel">Confirm Deletion</h5>
+                                    <h5 class="modal-title" id="DELETE_PRODUCT_MODALLabel">
+                                        <i class="fas fa-trash-alt"></i> Confirm Deletion
+                                    </h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body text-center">
-                                    <p>Are you sure you want to delete the product <strong>${product.title}</strong>?</p>
+                                    <p>Are you sure you want to delete the following product?</p>
+                                    <h3>${product.title}</h3>
+                                    <p class="card-text text-secondary small mb-4">
+                                        <strong>Category:</strong> ${product.category}
+                                    </p>
+                                    <p class="card-text text-secondary small mb-4">
+                                        <strong>Initial Price:</strong> $${product.priceInitial}
+                                    </p>
+                                    <p class="card-text text-secondary small mb-4">
+                                        <strong>Description:</strong> ${product.description}
+                                    </p>
                                 </div>
                                 <div class="modal-footer justify-content-center">
                                     <a href="ProductManagementController?route=list&idLot=${idLot}" class="btn btn-secondary">Cancel</a>
@@ -143,60 +161,51 @@
                 </c:forEach>
             </div>
         </section>
-    </main>
 
-    <!-- Add Product Modal -->
-    <div class="modal fade" id="PRODUCT_FORM" tabindex="-1" aria-labelledby="PRODUCT_FORMLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title" id="PRODUCT_FORMLabel">Add Product</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form action="${pageContext.request.contextPath}/ProductManagementController?route=saveNew" method="post" enctype="multipart/form-data">
-                        <input type="hidden" name="txtIdLot" value="${idLot}">
-                        <div class="mb-3">
-                            <label for="productTitle" class="form-label">Title</label>
-                            <input type="text" class="form-control" id="productTitle" name="txtTitle" placeholder="Enter product title" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="productCategory" class="form-label">Category</label>
-                            <input type="text" class="form-control" id="productCategory" name="txtCategory" placeholder="Enter category" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="productDescription" class="form-label">Description</label>
-                            <textarea class="form-control" id="productDescription" name="txtDescription" rows="3" placeholder="Enter description" required></textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label for="initialPrice" class="form-label">Initial Price</label>
-                            <input type="number" class="form-control" id="initialPrice" name="txtPriceInitial" placeholder="Enter initial price" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="productPhoto" class="form-label">Photo</label>
-                            <input type="file" class="form-control" id="productPhoto" name="txtPhoto">
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-primary">Save</button>
-                        </div>
-                    </form>
+        <!-- Add Product Modal -->
+        <div class="modal fade" id="PRODUCT_FORM" tabindex="-1" aria-labelledby="PRODUCT_FORMLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title" id="PRODUCT_FORMLabel">Add Product</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="${pageContext.request.contextPath}/ProductManagementController?route=saveNew" method="post" enctype="multipart/form-data">
+                            <input type="hidden" name="txtIdLot" value="${idLot}">
+                            <div class="mb-3">
+                                <label for="productTitle" class="form-label">Title</label>
+                                <input type="text" class="form-control" id="productTitle" name="txtTitle" placeholder="Enter product title" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="productCategory" class="form-label">Category</label>
+                                <input type="text" class="form-control" id="productCategory" name="txtCategory" placeholder="Enter category" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="productDescription" class="form-label">Description</label>
+                                <textarea class="form-control" id="productDescription" name="txtDescription" rows="3" placeholder="Enter description" required></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="initialPrice" class="form-label">Initial Price</label>
+                                <input type="number" class="form-control" id="initialPrice" name="txtPriceInitial" placeholder="Enter initial price" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="productPhoto" class="form-label">Photo</label>
+                                <input type="file" class="form-control" id="productPhoto" name="txtPhoto">
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="submit" class="btn btn-primary">Save</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </main>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        window.onload = function () {
-            var route = "${param.route}";
-            if (route === "delete" && "${param.idProduct}") {
-                var deleteModal = new bootstrap.Modal(document.getElementById('DELETE_PRODUCT_MODAL_${param.idProduct}'));
-                deleteModal.show();
-            }
-        };
-    </script>
 </body>
 
 </html>
