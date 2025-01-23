@@ -94,7 +94,7 @@
                     <!-- Status -->
                     <div class="card-header d-flex justify-content-between align-items-center bg-light">
                         <span class="badge bg-success"> <i class="fas fa-gavel"></i>
-                            ${latestBid != null ? latestBid.state : 'No Bids Yet'} <span> LOT ${product.lot.idLot}</span>
+                            <span>${product.lot.state}</span>
                     </div>
 
                     <!-- Bid Info -->
@@ -105,7 +105,8 @@
                             </div>
                             <div class="col-6">
                                 <label class="form-label">Current price</label> 
-                                <input type="text" class="form-control" value="$ ${currentPrice}" readonly>
+                                <input type="text" class="form-control" value="${bid.currentPrice != null ?
+							bid.currentPrice : product.priceInitial}" readonly>
                             </div>
                         </div>
 
@@ -165,7 +166,8 @@
                         </div>
                         <div class="mb-3">
                             <label for="currentPrice" class="form-label">Current Price</label>
-                            <input type="text" id="currentPrice" class="form-control" value="$ ${currentPrice}" readonly>
+                            <input type="text" id="currentPrice" class="form-control" value="${bid.currentPrice != null ?
+							bid.currentPrice : product.priceInitial}" readonly>
                         </div>
                         <div class="mb-3">
                             <label for="bidAmount" class="form-label">Your Offer</label>

@@ -22,8 +22,8 @@ public class Product {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "photo", columnDefinition = "LONGBLOB")
-    private byte[] photo;
+    @Column(name = "photoBase64", columnDefinition = "LONGTEXT") // Almacena la imagen en base64
+    private String base64Photo;
 
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "idLot", nullable = false)
@@ -32,15 +32,14 @@ public class Product {
     public Product() {
     }
 
-    // Constructor con todos los atributos
-    public Product(int idProduct, Lot lot, String title, String category, double priceInitial, String description, byte[] photo) {
+    public Product(int idProduct, Lot lot, String title, String category, double priceInitial, String description, String base64Photo) {
         this.idProduct = idProduct;
         this.lot = lot;
         this.title = title;
         this.category = category;
         this.priceInitial = priceInitial;
         this.description = description;
-        this.photo = photo;
+        this.base64Photo = base64Photo;
     }
 
     // Getters y setters
@@ -92,12 +91,12 @@ public class Product {
         this.description = description;
     }
 
-    public byte[] getPhoto() {
-        return photo;
+    public String getBase64Photo() {
+        return base64Photo;
     }
 
-    public void setPhoto(byte[] photo) {
-        this.photo = photo;
+    public void setBase64Photo(String base64Photo) {
+        this.base64Photo = base64Photo;
     }
 
     @Override
@@ -109,17 +108,7 @@ public class Product {
                 ", category='" + category + '\'' +
                 ", priceInitial=" + priceInitial +
                 ", description='" + description + '\'' +
-                ", photo=" + (photo != null ? "[BLOB]" : "null") +
+                ", base64Photo='" + (base64Photo != null ? "[BASE64]" : "null") + '\'' +
                 '}';
-    }
-
-    @Override
-    public int hashCode() {
-        return super.hashCode();
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return super.equals(obj);
     }
 }

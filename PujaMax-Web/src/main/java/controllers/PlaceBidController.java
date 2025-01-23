@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import model.entities.Auctioneer;
 import model.entities.Bid;
 import model.entities.Bidder;
 import model.entities.Product;
@@ -40,11 +41,7 @@ public class PlaceBidController extends HttpServlet {
 
         switch (route) {
             case "list":
-                try {
-                    this.list(req, resp);
-                } catch (ServletException | IOException | SQLException e) {
-                    e.printStackTrace();
-                }
+            	this.list(req, resp);
                 break;
             case "productDetails":
                 this.productDetails(req, resp);
@@ -63,46 +60,28 @@ public class PlaceBidController extends HttpServlet {
         }
     }
 
-    private void list(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException, SQLException {
-        String idProductParam = req.getParameter("idProduct");
-        if (idProductParam != null) {
-            try {
-                int idProduct = Integer.parseInt(idProductParam);
-                ProductService productService = new ProductService();
-                Product product = productService.findProductById(idProduct);
+    private void list(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		try {
+			HttpSession session = req.getSession();
+			Bidder bidder = (Bidder) session.getAttribute("user");
+			if (bidder == null) {
+				resp.sendError(HttpServletResponse.SC_UNAUTHORIZED, "User not logged in");
+				return;
+			}
 
-                if (product == null || product.getPhoto() == null) {
-                    resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Image not found");
-                    return;
-                }
+			int idLot = Integer.parseInt(req.getParameter("idLot"));
+			req.setAttribute("idLot", idLot); // Asegurar que el JSP reciba el idLot
+			ProductService productService = new ProductService();
+			List<Product> products = productService.findProductsByLotId(idLot);
 
-                resp.setContentType("image/jpeg");
-                resp.setContentLength(product.getPhoto().length);
-                resp.getOutputStream().write(product.getPhoto());
-            } catch (NumberFormatException e) {
-                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid Product ID");
-            } catch (Exception e) {
-                resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR,
-                        "Error retrieving image: " + e.getMessage());
-            }
-            return;
-        }
-
-        try {
-            int idLot = Integer.parseInt(req.getParameter("idLot"));
-            ProductService productService = new ProductService();
-            List<Product> products = productService.findProductsByLotId(idLot);
-
-            req.setAttribute("products", products);
-            req.setAttribute("idLot", idLot);
-            req.getRequestDispatcher("jsp/BIDDER_LOT.jsp").forward(req, resp);
-        } catch (NumberFormatException e) {
-            req.setAttribute("messageType", "error");
-            req.setAttribute("message", "Invalid Lot ID provided.");
-            req.getRequestDispatcher("jsp/BIDDER_LOT.jsp").forward(req, resp);
-        }
-    }
+			req.setAttribute("products", products);
+			req.getRequestDispatcher("jsp/BIDDER_LOT.jsp").forward(req, resp);
+		} catch (Exception e) {
+			req.setAttribute("messageType", "error");
+			req.setAttribute("message", "Unexpected error: " + e.getMessage());
+			req.getRequestDispatcher("jsp/BIDDER_LOT.jsp").forward(req, resp);
+		}
+	}
 
     private void productDetails(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {

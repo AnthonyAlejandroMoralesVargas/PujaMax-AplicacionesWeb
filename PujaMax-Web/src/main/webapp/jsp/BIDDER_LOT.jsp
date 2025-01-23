@@ -17,22 +17,23 @@
 
 <body>
     <!-- Header -->
-    <header class="header-container">
+    <header class="header-container bg-primary text-white py-2">
         <div class="container d-flex justify-content-between align-items-center">
             <div class="d-flex align-items-center">
                 <img src="${pageContext.request.contextPath}/images/OnlyB.png" alt="Logo" style="height: 50px; margin-right: 10px;">
-                <h1 class="app-name mb-0">PUJAMAX Online Auction</h1>
+                <h1 class="app-name mb-0 fs-4">PUJAMAX Online Auction</h1>
             </div>
             <div class="d-flex align-items-center">
                 <div class="dropdown">
-                    <a href="#" class="dropdown-toggle" id="dropdownMenuButton" data-bs-toggle="dropdown"
+                    <a href="#" class="dropdown-toggle text-white" id="dropdownMenuButton" data-bs-toggle="dropdown"
                         aria-expanded="false"><i class="fas fa-user"></i> User</a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton">
                         <li><a class="dropdown-item" href="${pageContext.request.contextPath}/AddressManagementController?route=list"><i class="fas fa-cogs"></i>
                                 Profile</a></li>
                         <li><a class="dropdown-item"
-                           href="${pageContext.request.contextPath}/LoginController?route=logOut"><i
-                            class="fas fa-sign-out-alt"></i> Logout</a>
+                                href="${pageContext.request.contextPath}/LoginController?route=logOut"><i
+                                    class="fas fa-sign-out-alt"></i> Logout</a></li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -48,32 +49,62 @@
         </c:if>
 
         <!-- Navigation -->
-        <section class="home-container">
-            <nav class="nav-container">
-                <a href="LotManagementController?route=listBidder&idLot=${idLot}" class="nav-item"><i class="fas fa-home"></i> Home</a>
-                <a href="${pageContext.request.contextPath}/PlaceBidController?route=history" class="nav-item"><i class="fas fa-history"></i>
-                History</a>
+        <section class="home-container mb-4">
+            <nav class="nav-container d-flex bg-primary p-2 rounded">
+                <a href="LotManagementController?route=listBidder&idLot=${idLot}" class="nav-item text-white me-3 text-decoration-none"><i class="fas fa-home"></i> Home</a>
+                <a href="${pageContext.request.contextPath}/PlaceBidController?route=history" class="nav-item text-white text-decoration-none"><i class="fas fa-history"></i>
+                    History</a>
             </nav>
         </section>
+
+        <!-- Filters Section -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="dropdown">
+                <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="categoryDropdown"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-filter"></i> Categories
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
+                    <li><a class="dropdown-item" href="#">${product.category}</a></li>
+                    <li><a class="dropdown-item" href="#">Category 2</a></li>
+                    <li><a class="dropdown-item" href="#">Category 3</a></li>
+                </ul>
+            </div>
+        </div>
 
         <!-- Product Cards -->
         <section class="lots-container">
             <div class="row">
                 <c:forEach var="product" items="${products}">
-                <!-- Product Image Section -->
-                    <div class="col-md-4 d-flex flex-column">
-                    	<a href="PlaceBidController?route=productDetails&idProduct=${product.idProduct}" class="btn btn-primary">View Product</a>
-
-                    </div>
-                    <div class="col-md-4 mb-4">
-                        <div class="card h-100">
-                            <img src="PlaceBidController?route=list&idProduct=${product.idProduct}" class="card-img-top" alt="Product Image">
-
-                            <div class="card-body">
-                                <h5 class="card-title">${product.title}</h5>
-                                <p class="card-text">${product.description}</p>
-                                <p><strong>Category:</strong> ${product.category}</p>
-                                <p><strong>Initial Price:</strong> $${product.priceInitial}</p>
+                    <div class="col-md-12 mb-4">
+                        <div class="card d-flex flex-row align-items-center p-3">
+                            <div class="col-3 d-flex flex-column align-items-center pe-3">
+                                <c:if test="${product.base64Photo != null}">
+                                    <img src="data:image/jpeg;base64,${product.base64Photo}" class="img-fluid rounded" alt="Product Image">
+                                </c:if>
+                                <c:if test="${product.base64Photo == null}">
+                                    <img src="${pageContext.request.contextPath}/images/default-product.jpg" class="img-fluid rounded" alt="No Image">
+                                </c:if>
+                                <a href="${pageContext.request.contextPath}/PlaceBidController?route=productDetails&idProduct=${product.idProduct}" class="btn btn-primary w-100">VIEW THIS PRODUCT</a>
+                            </div>
+                            <div class="col-md-8 ps-3">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h4 class="card-title">${product.title}</h4>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-4">
+                                        <strong>Current Price:</strong>
+                                        <div class="current-price"> $ ${bid.currentPrice != null ?
+							bid.currentPrice : product.priceInitial}</div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <strong>Lot:</strong>
+                                        <div><i class="fas fa-tag"></i> ${product.lot.idLot}</div>
+                                    </div>
+                                </div>
+                                <div class="card-text bg-light border rounded p-3 pt-4">
+                                    <p>${product.description}</p>
+                                </div>
                             </div>
                         </div>
                     </div>
