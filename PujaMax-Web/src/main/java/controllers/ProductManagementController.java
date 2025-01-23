@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.io.Serial;
 import java.sql.SQLException;
 import java.util.Base64;
+import java.util.Collection;
 import java.util.List;
 
 @WebServlet("/ProductManagementController")
@@ -60,7 +61,7 @@ public class ProductManagementController extends HttpServlet {
 				deleteProduct(req, resp);
 				break;
 			case "acceptDelete":
-				acceptDelete(req, resp); 
+				acceptDelete(req, resp);
 				break;
 			default:
 				resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Unknown route: " + route);
@@ -82,7 +83,7 @@ public class ProductManagementController extends HttpServlet {
 			}
 
 			int idLot = Integer.parseInt(req.getParameter("idLot"));
-			req.setAttribute("idLot", idLot); // Asegurar que el JSP reciba el idLot
+			req.setAttribute("idLot", idLot); // id del Lot para presentar sus productos asociados
 			ProductService productService = new ProductService();
 			List<Product> products = productService.findProductsByLotId(idLot);
 
@@ -215,63 +216,34 @@ public class ProductManagementController extends HttpServlet {
 	}
 
 	private Product parseProductFromRequest(HttpServletRequest req) throws IOException, ServletException {
-		// Validar y asignar ID del producto
 		int idProduct = 0;
 		String txtId = req.getParameter("txtId");
 		if (txtId != null && !txtId.isEmpty()) {
-			try {
-				idProduct = Integer.parseInt(txtId);
-			} catch (NumberFormatException e) {
-				System.out.println("Error parsing product ID: " + e.getMessage());
-			}
+			idProduct = Integer.parseInt(txtId);
 		}
 
-		// Validar y asignar ID del lote
-		String txtIdLot = req.getParameter("txtIdLot");
-		System.out.println("txtIdLot recibido: " + txtIdLot); // Log para depurar
-		if (txtIdLot == null || txtIdLot.isEmpty()) {
-			throw new IllegalArgumentException("Lot ID is required.");
-		}
-		int idLot = Integer.parseInt(txtIdLot);
-		;
+		int idLot = Integer.parseInt(req.getParameter("txtIdLot"));
 		LotService lotService = new LotService();
 		Lot lot = lotService.findLotById(idLot);
 
-		// Validar y asignar título
 		String title = req.getParameter("txtTitle");
-		if (title == null || title.isEmpty()) {
-			throw new IllegalArgumentException("Title is required.");
-		}
-
-		// Validar y asignar categoría
 		String category = req.getParameter("txtCategory");
-		if (category == null || category.isEmpty()) {
-			throw new IllegalArgumentException("Category is required.");
-		}
-
-		// Validar y asignar precio inicial
-		String txtPriceInitial = req.getParameter("txtPriceInitial");
-		if (txtPriceInitial == null || txtPriceInitial.isEmpty()) {
-			throw new IllegalArgumentException("Initial price is required.");
-		}
-		double priceInitial = Double.parseDouble(txtPriceInitial);
-
-		// Validar y asignar descripción
+		double priceInitial = Double.parseDouble(req.getParameter("txtPriceInitial"));
 		String description = req.getParameter("txtDescription");
-		if (description == null) {
-			description = ""; // Descripción opcional, asignar cadena vacía si no está presente
-		}
 
-		// Procesar imagen (opcional)
-		String base64Photo = null;
-		Part photoPart = req.getPart("txtPhoto");
-		if (photoPart != null && photoPart.getSize() > 0) {
+		Product product = new Product(idProduct, lot, title, category, priceInitial, description);
+
+		// Procesar múltiples fotos
+		Collection<Part> photoParts = req.getParts().stream()
+				.filter(part -> "txtPhotos".equals(part.getName()) && part.getSize() > 0).toList();
+
+		for (Part photoPart : photoParts) {
 			byte[] photoBytes = photoPart.getInputStream().readAllBytes();
-			base64Photo = Base64.getEncoder().encodeToString(photoBytes);
+			String base64Photo = Base64.getEncoder().encodeToString(photoBytes);
+			product.getPhotos().add(base64Photo);
 		}
 
-		// Crear y retornar el producto utilizando el constructor con parámetros
-		return new Product(idProduct, lot, title, category, priceInitial, description, base64Photo);
+		return product;
 	}
 
 }
