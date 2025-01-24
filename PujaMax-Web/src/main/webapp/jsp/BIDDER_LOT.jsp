@@ -56,36 +56,30 @@
                 History</a>
             </nav>
         </section>
-
-        <!-- Filters Section -->
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <div class="dropdown">
-                <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="categoryDropdown"
-                    data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="fas fa-filter"></i> Categories
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="categoryDropdown">
-                    <li><a class="dropdown-item" href="#">${product.category}</a></li>
-                    <li><a class="dropdown-item" href="#">Category 2</a></li>
-                    <li><a class="dropdown-item" href="#">Category 3</a></li>
-                </ul>
-            </div>
-        </div>
-
         <!-- Product Cards -->
         <section class="lots-container">
             <div class="row">
                 <c:forEach var="product" items="${products}">
                     <div class="col-md-12 mb-4">
                         <div class="card d-flex flex-row align-items-center p-3">
-                            <div class="col-3 d-flex flex-column align-items-center pe-3">
-                                <c:if test="${product.base64Photo != null}">
-                                    <img src="data:image/jpeg;base64,${product.base64Photo}" class="img-fluid rounded" alt="Product Image">
-                                </c:if>
-                                <c:if test="${product.base64Photo == null}">
-                                    <img src="${pageContext.request.contextPath}/images/default-product.jpg" class="img-fluid rounded" alt="No Image">
-                                </c:if>
+                            <div id="carouselProduct_${product.idProduct}" class="carousel slide product-carousel" data-bs-ride="carousel">
+                                <div class="carousel-inner col-3 d-flex flex-column align-items-center pe-3">
+                                    <c:forEach var="photo" items="${product.photos}" varStatus="status">
+                                        <div class="carousel-item ${status.first ? 'active' : ''}">
+                                            <img src="data:image/jpeg;base64,${photo}" class="d-block w-100" alt="Product Image">
+                                        </div>
+                                    </c:forEach>
+                                </div>
+                                <button class="carousel-control-prev" type="button" data-bs-target="#carouselProduct_${product.idProduct}" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#carouselProduct_${product.idProduct}" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Next</span>
+                                </button>
                                 <a href="${pageContext.request.contextPath}/PlaceBidController?route=productDetails&idProduct=${product.idProduct}" class="btn btn-primary w-100">VIEW THIS PRODUCT</a>
+                                
                             </div>
                             <div class="col-md-8 ps-3">
                                 <div class="d-flex justify-content-between align-items-center mb-3">
