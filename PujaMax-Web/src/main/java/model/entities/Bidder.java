@@ -17,4 +17,3 @@ public class Bidder extends User {
         super(id, dni, name, lastName, email, password, phoneNumber);
     }
 }
-

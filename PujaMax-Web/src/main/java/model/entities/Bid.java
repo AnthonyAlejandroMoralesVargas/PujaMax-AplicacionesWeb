@@ -42,6 +42,9 @@ public class Bid {
     @JoinColumn(name = "idUser", nullable = false)
     private User user;
 
+    @ManyToOne
+    @JoinColumn(name = "bidder_dni", referencedColumnName = "dni")
+    private Bidder bidder;
 
     public User getUser() {
 		return user;
@@ -67,7 +70,8 @@ public class Bid {
         ACTIVE,
         LOST,
         WON,
-        PENDING_DELIVERY
+        PENDING_DELIVERY,
+        PAID
     }
 
 
@@ -112,12 +116,21 @@ public class Bid {
         this.state = state;
     }
 
+
     public Product getProduct() {
         return product;
     }
 
     public void setProduct(Product product) {
         this.product = product;
+    }
+
+    public Bidder getBidder() {
+        return bidder;
+    }
+
+    public void setBidder(Bidder bidder) {
+        this.bidder = bidder;
     }
 
     @Override

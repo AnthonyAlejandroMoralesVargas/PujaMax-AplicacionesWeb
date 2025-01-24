@@ -1,5 +1,7 @@
 package model.entities;
 
+import java.util.List;
+
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +34,10 @@ public class Product {
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "idLot", nullable = false)
     private Lot lot;
+    
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    private List<Bid> bids;
+
 
     public Product() {
     }
@@ -112,5 +118,22 @@ public class Product {
                 ", description='" + description + '\'' +
                 ", photos=" + photos.size() + " photos" +
                 '}';
+    }
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return super.equals(obj);
+    }
+    
+    public List<Bid> getBids() {
+        return bids;
+    }
+    
+    public void setBids(List<Bid> bids) {
+        this.bids = bids;
     }
 }

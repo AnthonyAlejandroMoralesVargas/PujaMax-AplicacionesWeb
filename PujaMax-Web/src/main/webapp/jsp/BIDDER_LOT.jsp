@@ -49,11 +49,11 @@
         </c:if>
 
         <!-- Navigation -->
-        <section class="home-container mb-4">
+        <section class="home-container">
             <nav class="nav-container d-flex bg-primary p-2 rounded">
-                <a href="LotManagementController?route=listBidder&idLot=${idLot}" class="nav-item text-white me-3 text-decoration-none"><i class="fas fa-home"></i> Home</a>
-                <a href="${pageContext.request.contextPath}/PlaceBidController?route=history" class="nav-item text-white text-decoration-none"><i class="fas fa-history"></i>
-                    History</a>
+                <a href="LotManagementController?route=listBidder&idLot=${idLot}" class="nav-item"><i class="fas fa-home"></i> Home</a>
+                <a href="${pageContext.request.contextPath}/PlaceBidController?route=viewHistory" class="nav-item"><i class="fas fa-history"></i>
+                History</a>
             </nav>
         </section>
 
