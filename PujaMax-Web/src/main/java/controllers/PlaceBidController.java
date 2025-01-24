@@ -44,16 +44,12 @@ public class PlaceBidController extends HttpServlet {
             	this.list(req, resp);
                 break;
             case "productDetails":
-                this.productDetails(req, resp);
-                break;
-            case "bidInfo":
-                this.bidInfo(req, resp);
+                this.viewproductDetails(req, resp);
                 break;
             case "placeBid":
                 this.placeBid(req, resp);
                 break;
             case "history":
-                this.showUserBids(req, resp);
                 break;
             default:
                 throw new IllegalArgumentException("Unknown route: " + route);
@@ -83,7 +79,7 @@ public class PlaceBidController extends HttpServlet {
 		}
 	}
 
-    private void productDetails(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    private void viewproductDetails(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
             String idProductParam = req.getParameter("idProduct");
             if (idProductParam == null || idProductParam.isEmpty()) {
@@ -110,43 +106,6 @@ public class PlaceBidController extends HttpServlet {
         }
     }
 
-    private void bidInfo(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        try {
-            String idProductParam = req.getParameter("idProduct");
-            if (idProductParam == null || idProductParam.isEmpty()) {
-                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Product ID is required.");
-                return;
-            }
-
-            int idProduct = Integer.parseInt(idProductParam);
-
-            ProductService productService = new ProductService();
-            BidJPA bidJPA = new BidJPA();
-
-            Product product = productService.findProductById(idProduct);
-            if (product == null) {
-                resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Product not found.");
-                return;
-            }
-
-            List<Bid> bids = bidJPA.findBidByProductId(idProduct);
-            Bid latestBid = bids.isEmpty() ? null : bids.get(bids.size() - 1);
-
-            double currentPrice = (latestBid != null) ? latestBid.getCurrentPrice() : product.getPriceInitial();
-
-            req.setAttribute("product", product);
-            req.setAttribute("bids", bids);
-            req.setAttribute("latestBid", latestBid);
-            req.setAttribute("bidCount", bids.size());
-            req.setAttribute("currentPrice", currentPrice);
-
-            req.getRequestDispatcher("jsp/PRODUCT.jsp").forward(req, resp);
-        } catch (NumberFormatException e) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid Product ID format.");
-        } catch (Exception e) {
-            throw new ServletException("Error retrieving bid information", e);
-        }
-    }
 
     private void placeBid(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
@@ -197,7 +156,7 @@ public class PlaceBidController extends HttpServlet {
                 req.setAttribute("messageType", "error");
                 req.setAttribute("message", "Your bid must be higher than the current price.");
                 req.setAttribute("currentPrice", currentPrice);
-                req.setAttribute("bidCount", bids.size()); // Número de pujas actuales
+                req.setAttribute("bidCount", bids.size());
                 req.setAttribute("product", product);
                 req.getRequestDispatcher("jsp/PRODUCT.jsp").forward(req, resp);
                 return;
@@ -218,11 +177,11 @@ public class PlaceBidController extends HttpServlet {
             newBid.setCurrentPrice(bidAmount);
             newBid.setState(Bid.BidState.ACTIVE);
             newBid.setDateBid(new java.util.Date());
-            newBid.setUser(bidder); // Asociar el usuario a la puja
+            newBid.setUser(bidder);
 
             boolean success = bidJPA.createBid(newBid);
 
-            // Configurar atributos para la vista
+            // Actualizar valores para la vista
             req.setAttribute("currentPrice", bidAmount);
             req.setAttribute("bidCount", bids.size() + 1);
             req.setAttribute("product", product);
@@ -245,31 +204,5 @@ public class PlaceBidController extends HttpServlet {
         }
     }
 
-
-
-    private void showUserBids(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        HttpSession session = req.getSession();
-        Object user = session.getAttribute("user");
-
-        // Validar usuario en sesión
-        if (user == null || !(user instanceof Bidder)) {
-            req.setAttribute("messageType", "error");
-            req.setAttribute("message", "You must be logged in as a bidder to view your bid history.");
-            req.getRequestDispatcher("jsp/LOGIN.jsp").forward(req, resp);
-            return;
-        }
-
-        Bidder bidder = (Bidder) user;
-
-        try {
-            BidJPA bidJPA = new BidJPA();
-            List<Bid> userBids = bidJPA.findBidsByUserId(bidder.getId());
-
-            req.setAttribute("bids", userBids);
-            req.getRequestDispatcher("jsp/BIDDER_HISTORY.jsp").forward(req, resp);
-        } catch (Exception e) {
-            throw new ServletException("Error retrieving user's bids", e);
-        }
-    }
 
 }
