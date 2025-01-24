@@ -1,6 +1,7 @@
 package model.jpa;
 
 import jakarta.persistence.*;
+import model.entities.Lot;
 import model.entities.Product;
 
 import java.util.ArrayList;
@@ -29,15 +30,25 @@ public class ProductJPA {
 
     public boolean createProduct(Product product) {
         boolean result = false;
-        try (EntityManager em = getEntityManager()) {
-            EntityTransaction transaction = em.getTransaction();
+        EntityManager em = getEntityManager();
+        EntityTransaction transaction = em.getTransaction();
+
+        try {
             transaction.begin();
             em.persist(product);
-            transaction.commit();
 
+            // Actualizar la cantidad de productos en el lote
+            Lot lot = product.getLot();
+            lot.setQuantityProducts(lot.getQuantityProducts() + 1);
+            em.merge(lot);
+
+            transaction.commit();
             result = true;
         } catch (Exception e) {
+            transaction.rollback();
             System.out.println("Couldn't create product: " + e.getMessage());
+        } finally {
+            em.close();
         }
         return result;
     }
@@ -69,22 +80,29 @@ public class ProductJPA {
 
     public boolean removeProduct(int idProduct) {
         boolean result = false;
-        try (EntityManager em = getEntityManager()) {
-            EntityTransaction transaction = em.getTransaction();
-            transaction.begin();
+        EntityManager em = getEntityManager();
+        EntityTransaction transaction = em.getTransaction();
 
+        try {
+            transaction.begin();
             Product product = em.find(Product.class, idProduct);
             if (product != null) {
+                Lot lot = product.getLot();
+                lot.setQuantityProducts(Math.max(0, lot.getQuantityProducts() - 1));
+                em.merge(lot);
                 em.remove(product);
-                transaction.commit();
-                result = true;
             }
+
+            transaction.commit();
+            result = true;
         } catch (Exception e) {
+            transaction.rollback();
             System.out.println("Couldn't remove product: " + e.getMessage());
+        } finally {
+            em.close();
         }
         return result;
     }
-    
     public List<Product> getAllProducts() {
         List<Product> products = new ArrayList<>();
         String jpql = "SELECT p FROM Product p";

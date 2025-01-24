@@ -3,6 +3,8 @@ package model.entities;
 import java.util.List;
 
 import jakarta.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Product {
@@ -24,8 +26,10 @@ public class Product {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "photo", columnDefinition = "LONGBLOB")
-    private byte[] photo;
+    @ElementCollection
+    @CollectionTable(name = "product_photos", joinColumns = @JoinColumn(name = "idProduct"))
+    @Column(name = "base64Photo", columnDefinition = "LONGTEXT")
+    private List<String> photos = new ArrayList<>();
 
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "idLot", nullable = false)
@@ -38,19 +42,15 @@ public class Product {
     public Product() {
     }
 
-    // Constructor con todos los atributos
-    public Product(int idProduct, Lot lot, String title, String category, double priceInitial, String description, byte[] photo) {
+    public Product(int idProduct, Lot lot, String title, String category, double priceInitial, String description) {
         this.idProduct = idProduct;
         this.lot = lot;
         this.title = title;
         this.category = category;
         this.priceInitial = priceInitial;
         this.description = description;
-        this.photo = photo;
-        this.bids = bids;
     }
 
-    // Getters y setters
     public int getIdProduct() {
         return idProduct;
     }
@@ -99,12 +99,12 @@ public class Product {
         this.description = description;
     }
 
-    public byte[] getPhoto() {
-        return photo;
+    public List<String> getPhotos() {
+        return photos;
     }
 
-    public void setPhoto(byte[] photo) {
-        this.photo = photo;
+    public void setPhotos(List<String> photos) {
+        this.photos = photos;
     }
 
     @Override
@@ -116,10 +116,9 @@ public class Product {
                 ", category='" + category + '\'' +
                 ", priceInitial=" + priceInitial +
                 ", description='" + description + '\'' +
-                ", photo=" + (photo != null ? "[BLOB]" : "null") +
+                ", photos=" + photos.size() + " photos" +
                 '}';
     }
-
     @Override
     public int hashCode() {
         return super.hashCode();
