@@ -13,6 +13,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+    <style>
+        .product-carousel img {
+            max-height: 350px;
+            object-fit: contain;
+            width: 100%;
+        }
+    </style>
 </head>
 
 <body>
@@ -64,12 +71,24 @@
                 <c:forEach var="product" items="${products}">
                     <div class="col-md-4 mb-4">
                         <div class="card h-100">
-                            <c:if test="${product.base64Photo != null}">
-                                <img src="data:image/jpeg;base64,${product.base64Photo}" class="card-img-top" alt="Product Image">
-                            </c:if>
-                            <c:if test="${product.base64Photo == null}">
-                                <img src="${pageContext.request.contextPath}/images/default-product.jpg" class="card-img-top" alt="No Image">
-                            </c:if>
+                            <!-- Carousel for product images -->
+                            <div id="carouselProduct_${product.idProduct}" class="carousel slide product-carousel" data-bs-ride="carousel">
+                                <div class="carousel-inner">
+                                    <c:forEach var="photo" items="${product.photos}" varStatus="status">
+                                        <div class="carousel-item ${status.first ? 'active' : ''}">
+                                            <img src="data:image/jpeg;base64,${photo}" class="d-block w-100" alt="Product Image">
+                                        </div>
+                                    </c:forEach>
+                                </div>
+                                <button class="carousel-control-prev" type="button" data-bs-target="#carouselProduct_${product.idProduct}" data-bs-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Previous</span>
+                                </button>
+                                <button class="carousel-control-next" type="button" data-bs-target="#carouselProduct_${product.idProduct}" data-bs-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="visually-hidden">Next</span>
+                                </button>
+                            </div>
 
                             <div class="card-body">
                                 <h5 class="card-title">${product.title}</h5>
@@ -113,8 +132,8 @@
                                             <input type="number" class="form-control" id="editProductPrice_${product.idProduct}" name="txtPriceInitial" value="${product.priceInitial}" required>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="editProductPhoto_${product.idProduct}" class="form-label">Photo</label>
-                                            <input type="file" class="form-control" id="editProductPhoto_${product.idProduct}" name="txtPhoto">
+                                            <label for="editProductPhoto_${product.idProduct}" class="form-label">Photos</label>
+                                            <input type="file" class="form-control" id="editProductPhoto_${product.idProduct}" name="txtPhotos" multiple>
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -131,27 +150,23 @@
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
                                 <div class="modal-header bg-danger text-white">
-                                    <h5 class="modal-title" id="DELETE_PRODUCT_MODALLabel">
-                                        <i class="fas fa-trash-alt"></i> Confirm Deletion
-                                    </h5>
+                                    <h5 class="modal-title" id="DELETE_PRODUCT_MODALLabel">Confirm Deletion</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body text-center">
                                     <p>Are you sure you want to delete the following product?</p>
                                     <h3>${product.title}</h3>
                                     <p class="card-text text-secondary small mb-4">
-                                        <strong>Category:</strong> ${product.category}
+                                    <strong>Category:</strong> ${product.category}
                                     </p>
-                                    <p class="card-text text-secondary small mb-4">
-                                        <strong>Initial Price:</strong> $${product.priceInitial}
+                                    <p class="card-text text-secondary small mb-4"> <strong>Initial Price:</strong> $${product.priceInitial}
                                     </p>
-                                    <p class="card-text text-secondary small mb-4">
-                                        <strong>Description:</strong> ${product.description}
+                                    <p class="card-text text-secondary small mb-4"><strong>Description:</strong> ${product.description}
                                     </p>
                                 </div>
                                 <div class="modal-footer justify-content-center">
-                                    <a href="ProductManagementController?route=list&idLot=${idLot}" class="btn btn-secondary">Cancel</a>
-                                    <form action="${pageContext.request.contextPath}/ProductManagementController?route=acceptDelete&idProduct=${product.idProduct}&idLot=${idLot}" method="POST">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <form action="${pageContext.request.contextPath}/ProductManagementController?route=acceptDelete&idProduct=${product.idProduct}&idLot=${idLot}" method="post">
                                         <button type="submit" class="btn btn-danger">Delete</button>
                                     </form>
                                 </div>
@@ -175,23 +190,23 @@
                             <input type="hidden" name="txtIdLot" value="${idLot}">
                             <div class="mb-3">
                                 <label for="productTitle" class="form-label">Title</label>
-                                <input type="text" class="form-control" id="productTitle" name="txtTitle" placeholder="Enter product title" required>
+                                <input type="text" class="form-control" id="productTitle" name="txtTitle" required>
                             </div>
                             <div class="mb-3">
                                 <label for="productCategory" class="form-label">Category</label>
-                                <input type="text" class="form-control" id="productCategory" name="txtCategory" placeholder="Enter category" required>
+                                <input type="text" class="form-control" id="productCategory" name="txtCategory" required>
                             </div>
                             <div class="mb-3">
                                 <label for="productDescription" class="form-label">Description</label>
-                                <textarea class="form-control" id="productDescription" name="txtDescription" rows="3" placeholder="Enter description" required></textarea>
+                                <textarea class="form-control" id="productDescription" name="txtDescription" rows="3" required></textarea>
                             </div>
                             <div class="mb-3">
                                 <label for="initialPrice" class="form-label">Initial Price</label>
-                                <input type="number" class="form-control" id="initialPrice" name="txtPriceInitial" placeholder="Enter initial price" required>
+                                <input type="number" class="form-control" id="initialPrice" name="txtPriceInitial" required>
                             </div>
                             <div class="mb-3">
-                                <label for="productPhoto" class="form-label">Photo</label>
-                                <input type="file" class="form-control" id="productPhoto" name="txtPhoto">
+                                <label for="productPhotos" class="form-label">Photos</label>
+                                <input type="file" class="form-control" id="productPhotos" name="txtPhotos" multiple>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
