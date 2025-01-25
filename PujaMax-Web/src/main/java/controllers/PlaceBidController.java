@@ -49,9 +49,6 @@ public class PlaceBidController extends HttpServlet {
             case "placeBid":
                 this.placeBid(req, resp);
                 break;
-            case "viewHistory":
-                req.getRequestDispatcher("/PayBidController?route=viewHistory").forward(req, resp);
-                break;
             default:
                 throw new IllegalArgumentException("Unknown route: " + route);
         }
