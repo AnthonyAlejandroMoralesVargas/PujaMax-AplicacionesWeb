@@ -42,36 +42,6 @@ public class BidJPA {
         return bids;
     }
 
-    public List<Bid> findActiveBidsByProductId(int productId) {
-        List<Bid> bids = new ArrayList<>();
-        String jpql = "SELECT b FROM Bid b WHERE b.product.idProduct = :productId AND b.state = :state";
-
-        try (EntityManager em = getEntityManager()) {
-            Query query = em.createQuery(jpql, Bid.class);
-            query.setParameter("productId", productId);
-            query.setParameter("state", Bid.BidState.ACTIVE);
-            bids = query.getResultList();
-        } catch (Exception e) {
-            System.err.println("Couldn't find active bids for product ID " + productId + ": " + e.getMessage());
-        }
-        return bids;
-    }
-
-    
-    public List<Bid> findBidsByUserId(int userId) {
-        List<Bid> bids = new ArrayList<>();
-        String jpql = "SELECT b FROM Bid b WHERE b.user.id = :userId"; // Esto ya funciona correctamente
-
-        try (EntityManager em = getEntityManager()) {
-            Query query = em.createQuery(jpql, Bid.class);
-            query.setParameter("userId", userId);
-            bids = query.getResultList();
-        } catch (Exception e) {
-            System.err.println("Couldn't find bids for user ID " + userId + ": " + e.getMessage());
-        }
-        return bids;
-    }
-
 
     public Bid findBidById(int idBid) {
         Bid bid = null;
@@ -124,20 +94,4 @@ public class BidJPA {
         return result;
     }
 
-    public void expireActiveBidsForProduct(int productId) {
-        String jpql = "UPDATE Bid b SET b.state = :expired WHERE b.product.idProduct = :productId AND b.state = :active";
-
-        try (EntityManager em = getEntityManager()) {
-            EntityTransaction transaction = em.getTransaction();
-            transaction.begin();
-            Query query = em.createQuery(jpql);
-            query.setParameter("expired", Bid.BidState.LOST);
-            query.setParameter("productId", productId);
-            query.setParameter("active", Bid.BidState.ACTIVE);
-            query.executeUpdate();
-            transaction.commit();
-        } catch (Exception e) {
-            System.out.println("Couldn't expire active bids: " + e.getMessage());
-        }
-    }
 }
