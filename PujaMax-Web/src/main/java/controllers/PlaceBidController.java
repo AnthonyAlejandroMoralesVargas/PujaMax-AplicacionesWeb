@@ -177,7 +177,7 @@ public class PlaceBidController extends HttpServlet {
         BidJPA bidJPA = new BidJPA();
         Bid newBid = new Bid(0, new Date(), bidAmount, bidAmount, Bid.BidState.ACTIVE);
         newBid.setProduct(product);
-        newBid.setBidder(new Bidder(bidder.getDni()));
+        newBid.setBidder(bidder);
         return bidJPA.createBid(newBid);
     }
 

@@ -14,7 +14,13 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
-
+    <style>
+        .product-carousel img {
+            max-height: 350px;
+            object-fit: contain;
+            width: 100%;
+        }
+    </style>
 <body>
     <!-- Header -->
     <header class="header-container bg-primary text-white py-2">
@@ -79,6 +85,7 @@
                                     <span class="carousel-control-next-icon" aria-hidden="true"></span>
                                     <span class="visually-hidden">Next</span>
                                 </button>
+                                <a href="${pageContext.request.contextPath}/PlaceBidController?route=productDetails&idProduct=${product.idProduct}" class="btn btn-primary w-100">VIEW THIS PRODUCT</a>
                             </div>
 
                             <div class="col-md-8 ps-3">
