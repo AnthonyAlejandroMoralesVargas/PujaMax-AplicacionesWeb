@@ -16,4 +16,10 @@ public class Bidder extends User {
     public Bidder(int id, String dni, String name, String lastName, String email, String password, String phoneNumber) {
         super(id, dni, name, lastName, email, password, phoneNumber);
     }
+    
+ // Constructor que inicializa solo el DNI
+    public Bidder(String dni) {
+        super();
+        this.setDni(dni);
+    }
 }

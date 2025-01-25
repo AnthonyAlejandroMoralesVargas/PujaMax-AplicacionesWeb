@@ -37,22 +37,11 @@ public class Bid {
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "idProduct", nullable = false)
     private Product product;
-    
-    @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "idUser", nullable = false)
-    private User user;
 
     @ManyToOne
     @JoinColumn(name = "bidder_dni", referencedColumnName = "dni")
     private Bidder bidder;
 
-    public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
 
 	// Constructors
     public Bid() {

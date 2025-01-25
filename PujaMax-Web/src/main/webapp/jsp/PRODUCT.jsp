@@ -27,7 +27,7 @@
 			<div class="d-flex align-items-center">
 				<img src="${pageContext.request.contextPath}/images/OnlyB.png"
 					alt="Logo" style="height: 50px; margin-right: 10px;">
-				<h1 class="app-name mb-0">PUJAMAX Online Auction</h1>
+				<h1 class="app-name mb-0">idmax Online Auction</h1>
 			</div>
 			<div class="d-flex align-items-center">
 				<div class="dropdown">
@@ -209,6 +209,19 @@
 					<button type="button" class="btn btn-danger"
 						data-bs-dismiss="modal">Cancel</button>
 					<button type="button" class="btn btn-primary" id="confirmBidButton">Confirm</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Modal para mensajes informativos y de error -->
+	<div class="modal modal-info" id="infoModal" tabindex="-1"
+		aria-labelledby="infoModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-body ${messageType == 'info' ? 'info' : 'error'}">
+					<i
+						class="fas ${messageType == 'info' ? 'fa-info-circle text-info' : 'fa-exclamation-circle text-danger'}"></i>
+					<span>${message}</span>
 				</div>
 			</div>
 		</div>

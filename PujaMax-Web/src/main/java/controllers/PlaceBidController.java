@@ -3,6 +3,7 @@ package controllers;
 import java.io.IOException;
 import java.io.Serial;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
 import jakarta.servlet.ServletException;
@@ -107,27 +108,18 @@ public class PlaceBidController extends HttpServlet {
 
     private void placeBid(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
-        Object user = session.getAttribute("user");
+        Bidder bidder = (Bidder) session.getAttribute("user");
 
-        if (user == null || !(user instanceof Bidder)) {
-            System.out.println("No user found in session or user is not a Bidder.");
-        } else {
-            Bidder bidder = (Bidder) user;
-            System.out.println("Authenticated Bidder: " + bidder.getDni());
-        }
-        
-        // Validación del usuario en sesión
-        if (user == null || !(user instanceof Bidder)) {
+        // Validar si el usuario está autenticado
+        if (bidder == null) {
             req.setAttribute("messageType", "error");
             req.setAttribute("message", "You must be logged in as a bidder to place a bid.");
             req.getRequestDispatcher("jsp/LOGIN.jsp").forward(req, resp);
             return;
         }
 
-        Bidder bidder = (Bidder) user;
-
         try {
-            // Recuperar parámetros de la solicitud
+            // Recuperar y validar parámetros
             String idProductParam = req.getParameter("idProduct");
             String bidAmountParam = req.getParameter("bidAmount");
 
@@ -141,10 +133,8 @@ public class PlaceBidController extends HttpServlet {
             int idProduct = Integer.parseInt(idProductParam);
             double bidAmount = Double.parseDouble(bidAmountParam);
 
-            BidJPA bidJPA = new BidJPA();
-            ProductService productService = new ProductService();
-
             // Validar producto
+            ProductService productService = new ProductService();
             Product product = productService.findProductById(idProduct);
             if (product == null) {
                 req.setAttribute("messageType", "error");
@@ -153,10 +143,12 @@ public class PlaceBidController extends HttpServlet {
                 return;
             }
 
-            // Validar monto de la puja
+            // Obtener el precio actual del producto
+            BidJPA bidJPA = new BidJPA();
             List<Bid> bids = bidJPA.findBidByProductId(idProduct);
             double currentPrice = bids.isEmpty() ? product.getPriceInitial() : bids.get(bids.size() - 1).getCurrentPrice();
 
+            // Validar monto de la puja
             if (bidAmount <= currentPrice) {
                 req.setAttribute("messageType", "error");
                 req.setAttribute("message", "Your bid must be higher than the current price.");
@@ -167,39 +159,11 @@ public class PlaceBidController extends HttpServlet {
                 return;
             }
 
-            // Expirar pujas activas
-            for (Bid bid : bids) {
-                if (Bid.BidState.ACTIVE.equals(bid.getState())) {
-                    bid.setState(Bid.BidState.LOST);
-                    bidJPA.updateBid(bid);
-                }
-            }
+            // Crear y guardar nueva puja
+            boolean success = createAndSaveBid(bidAmount, product, bidder);
 
-            // Crear nueva puja
-            Bid newBid = new Bid();
-            newBid.setProduct(product);
-            newBid.setBid(bidAmount);
-            newBid.setCurrentPrice(bidAmount);
-            newBid.setState(Bid.BidState.ACTIVE);
-            newBid.setDateBid(new java.util.Date());
-            newBid.setUser(bidder);
-
-            boolean success = bidJPA.createBid(newBid);
-
-            // Actualizar valores para la vista
-            req.setAttribute("currentPrice", bidAmount);
-            req.setAttribute("bidCount", bids.size() + 1);
-            req.setAttribute("product", product);
-
-            if (success) {
-                req.setAttribute("messageType", "success");
-                req.setAttribute("message", "Your bid was successfully placed!");
-            } else {
-                req.setAttribute("messageType", "error");
-                req.setAttribute("message", "Failed to place your bid. Please try again.");
-            }
-
-            req.getRequestDispatcher("jsp/PRODUCT.jsp").forward(req, resp);
+            // Preparar respuesta
+            prepareResponse(req, resp, success, bidAmount, product, idProduct);
         } catch (NumberFormatException e) {
             req.setAttribute("messageType", "error");
             req.setAttribute("message", "Invalid product ID or bid amount format.");
@@ -208,6 +172,33 @@ public class PlaceBidController extends HttpServlet {
             throw new ServletException("Error placing bid", e);
         }
     }
+
+    private boolean createAndSaveBid(double bidAmount, Product product, Bidder bidder) {
+        BidJPA bidJPA = new BidJPA();
+        Bid newBid = new Bid(0, new Date(), bidAmount, bidAmount, Bid.BidState.ACTIVE);
+        newBid.setProduct(product);
+        newBid.setBidder(new Bidder(bidder.getDni()));
+        return bidJPA.createBid(newBid);
+    }
+
+    private void prepareResponse(HttpServletRequest req, HttpServletResponse resp, boolean success, double bidAmount,
+            Product product, int idProduct) throws ServletException, IOException {
+        req.setAttribute("currentPrice", bidAmount);
+        req.setAttribute("bidCount", new BidJPA().findBidByProductId(idProduct).size() + 1);
+        req.setAttribute("product", product);
+
+        if (success) {
+            req.setAttribute("messageType", "success");
+            req.setAttribute("message", "Your bid was successfully placed!");
+        } else {
+            req.setAttribute("messageType", "error");
+            req.setAttribute("message", "Failed to place your bid. Please try again.");
+        }
+
+        req.getRequestDispatcher("jsp/PRODUCT.jsp").forward(req, resp);
+    }
+
+
 
 
 }
