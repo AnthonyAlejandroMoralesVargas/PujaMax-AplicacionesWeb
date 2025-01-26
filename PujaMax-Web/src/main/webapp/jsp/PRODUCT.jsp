@@ -14,6 +14,14 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
 
+<style>
+.product-carousel img {
+	max-height: 350px;
+	object-fit: contain;
+	width: 100%;
+}
+</style>
+
 <body>
     <!-- Header -->
     <header class="header-container">
