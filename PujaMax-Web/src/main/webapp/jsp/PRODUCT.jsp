@@ -41,7 +41,7 @@
             <nav class="nav-container">
                 <div class="d-flex flex-column flex-md-row">
                     <a href="LotManagementController?route=listBidder&idLot=${idLot}" class="nav-item"><i class="fas fa-home"></i> Home</a>
-                    <a href="${pageContext.request.contextPath}/PlaceBidController?route=history" class="nav-item"><i class="fas fa-history"></i> History</a>
+                    <a href="${pageContext.request.contextPath}/PayBidController?route=viewHistory" class="nav-item"><i class="fas fa-history"></i> History</a>
                 </div>
             </nav>
         </section>
@@ -225,7 +225,3 @@
 </body>
 
 </html>
-
-
-
-

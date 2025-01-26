@@ -94,4 +94,18 @@ public class BidJPA {
         return result;
     }
 
+    public List<Bid> getBidsByUserId(int userId) {
+        EntityManager em = getEntityManager();
+        try {
+            return em.createQuery("SELECT b FROM Bid b WHERE b.bidder.id = :userId", Bid.class)
+                    .setParameter("userId", userId)
+                    .getResultList();
+        } catch (Exception e) {
+            System.out.println("Error fetching bids by user ID: " + e.getMessage());
+            return null;
+        } finally {
+            em.close();
+        }
+    }
+
 }

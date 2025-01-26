@@ -1,43 +1,60 @@
 package model.jpa;
 
 import java.time.LocalDateTime;
+import jakarta.persistence.*;
 
-import jakarta.persistence.EntityManager;
 import model.entities.Bid;
 import model.entities.Receipt;
 
 public class ReceiptJPA {
 
-    private EntityManager entityManager;
+    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("BidMax");
 
-    // Constructor que recibe el EntityManager
-    public ReceiptJPA(EntityManager entityManager) {
-        this.entityManager = entityManager;
+    private EntityManager getEntityManager() {
+        return emf.createEntityManager();
     }
+    
+    public ReceiptJPA() {
+		super();
+	}
 
-    public void createPayment(String filePath, int bidId) {
-        // Buscar la puja
-        Bid bid = entityManager.find(Bid.class, bidId);
 
-        if (bid == null) {
-            throw new IllegalArgumentException("Bid not found with ID: " + bidId);
+
+	public void createPayment(String filePath, int bidId) {
+        if (filePath == null || filePath.isBlank()) {
+            throw new IllegalArgumentException("The file path cannot be null or blank.");
         }
 
-        // Asignar el estado al bid
-        String stateString = "PENDING_DELIVERY"; // Esto debería venir de tu lógica
+        EntityManager entityManager = getEntityManager();
+        EntityTransaction transaction = entityManager.getTransaction();
+
         try {
-            Bid.BidState newState = Bid.BidState.valueOf(stateString);
-            bid.setState(newState);
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Invalid state value: " + stateString, e);
+            transaction.begin();
+
+            // Buscar la puja
+            Bid bid = entityManager.find(Bid.class, bidId);
+            if (bid == null) {
+                throw new IllegalArgumentException("Bid not found with ID: " + bidId);
+            }
+
+            bid.setState(Bid.BidState.PENDING_DELIVERY);
+
+            // Crear y guardar el recibo
+            Receipt receipt = new Receipt();
+            receipt.setDocument(filePath);
+            receipt.setBid(bid);
+            receipt.setDate(LocalDateTime.now().toString());
+
+            entityManager.persist(receipt);
+
+            transaction.commit();
+        } catch (Exception e) {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            throw e;
+        } finally {
+            entityManager.close();
         }
-
-        // Crear y guardar el recibo
-        Receipt receipt = new Receipt();
-        receipt.setDocument(filePath);
-        receipt.setBid(bid);
-        receipt.setDate(LocalDateTime.now().toString()); // Asignar la fecha actual
-
-        entityManager.persist(receipt);
     }
 }

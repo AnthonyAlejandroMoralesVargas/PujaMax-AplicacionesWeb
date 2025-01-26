@@ -68,10 +68,8 @@ public class PlaceBidController extends HttpServlet {
             ProductService productService = new ProductService();
             BidJPA bidJPA = new BidJPA();
 
-            
             List<Product> products = productService.findProductsByLotId(idLot);
 
-            
             Map<Integer, Double> productCurrentPrices = new HashMap<>();
             for (Product product : products) {
                 List<Bid> bids = bidJPA.findBidByProductId(product.getIdProduct());
@@ -196,8 +194,4 @@ public class PlaceBidController extends HttpServlet {
 
         req.getRequestDispatcher("jsp/PRODUCT.jsp").forward(req, resp);
     }
-
-
-
-
 }
