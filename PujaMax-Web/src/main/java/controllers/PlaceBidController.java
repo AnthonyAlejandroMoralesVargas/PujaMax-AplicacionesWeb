@@ -61,7 +61,7 @@ public class PlaceBidController extends HttpServlet {
         try {
             HttpSession session = req.getSession();
             Bidder bidder = (Bidder) session.getAttribute("user");
-            
+
             int idLot = Integer.parseInt(req.getParameter("idLot"));
             req.setAttribute("idLot", idLot);
 
@@ -70,15 +70,7 @@ public class PlaceBidController extends HttpServlet {
 
             List<Product> products = productService.findProductsByLotId(idLot);
 
-            Map<Integer, Double> productCurrentPrices = new HashMap<>();
-            for (Product product : products) {
-                List<Bid> bids = bidJPA.findBidByProductId(product.getIdProduct());
-                double currentPrice = bids.isEmpty() ? product.getPriceInitial() : bids.get(bids.size() - 1).getCurrentPrice();
-                productCurrentPrices.put(product.getIdProduct(), currentPrice);
-            }
-
             req.setAttribute("products", products);
-            req.setAttribute("productCurrentPrices", productCurrentPrices); 
             req.getRequestDispatcher("jsp/BIDDER_LOT.jsp").forward(req, resp);
         } catch (NumberFormatException e) {
             req.setAttribute("messageType", "error");
@@ -97,18 +89,16 @@ public class PlaceBidController extends HttpServlet {
             String idProductParam = req.getParameter("idProduct");
 
             int idProduct = Integer.parseInt(idProductParam);
-            int idLot = Integer.parseInt(req.getParameter("idLot")); 
-            req.setAttribute("idLot", idLot); 
+            int idLot = Integer.parseInt(req.getParameter("idLot"));
+            req.setAttribute("idLot", idLot);
 
             ProductService productService = new ProductService();
             Product product = productService.findProductById(idProduct);
 
             BidJPA bidJPA = new BidJPA();
             List<Bid> bids = bidJPA.findBidByProductId(idProduct);
-            double currentPrice = bids.isEmpty() ? product.getPriceInitial() : bids.get(bids.size() - 1).getCurrentPrice();
 
             req.setAttribute("product", product);
-            req.setAttribute("currentPrice", currentPrice);
             req.setAttribute("bidCount", bids.size());
             req.getRequestDispatcher("jsp/PRODUCT.jsp").forward(req, resp);
         } catch (NumberFormatException e) {
@@ -127,31 +117,28 @@ public class PlaceBidController extends HttpServlet {
         try {
             String idProductParam = req.getParameter("idProduct");
             String bidAmountParam = req.getParameter("bidAmount");
-            int idLot = Integer.parseInt(req.getParameter("idLot")); 
+            int idLot = Integer.parseInt(req.getParameter("idLot"));
             req.setAttribute("idLot", idLot);
 
             int idProduct = Integer.parseInt(idProductParam);
             double bidAmount = Double.parseDouble(bidAmountParam);
 
-            
+
             ProductService productService = new ProductService();
             Product product = productService.findProductById(idProduct);
-            
+
             BidJPA bidJPA = new BidJPA();
             List<Bid> bids = bidJPA.findBidByProductId(idProduct);
-            double currentPrice = bids.isEmpty() ? product.getPriceInitial() : bids.get(bids.size() - 1).getCurrentPrice();
 
-            
-            if (bidAmount <= currentPrice) {
+            if (bidAmount <= product.getPriceCurrent()) {
                 req.setAttribute("messageType", "error");
                 req.setAttribute("message", "Your bid must be higher than the current price.");
-                req.setAttribute("currentPrice", currentPrice);
                 req.setAttribute("bidCount", bids.size());
                 req.setAttribute("product", product);
                 req.getRequestDispatcher("jsp/PRODUCT.jsp").forward(req, resp);
                 return;
             }
-            
+
             boolean success = createAndSaveBid(bidAmount, product, bidder);
 
             prepareResponse(req, resp, success, bidAmount, product, idProduct);
@@ -166,7 +153,7 @@ public class PlaceBidController extends HttpServlet {
 
     private boolean createAndSaveBid(double bidAmount, Product product, Bidder bidder) {
         BidJPA bidJPA = new BidJPA();
-        Bid newBid = new Bid(0, new Date(), bidAmount, bidAmount, Bid.BidState.ACTIVE);
+        Bid newBid = new Bid(0, new Date(), bidAmount, Bid.BidState.ACTIVE);
         newBid.setProduct(product);
         newBid.setBidder(bidder);
         return bidJPA.createBid(newBid);
@@ -174,13 +161,8 @@ public class PlaceBidController extends HttpServlet {
 
     private void prepareResponse(HttpServletRequest req, HttpServletResponse resp, boolean success, double bidAmount,
             Product product, int idProduct) throws ServletException, IOException {
-        
     	BidJPA bidJPA = new BidJPA();
         List<Bid> bids = bidJPA.findBidByProductId(idProduct);
-        double currentPrice = bids.isEmpty() ? product.getPriceInitial() : bids.get(bids.size() - 1).getCurrentPrice();
-
-    	
-    	req.setAttribute("currentPrice", bidAmount);
         req.setAttribute("bidCount", new BidJPA().findBidByProductId(idProduct).size());
         req.setAttribute("product", product);
 

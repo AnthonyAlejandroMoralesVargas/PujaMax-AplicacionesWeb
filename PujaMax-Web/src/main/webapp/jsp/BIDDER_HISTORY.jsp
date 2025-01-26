@@ -81,8 +81,8 @@
 					<div class="col-md-4 d-flex flex-column justify-content-center">
 						<div>
 							<strong>Title:</strong> ${bid.product != null ? bid.product.title : 'No Title'}<br>
-							<strong>Price:</strong> $${bid.currentPrice != null ?
-							bid.currentPrice : '0.00'}<br> <strong>Date:</strong>
+							<strong>Price:</strong> $${bid.product.priceCurrent != null ?
+							bid.product.priceCurrent : '0.00'}<br> <strong>Date:</strong>
 							${bid.dateBid != null ? bid.dateBid : 'N/A'}<br> <strong>Description:</strong>
 							${bid.product != null && bid.product.description != null ? bid.product.description : 'No Description'}
 						</div>

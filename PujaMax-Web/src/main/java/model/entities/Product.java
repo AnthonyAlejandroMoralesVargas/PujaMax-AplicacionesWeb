@@ -23,6 +23,9 @@ public class Product {
     @Column(name = "priceInitial", nullable = false)
     private double priceInitial;
 
+    @Column(name = "priceCurrent", nullable = false)
+    private double priceCurrent;
+
     @Column(name = "description")
     private String description;
 
@@ -41,7 +44,6 @@ public class Product {
 
     public Product() {
     }
-
     public Product(int idProduct, Lot lot, String title, String category, double priceInitial, String description) {
         this.idProduct = idProduct;
         this.lot = lot;
@@ -49,7 +51,9 @@ public class Product {
         this.category = category;
         this.priceInitial = priceInitial;
         this.description = description;
+        this.priceCurrent = priceInitial;
     }
+
 
     public int getIdProduct() {
         return idProduct;
@@ -135,5 +139,13 @@ public class Product {
     
     public void setBids(List<Bid> bids) {
         this.bids = bids;
+    }
+
+    public double getPriceCurrent() {
+        return priceCurrent;
+    }
+
+    public void setPriceCurrent(double priceCurrent) {
+        this.priceCurrent = priceCurrent;
     }
 }

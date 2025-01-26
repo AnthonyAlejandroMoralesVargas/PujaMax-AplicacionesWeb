@@ -114,7 +114,7 @@
 								</p>
 								<p>
 									<strong>Current Price:</strong>
-									$${productCurrentPrices[product.idProduct]}
+									$${product.priceCurrent}
 								</p>
 							</div>
 							<a
@@ -135,5 +135,4 @@
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>

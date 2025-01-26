@@ -24,9 +24,6 @@ public class Bid {
     @Column(name = "dateBid", nullable = false)
     private Date dateBid;
 
-    @Column(name = "currentPrice", nullable = false)
-    private Double currentPrice;
-
     @Column(name = "bid", nullable = false)
     private Double bid;
 
@@ -47,10 +44,9 @@ public class Bid {
     public Bid() {
     }
 
-    public Bid(int idBid, Date dateBid, Double currentPrice, Double bid, BidState state) {
+    public Bid(int idBid, Date dateBid, Double bid, BidState state) {
         this.idBid = idBid;
         this.dateBid = dateBid;
-        this.currentPrice = currentPrice;
         this.bid = bid;
         this.state = state;
     }
@@ -59,6 +55,7 @@ public class Bid {
         ACTIVE,
         LOST,
         WON,
+        //PENDING_APPROVAL,
         PENDING_DELIVERY,
         PAID
     }
@@ -79,14 +76,6 @@ public class Bid {
 
     public void setDateBid(Date dateBid) {
         this.dateBid = dateBid;
-    }
-
-    public Double getCurrentPrice() {
-        return currentPrice;
-    }
-
-    public void setCurrentPrice(Double currentPrice) {
-        this.currentPrice = currentPrice;
     }
 
     public Double getBid() {
@@ -128,7 +117,6 @@ public class Bid {
                 "idBid=" + idBid +
                 ", product=" + product +
                 ", dateBid='" + dateBid + '\'' +
-                ", currentPrice=" + currentPrice +
                 ", bid=" + bid +
                 ", state='" + state + '\'' +
                 '}';

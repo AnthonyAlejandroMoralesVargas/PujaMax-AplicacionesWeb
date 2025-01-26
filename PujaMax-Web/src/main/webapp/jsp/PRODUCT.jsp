@@ -102,7 +102,8 @@
                             </div>
                             <div class="col-6">
                                 <label class="form-label">Current price</label>
-                                <input type="text" class="form-control" value="${currentPrice}" readonly>
+                                <h3 class="text-primary">${product.priceCurrent}</h3>
+                                <input type="text" class="form-control" value="${product.priceCurrent}" readonly>
                             </div>
                         </div>
 
@@ -164,7 +165,7 @@
 						<div class="mb-3">
 							<label for="currentPrice" class="form-label">Current
 								Price</label> <input type="text" id="currentPrice" class="form-control"
-								value="${currentPrice}" readonly>
+								value="${product.priceCurrent}" readonly>
 						</div>
                         <div class="mb-3">
                             <label for="bidAmount" class="form-label">Your Bid</label>
