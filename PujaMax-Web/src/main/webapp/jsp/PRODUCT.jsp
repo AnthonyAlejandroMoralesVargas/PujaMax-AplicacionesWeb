@@ -107,14 +107,14 @@
                         </div>
 
                         <h5 class="text-primary mb-3">BID INFORMATION</h5>
-                        <form id="bidForm" method="post" action="${pageContext.request.contextPath}/PlaceBidController?route=placebid">
+                        <form id="bidForm" method="POST" action="${pageContext.request.contextPath}/PlaceBidController?route=placebid">
                             <input type="hidden" name="idProduct" value="${product.idProduct}">
                             <input type="hidden" name="idLot" value="${idLot}">
                             <div class="mb-3">
                                 <label for="bidAmount" class="form-label">Your Offer</label>
                                 <input type="number" step="0.01" name="bidAmount" id="bidAmount" class="form-control" placeholder="Enter your bid" required>
                             </div>
-                            <button type="submit"  data-bs-toggle="modal" data-bs-target="#NEW_HIGH_BID" class="btn btn-primary w-100">Submit</button>
+                            <button type="submit"  class="btn btn-primary w-100">Submit</button>
                         </form>
                     </div>
                 </div>
@@ -152,30 +152,31 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="bidConfirmationForm" action="${pageContext.request.contextPath}/PlaceBidController?route=confirm" method="post">
+                    <!-- Solo 1 input con name="bidAmount", y lo seteas en el JS o en tu back -->
+                    <form id="bidConfirmationForm"
+                          action="${pageContext.request.contextPath}/PlaceBidController?route=confirm"
+                          method="post">
+
                         <input type="hidden" name="idProduct" value="${product.idProduct}">
                         <input type="hidden" name="idLot" value="${idLot}">
-                        <input type="hidden" name="bidAmount" id="hiddenBidAmount">
+                        <input type="hidden" name="bidAmount" id="hiddenBidAmount" value="${bidAmount}" />
+
                         <div class="mb-3">
-							<label for="productTitle" class="form-label">Title of
-								product</label> <input type="text" id="productTitle"
-								class="form-control" value="${product.title}" readonly>
-						</div>
-						<div class="mb-3">
-							<label for="currentPrice" class="form-label">Current
-								Price</label> <input type="text" id="currentPrice" class="form-control"
-								value="${product.priceCurrent}" readonly>
-						</div>
-                        <div class="mb-3">
-                            <label for="bidAmount" class="form-label">Your Bid</label>
-                            <input type="text" id="bidAmountDisplay" class="form-control" readonly>
+                            <label for="bidAmountDisplay" class="form-label">Your Bid</label>
+                            <!-- Este NO usa name="bidAmount", es solo para mostrarlo -->
+                            <input type="text" id="bidAmountDisplay"  name="bidAmount" class="form-control"
+                                   value="${bidAmount}" readonly>
+                        </div>
+
+                        <div class="modal-footer justify-content-center">
+                            <a href="PlaceBidController?route=productDetails"
+                               class="btn btn-danger"> Cancel </a>
+                            <button type="submit" class="btn btn-primary">Save</button>
                         </div>
                     </form>
+
                 </div>
-                <div class="modal-footer justify-content-center">
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" id="confirmBidButton">Confirm</button>
-                </div>
+
             </div>
         </div>
     </div>
@@ -196,7 +197,7 @@
 
     <script>
         window.onload = function () {
-            var route = "${param.route}";
+            var route = "${routemodal}";
 
             if (route === "confirm") {
                 var myModal = new bootstrap.Modal(document

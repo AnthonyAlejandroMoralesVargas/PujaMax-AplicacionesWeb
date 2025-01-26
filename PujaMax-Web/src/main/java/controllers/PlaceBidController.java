@@ -86,6 +86,12 @@ public class PlaceBidController extends HttpServlet {
     private void viewproductDetails(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
             String idProductParam = req.getParameter("idProduct");
+            String bidAmountParam = req.getParameter("bidAmount");
+
+            if (bidAmountParam != null) {
+               double bidAmount = Double.parseDouble(bidAmountParam);
+               req.setAttribute("bidAmount", bidAmount);
+            }
 
             int idProduct = Integer.parseInt(idProductParam);
             int idLot = Integer.parseInt(req.getParameter("idLot"));
@@ -106,20 +112,26 @@ public class PlaceBidController extends HttpServlet {
             throw new ServletException("Error retrieving product details", e);
         }
     }
-
     private void placeBid(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         double bidAmount = Double.parseDouble(req.getParameter("bidAmount"));
         int idProduct = Integer.parseInt(req.getParameter("idProduct"));
         int idLot = Integer.parseInt(req.getParameter("idLot"));
 
-        req.setAttribute("route", "confirm");
+        System.out.println("idProduct: " + idProduct);
+        System.out.println("idLot: " + idLot);
+        System.out.println("bidAmount: " + bidAmount);
+
+        req.setAttribute("routemodal", "confirm");
         req.setAttribute("idProduct", idProduct);
         req.setAttribute("idLot", idLot);
         req.setAttribute("bidAmount", bidAmount);
-        req.getRequestDispatcher("jsp/PRODUCT.jsp").forward(req, resp);
+        req.getRequestDispatcher("PlaceBidController?route=productDetails").forward(req, resp);
+
+        //req.getRequestDispatcher("jsp/PRODUCT.jsp").forward(req, resp);
     }
 
     private void confirmBid(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        System.out.println("Estoy en confirmBid");
         Bid bid = parseBidFromRequest(req);
         BidService bidService = new BidService();
         if(bidService.createBid(bid)) {
