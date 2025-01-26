@@ -72,11 +72,6 @@
 									alt="${bid.product.title}" class="product-img mb-3"
 									style="max-width: 100%; height: auto;">
 							</c:when>
-							<c:otherwise>
-								<!-- Imagen predeterminada si no hay fotos -->
-								<img src="images/default.jpg" alt="No Image Available"
-									class="product-img mb-3" style="max-width: 100%; height: auto;">
-							</c:otherwise>
 						</c:choose>
 						<a href="PRODUCT.jsp?productId=${bid.product.idProduct}"
 							class="btn btn-primary w-100">VIEW THIS LOT</a>
