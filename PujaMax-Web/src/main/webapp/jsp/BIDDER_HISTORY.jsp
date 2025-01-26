@@ -4,22 +4,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Bidder History</title>
-	<!-- Bootstrap CSS -->
-	<link
-		href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-		rel="stylesheet">
-	<!-- Font Awesome for icons -->
-	<link rel="stylesheet"
-		href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-	<!-- Custom CSS -->
-	<link rel="stylesheet"
-		href="${pageContext.request.contextPath}/css/style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bidder History</title>
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+	rel="stylesheet">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
-	<!-- Header -->
 	<header class="header-container">
 		<div
 			class="container d-flex justify-content-between align-items-center">
@@ -46,9 +42,7 @@
 			</div>
 		</div>
 	</header>
-	<!-- Main Container -->
 	<main class="main-container container my-4">
-		<!-- Filter Section -->
 		<section class="home-container">
 			<nav class="nav-container">
 				<a href="LotManagementController?route=listBidder&idLot=${idLot}"
@@ -57,17 +51,14 @@
 					class="nav-item"><i class="fas fa-history"></i> History</a>
 			</nav>
 		</section>
-		<!-- Dynamic Product Cards -->
 		<c:forEach var="bid" items="${bids}">
 			<div class="product-card mb-3 p-3 shadow rounded"
 				style="background-color: white;">
 				<div class="row">
-					<!-- Fotos del Producto -->
 					<div
 						class="col-md-4 d-flex justify-content-center align-items-center flex-column">
 						<c:choose>
 							<c:when test="${not empty bid.product.photos}">
-								<!-- Mostrar la primera foto disponible -->
 								<img src="data:image/jpeg;base64,${bid.product.photos[0]}"
 									alt="${bid.product.title}" class="product-img mb-3"
 									style="max-width: 100%; height: auto;">
@@ -77,7 +68,6 @@
 							class="btn btn-primary w-100">VIEW THIS LOT</a>
 					</div>
 
-					<!-- Detalles del Producto -->
 					<div class="col-md-4 d-flex flex-column justify-content-center">
 						<div>
 							<strong>Title:</strong> ${bid.product != null ? bid.product.title : 'No Title'}<br>
@@ -87,27 +77,46 @@
 							${bid.product != null && bid.product.description != null ? bid.product.description : 'No Description'}
 						</div>
 					</div>
+
 					<div
 						class="col-md-4 d-flex flex-column justify-content-center align-items-center">
 						<c:choose>
+							<c:when test="${bid.state == 'TOP'}">
+								<div class="btn btn-success w-50 mb-2">You're the top
+									bidder</div>								
+							</c:when>
+							<c:when test="${bid.state == 'SURPASSED'}">
+								<div class="btn btn-warning w-50 mb-2">Your bid has been
+									surpassed</div>
+							</c:when>
+
 							<c:when test="${bid.state == 'WON'}">
-								<div class="btn btn-success w-50 mb-2">Won</div>
+								<div class="btn btn-success w-50 mb-2">You won the bid!</div>
 								<button class="btn btn-primary w-50" data-bs-toggle="modal"
 									data-bs-target="#SUBMIT_RECEIPT_PAYMENT"
 									data-bid-id="${bid.idBid}">Submit Receipt</button>
 							</c:when>
-							<c:when test="${bid.state == 'PENDING_DELIVERY'}">
-								<div class="btn btn-warning w-50 mb-2">Pending Delivery</div>
+							<c:when test="${bid.state == 'LOST'}">
+								<div class="btn btn-danger w-50 mb-2">You lost the bid</div>
+							</c:when>
+
+							<c:when test="${bid.state == 'PENDING_APPROVAL'}">
+								<div class="btn btn-warning w-50 mb-2">Receipt Pending
+									Approval</div>
+							</c:when>
+							<c:when test="${bid.state == 'ACCEPT'}">
+								<div class="btn btn-success w-50 mb-2">Receipt Accepted</div>
 								<button class="btn btn-primary w-50" data-bs-toggle="modal"
 									data-bs-target="#DESCRIPTION_ADDRESS"
-									data-bid-id="${bid.idBid}">View Address</button>
+									data-bid-id="${bid.idBid}">View Delivery Address</button>
 							</c:when>
-							<c:when test="${bid.state == 'LOST'}">
-								<div class="btn btn-danger w-50 mb-2">Lost</div>
+							<c:when test="${bid.state == 'REJECT'}">
+								<div class="btn btn-danger w-50 mb-2">Receipt Rejected</div>
 								<button class="btn btn-primary w-50" data-bs-toggle="modal"
 									data-bs-target="#DESCRIPTION_REJECTION"
-									data-bid-id="${bid.idBid}">View Reason</button>
+									data-bid-id="${bid.idBid}">View Rejection Reason</button>
 							</c:when>
+
 							<c:otherwise>
 								<div class="btn btn-secondary w-50 mb-2">State:
 									${bid.state}</div>
@@ -117,20 +126,19 @@
 				</div>
 			</div>
 		</c:forEach>
-		<!-- No Bids Found -->
+
 		<c:if test="${empty bids}">
 			<div class="alert alert-warning text-center">No bids found for
 				this bidder.</div>
 		</c:if>
 	</main>
-	<!-- Footer -->
 	<footer class="text-center bg-dark text-white py-3 mt-4">
 		<p>&copy; 2025 BIDMAX | All rights reserved</p>
 	</footer>
-	<!-- Bootstrap JS -->
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 <div class="modal fade" id="SUBMIT_RECEIPT_PAYMENT" tabindex="-1"
 	aria-labelledby="SUBMIT_RECEIPT_PAYMENTLabel" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered">
@@ -146,10 +154,8 @@
 			<form action="PayBidController?route=updateReceipt" method="POST"
 				enctype="multipart/form-data">
 				<div class="modal-body">
-					<!-- Hidden fields to send additional data -->
 					<input type="hidden" name="idBid" id="idBid"> <input
 						type="hidden" name="bidderDni" value="${bidderDni}">
-					<!-- Bidder information -->
 					<div class="mb-3">
 						<label for="bidderInfo" class="form-label">Bidder
 							Information</label>
@@ -160,7 +166,6 @@
 	Phone: 
 	                        </textarea>
 					</div>
-					<!-- File upload -->
 					<div class="mb-3">
 						<label for="receiptFile" class="form-label">Upload Receipt</label>
 						<input class="form-control" type="file" name="document"
@@ -187,39 +192,32 @@
 	        });
 	    });
 	</script>
+
 <div class="modal fade" id="DESCRIPTION_REJECTION" tabindex="-1"
 	aria-labelledby="DESCRIPTION_REJECTIONLabel" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered">
 		<div class="modal-content">
 			<div class="modal-header bg-danger text-white">
 				<h5 class="modal-title" id="DESCRIPTION_REJECTIONLabel">
-					<i class="fas fa-layer-group"></i> Description Rejection
+					<i class="fas fa-layer-group"></i> Rejection Reason
 				</h5>
 				<button type="button" class="btn-close" data-bs-dismiss="modal"
 					aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
-				<form>
-					<div class="mb-3">
-						<label for="rejectedDescription" class="form-label">Description
-							of the rejected decision</label>
-						<textarea id="rejectedDescription" class="form-control" rows="3"
-							placeholder="Description" readonly></textarea>
-					</div>
-				</form>
+				<textarea class="form-control" rows="3" readonly>${bid.rejectionReason}</textarea>
 			</div>
 			<div class="modal-footer justify-content-center">
-				<button type="button" class="btn btn-success"
-					data-bs-dismiss="modal">Accept</button>
+				<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
 			</div>
 		</div>
 	</div>
 </div>
+
 <div class="modal fade" id="DESCRIPTION_ADDRESS" tabindex="-1"
 	aria-labelledby="DESCRIPTION_ADDRESSLabel" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered">
 		<div class="modal-content">
-			<!-- Modal Header -->
 			<div class="modal-header bg-primary text-white">
 				<h5 class="modal-title" id="DESCRIPTION_ADDRESSLabel">
 					<i class="fas fa-layer-group"></i> Delivery Address
@@ -227,7 +225,6 @@
 				<button type="button" class="btn-close" data-bs-dismiss="modal"
 					aria-label="Close"></button>
 			</div>
-			<!-- Modal Body -->
 			<div class="modal-body">
 				<form>
 					<div class="row">
@@ -279,14 +276,15 @@
 					</div>
 				</form>
 			</div>
-			<!-- Modal Footer -->
 			<div class="modal-footer justify-content-center">
 				<button type="button" class="btn btn-success"
 					data-bs-dismiss="modal">Accept</button>
 			</div>
 		</div>
 	</div>
-	<script>
+</div>
+
+<script>
 	        // Handle Delivery modal
 	        const deliveryModal = document.getElementById('DESCRIPTION_ADDRESS');
 	        deliveryModal.addEventListener('show.bs.modal', function (event) {
@@ -303,6 +301,18 @@
 	
 	            // Example: Fetch and populate rejection reason using bidId
 	            console.log(`Fetching rejection reason for bid ID: ${bidId}`);
+	        });
+	        
+	        document.addEventListener("DOMContentLoaded", function () {
+	            // Handle dynamic data for modals
+	            const modals = document.querySelectorAll("[data-bs-toggle='modal']");
+	            modals.forEach(modal => {
+	                modal.addEventListener("click", function (event) {
+	                    const bidId = this.getAttribute("data-bid-id");
+	                    console.log(`Modal opened for Bid ID: ${bidId}`);
+	                    // Fetch and populate data dynamically if needed
+	                });
+	            });
 	        });
 	    });
 	</script>
