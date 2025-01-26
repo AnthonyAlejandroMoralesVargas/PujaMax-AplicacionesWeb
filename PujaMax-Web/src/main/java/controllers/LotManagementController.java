@@ -41,9 +41,6 @@ public class LotManagementController extends HttpServlet {
             case "list":
                 this.list(req, resp);
                 break;
-            case "listBidder":
-                this.listLotBidder(req, resp);
-                break;
             case "add":
                 this.addLot(req, resp);
                 break;
@@ -83,26 +80,20 @@ public class LotManagementController extends HttpServlet {
                 throw new ServletException("Error retrieving lots for auctioneer", e);
             }
         } else if (user instanceof Bidder) {
-            listLotBidder(req, resp);
+        	try {
+        		List<Lot> lots;
+                LotService lotService = new LotService();
+                lots = lotService.getActiveLots();
+                req.setAttribute("lots", lots);
+                req.getRequestDispatcher("jsp/BIDDER_LOT_BOARD.jsp").forward(req, resp);
+            } catch (SQLException e) {
+                throw new ServletException("Error retrieving lots for bidder", e);
+            }
         } else {
             throw new IllegalArgumentException("Unknown user type in session.");
         }
     }
     
-    private void listLotBidder(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        HttpSession session = req.getSession();
-        List<Lot> lots;
-
-        try {
-            LotService lotService = new LotService();
-            lots = lotService.findLotsByState("ACTIVE");
-            req.setAttribute("lots", lots);
-            req.getRequestDispatcher("jsp/BIDDER_LOT_BOARD.jsp").forward(req, resp);
-        } catch (SQLException e) {
-            throw new ServletException("Error retrieving lots for bidder", e);
-        }
-    }
-
     private void addLot(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
         Auctioneer auctioneer = (Auctioneer) session.getAttribute("user");
