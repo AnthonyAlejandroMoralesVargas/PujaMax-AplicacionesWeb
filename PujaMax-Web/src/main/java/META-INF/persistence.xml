@@ -16,7 +16,7 @@
 			<property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/bidmax"/>
 			<property name="jakarta.persistence.jdbc.user" value="root"/>
 			<property name="jakarta.persistence.jdbc.password" value=""/>
-			<property name="eclipselink.ddl-generation" value="none"/>
+			<property name="eclipselink.ddl-generation" value="update"/>
 			<!--
             <property name="eclipselink.ddl-generation" value="none"/>
             <property name="eclipselink.ddl-generation" value="create-tables"/>
