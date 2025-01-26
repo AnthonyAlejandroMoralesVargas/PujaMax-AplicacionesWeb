@@ -137,53 +137,14 @@ public class PlaceBidController extends HttpServlet {
         if(bidService.createBid(bid)) {
             req.setAttribute("messageType", "info");
             req.setAttribute("message", "Bid placed successfully.");
+            req.getRequestDispatcher("PlaceBidController?route=productDetails").forward(req, resp);
         } else {
             req.setAttribute("messageType", "error");
             req.setAttribute("message", "Failed to place bid.");
+            req.getRequestDispatcher("PlaceBidController?route=productDetails").forward(req, resp);
         }
     }
 
-    /*
-    private void placeBid(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        HttpSession session = req.getSession();
-        Bidder bidder = (Bidder) session.getAttribute("user");
-
-        try {
-            String idProductParam = req.getParameter("idProduct");
-            String bidAmountParam = req.getParameter("bidAmount");
-            int idLot = Integer.parseInt(req.getParameter("idLot"));
-            req.setAttribute("idLot", idLot);
-
-            int idProduct = Integer.parseInt(idProductParam);
-            double bidAmount = Double.parseDouble(bidAmountParam);
-
-
-            ProductService productService = new ProductService();
-            Product product = productService.findProductById(idProduct);
-
-            BidService bidService = new BidService();
-            boolean success = bidService.createBid(bidAmount, product, bidder);
-
-            if (!success) {
-                req.setAttribute("messageType", "error");
-                req.setAttribute("message", "Your bid must be higher than the current price.");
-                req.setAttribute("bidCount", bids.size());
-                req.setAttribute("product", product);
-                req.getRequestDispatcher("jsp/PRODUCT.jsp").forward(req, resp);
-                return;
-            }
-
-            prepareResponse(req, resp, success, bidAmount, product, idProduct);
-        } catch (NumberFormatException e) {
-            req.setAttribute("messageType", "error");
-            req.setAttribute("message", "Invalid product ID or bid amount format.");
-            req.getRequestDispatcher("jsp/PRODUCT.jsp").forward(req, resp);
-        } catch (Exception e) {
-            throw new ServletException("Error placing bid", e);
-        }
-    }
-
-     */
 
     private Bid parseBidFromRequest(HttpServletRequest req) {
 
