@@ -34,9 +34,7 @@ public class ReceiptJPA {
             if (bid == null) {
                 throw new IllegalArgumentException("Bid not found with ID: " + bidId);
             }
-
             bid.setState(Bid.BidState.PENDING_APPROVAL);
-
             // Crear y guardar el recibo
             Receipt receipt = new Receipt();
             receipt.setDocument(filePath);
