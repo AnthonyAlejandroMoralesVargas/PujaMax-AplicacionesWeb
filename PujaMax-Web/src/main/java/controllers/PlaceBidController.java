@@ -14,12 +14,9 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import model.entities.Auctioneer;
-import model.entities.Bid;
-import model.entities.Bidder;
-import model.entities.Product;
-import model.entities.User;
+import model.entities.*;
 import model.jpa.BidJPA;
+import model.service.BidService;
 import model.service.ProductService;
 import model.service.UserService;
 
@@ -49,8 +46,11 @@ public class PlaceBidController extends HttpServlet {
             case "productDetails":
                 this.viewproductDetails(req, resp);
                 break;
-            case "placeBid":
+            case "placebid":
                 this.placeBid(req, resp);
+                break;
+            case "confirm":
+                this.confirmBid(req, resp);
                 break;
             default:
                 throw new IllegalArgumentException("Unknown route: " + route);
@@ -66,7 +66,6 @@ public class PlaceBidController extends HttpServlet {
             req.setAttribute("idLot", idLot);
 
             ProductService productService = new ProductService();
-            BidJPA bidJPA = new BidJPA();
 
             List<Product> products = productService.findProductsByLotId(idLot);
 
@@ -108,8 +107,31 @@ public class PlaceBidController extends HttpServlet {
         }
     }
 
+    private void placeBid(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        double bidAmount = Double.parseDouble(req.getParameter("bidAmount"));
+        int idProduct = Integer.parseInt(req.getParameter("idProduct"));
+        int idLot = Integer.parseInt(req.getParameter("idLot"));
 
+        req.setAttribute("route", "confirm");
+        req.setAttribute("idProduct", idProduct);
+        req.setAttribute("idLot", idLot);
+        req.setAttribute("bidAmount", bidAmount);
+        req.getRequestDispatcher("jsp/PRODUCT.jsp").forward(req, resp);
+    }
 
+    private void confirmBid(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        Bid bid = parseBidFromRequest(req);
+        BidService bidService = new BidService();
+        if(bidService.createBid(bid)) {
+            req.setAttribute("messageType", "info");
+            req.setAttribute("message", "Bid placed successfully.");
+        } else {
+            req.setAttribute("messageType", "error");
+            req.setAttribute("message", "Failed to place bid.");
+        }
+    }
+
+    /*
     private void placeBid(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
         Bidder bidder = (Bidder) session.getAttribute("user");
@@ -127,10 +149,10 @@ public class PlaceBidController extends HttpServlet {
             ProductService productService = new ProductService();
             Product product = productService.findProductById(idProduct);
 
-            BidJPA bidJPA = new BidJPA();
-            List<Bid> bids = bidJPA.findBidByProductId(idProduct);
+            BidService bidService = new BidService();
+            boolean success = bidService.createBid(bidAmount, product, bidder);
 
-            if (bidAmount <= product.getPriceCurrent()) {
+            if (!success) {
                 req.setAttribute("messageType", "error");
                 req.setAttribute("message", "Your bid must be higher than the current price.");
                 req.setAttribute("bidCount", bids.size());
@@ -138,8 +160,6 @@ public class PlaceBidController extends HttpServlet {
                 req.getRequestDispatcher("jsp/PRODUCT.jsp").forward(req, resp);
                 return;
             }
-
-            boolean success = createAndSaveBid(bidAmount, product, bidder);
 
             prepareResponse(req, resp, success, bidAmount, product, idProduct);
         } catch (NumberFormatException e) {
@@ -151,29 +171,15 @@ public class PlaceBidController extends HttpServlet {
         }
     }
 
-    private boolean createAndSaveBid(double bidAmount, Product product, Bidder bidder) {
-        BidJPA bidJPA = new BidJPA();
-        Bid newBid = new Bid(0, new Date(), bidAmount, Bid.BidState.ACTIVE);
-        newBid.setProduct(product);
-        newBid.setBidder(bidder);
-        return bidJPA.createBid(newBid);
-    }
+     */
 
-    private void prepareResponse(HttpServletRequest req, HttpServletResponse resp, boolean success, double bidAmount,
-            Product product, int idProduct) throws ServletException, IOException {
-    	BidJPA bidJPA = new BidJPA();
-        List<Bid> bids = bidJPA.findBidByProductId(idProduct);
-        req.setAttribute("bidCount", new BidJPA().findBidByProductId(idProduct).size());
-        req.setAttribute("product", product);
+    private Bid parseBidFromRequest(HttpServletRequest req) {
 
-        if (success) {
-            req.setAttribute("messageType", "success");
-            req.setAttribute("message", "Your bid was successfully placed!");
-        } else {
-            req.setAttribute("messageType", "error");
-            req.setAttribute("message", "Failed to place your bid. Please try again.");
-        }
-
-        req.getRequestDispatcher("jsp/PRODUCT.jsp").forward(req, resp);
+        HttpSession session = req.getSession();
+        Bidder auctioneer = (Bidder) session.getAttribute("user");
+        double bidAmount = Double.parseDouble(req.getParameter("bidAmount"));
+        int idProduct = Integer.parseInt(req.getParameter("idProduct"));
+        Product product = new ProductService().findProductById(idProduct);
+        return new Bid(0,new Date(),bidAmount, product, auctioneer);
     }
 }

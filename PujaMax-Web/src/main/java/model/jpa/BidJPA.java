@@ -71,9 +71,20 @@ public class BidJPA {
         try (EntityManager em = getEntityManager()) {
             EntityTransaction transaction = em.getTransaction();
             transaction.begin();
-            em.persist(bid);
-            transaction.commit();
-            result = true;
+            Product product = bid.getProduct(); // asumiendo que ya viene lleno
+
+            // Validamos si la puja es mayor que el priceCurrent
+            if (bid.getAmount() <= product.getPriceCurrent()) {
+                // No persistimos
+                transaction.rollback();
+                return false;
+            } else {
+                em.persist(bid);
+                product.setPriceCurrent(bid.getAmount());
+                em.merge(product);
+                transaction.commit();
+                result = true;
+            }
         } catch (Exception e) {
             System.out.println("Couldn't create bid: " + e.getMessage());
         }

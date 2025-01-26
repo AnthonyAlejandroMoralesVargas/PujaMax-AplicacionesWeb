@@ -107,14 +107,14 @@
                         </div>
 
                         <h5 class="text-primary mb-3">BID INFORMATION</h5>
-                        <form id="bidForm">
+                        <form id="bidForm" method="post" action="${pageContext.request.contextPath}/PlaceBidController?route=placebid">
                             <input type="hidden" name="idProduct" value="${product.idProduct}">
                             <input type="hidden" name="idLot" value="${idLot}">
                             <div class="mb-3">
                                 <label for="bidAmount" class="form-label">Your Offer</label>
                                 <input type="number" step="0.01" name="bidAmount" id="bidAmount" class="form-control" placeholder="Enter your bid" required>
                             </div>
-                            <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#NEW_HIGH_BID">Submit</button>
+                            <button type="submit"  data-bs-toggle="modal" data-bs-target="#NEW_HIGH_BID" class="btn btn-primary w-100">Submit</button>
                         </form>
                     </div>
                 </div>
@@ -152,7 +152,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="bidConfirmationForm" action="${pageContext.request.contextPath}/PlaceBidController?route=placeBid" method="post">
+                    <form id="bidConfirmationForm" action="${pageContext.request.contextPath}/PlaceBidController?route=confirm" method="post">
                         <input type="hidden" name="idProduct" value="${product.idProduct}">
                         <input type="hidden" name="idLot" value="${idLot}">
                         <input type="hidden" name="bidAmount" id="hiddenBidAmount">
@@ -195,45 +195,48 @@
 	</div>
 
     <script>
-		// Capture the bid amount and display it in the modal
-		document
-				.querySelector('[data-bs-target="#NEW_HIGH_BID"]')
-				.addEventListener(
-						'click',
-						function() {
-							const bidAmount = document
-									.querySelector('[name="bidAmount"]').value;
-							document.getElementById('bidAmountDisplay').value = bidAmount;
-							document.getElementById('hiddenBidAmount').value = bidAmount;
-						});
+        window.onload = function () {
+            var route = "${param.route}";
 
-		// Submit the form when Confirm is clicked
-		document.getElementById('confirmBidButton').addEventListener('click',
-				function() {
-					document.getElementById('bidConfirmationForm').submit();
-				});
-	</script>
+            if (route === "confirm") {
+                var myModal = new bootstrap.Modal(document
+                    .getElementById('NEW_HIGH_BID'), {
+                    keyboard: false,
+                    backdrop: 'static'
+                });
+                document.body.classList.remove('modal-open');
+                myModal.show();
+            }
+            // Mostrar modal informativo si hay mensaje
+            const message = "${message}";
+            if (message !== "") {
+                const infoModalElement = document.getElementById("infoModal");
+                if (infoModalElement) {
+                    const infoModal = new bootstrap.Modal(infoModalElement, {
+                        backdrop: false, // Sin fondo oscuro
+                        keyboard: false  // Desactiva cerrar con teclado
+                    });
+                    infoModal.show();
 
-	<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const infoModalElement = document.getElementById("infoModal");
+                    // Cerrar automáticamente después de 5 segundos
+                    setTimeout(() => {
+                        infoModal.hide();
+                    }, 5000);
+                }
+            }
+        };
 
-    if (infoModalElement && "${message}" !== "") {
-      const infoModal = new bootstrap.Modal(infoModalElement, {
-        backdrop: false, // Sin fondo oscuro
-        keyboard: false  // Desactiva cerrar con el teclado
-      });
-
-      // Mostrar el modal
-      infoModal.show();
-
-      // Cerrar automáticamente después de 5 segundos
-      setTimeout(() => {
-        infoModal.hide();
-      }, 5000);
-    }
-  });
-</script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const notification = document.getElementById("notification");
+            if (notification) {
+                // Oculta el mensaje después de 2 segundos
+                setTimeout(() => {
+                    notification.style.transition = "opacity 0.5s";
+                    notification.style.opacity = "0";
+                    setTimeout(() => notification.remove(), 1000); // Remueve el elemento después de la transición
+                }, 2000);
+            }
+        });
+    </script>
 </body>
-
 </html>

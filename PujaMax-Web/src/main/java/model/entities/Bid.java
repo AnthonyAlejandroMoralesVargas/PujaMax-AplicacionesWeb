@@ -25,7 +25,7 @@ public class Bid {
     private Date dateBid;
 
     @Column(name = "bid", nullable = false)
-    private Double bid;
+    private Double amount;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "state", nullable = false)
@@ -44,17 +44,20 @@ public class Bid {
     public Bid() {
     }
 
-    public Bid(int idBid, Date dateBid, Double bid, BidState state) {
+    public Bid(int idBid, Date dateBid, Double amount, Product product, Bidder bidder) {
         this.idBid = idBid;
         this.dateBid = dateBid;
-        this.bid = bid;
-        this.state = state;
+        this.amount = amount;
+        this.state = BidState.TOP;
+        this.product = product;
+        this.bidder = bidder;
     }
     
     public enum BidState {
         ACTIVE,
         LOST,
         WON,
+        TOP,
         //PENDING_APPROVAL,
         PENDING_DELIVERY,
         PAID
@@ -78,12 +81,12 @@ public class Bid {
         this.dateBid = dateBid;
     }
 
-    public Double getBid() {
-        return bid;
+    public Double getAmount() {
+        return amount;
     }
 
-    public void setBid(Double bid) {
-        this.bid = bid;
+    public void setAmount(Double bid) {
+        this.amount = bid;
     }
 
     public BidState getState() {
@@ -117,7 +120,7 @@ public class Bid {
                 "idBid=" + idBid +
                 ", product=" + product +
                 ", dateBid='" + dateBid + '\'' +
-                ", bid=" + bid +
+                ", bid=" + amount +
                 ", state='" + state + '\'' +
                 '}';
     }
