@@ -28,7 +28,7 @@
         <div class="container d-flex justify-content-between align-items-center">
             <div class="d-flex align-items-center">
                 <img src="${pageContext.request.contextPath}/images/OnlyB.png" alt="Logo" style="height: 50px; margin-right: 10px;">
-                <h1 class="app-name mb-0">PUJAMAX Online Auction</h1>
+                <h1 class="app-name mb-0">Online Auction</h1>
             </div>
             <div class="d-flex align-items-center">
                 <div class="dropdown">
