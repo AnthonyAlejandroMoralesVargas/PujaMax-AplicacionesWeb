@@ -98,12 +98,11 @@
                         <div class="row mb-3">
                             <div class="col-6">
                                 <label class="form-label">Bids</label>
-                                <input type="text" class="form-control" value="${bidCount}" readonly>
+                                <h3>${bidCount}</h3>
                             </div>
                             <div class="col-6">
                                 <label class="form-label">Current price</label>
                                 <h3 class="text-primary">${product.priceCurrent}</h3>
-                                <input type="text" class="form-control" value="${product.priceCurrent}" readonly>
                             </div>
                         </div>
 
