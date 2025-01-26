@@ -18,9 +18,7 @@ public class ReceiptJPA {
 		super();
 	}
 
-
-
-	public void createPayment(String filePath, int bidId) {
+    public void createPayment(String filePath, int bidId) {
         if (filePath == null || filePath.isBlank()) {
             throw new IllegalArgumentException("The file path cannot be null or blank.");
         }
@@ -37,7 +35,7 @@ public class ReceiptJPA {
                 throw new IllegalArgumentException("Bid not found with ID: " + bidId);
             }
 
-            bid.setState(Bid.BidState.PENDING_DELIVERY);
+            bid.setState(Bid.BidState.PENDING_APPROVAL);
 
             // Crear y guardar el recibo
             Receipt receipt = new Receipt();

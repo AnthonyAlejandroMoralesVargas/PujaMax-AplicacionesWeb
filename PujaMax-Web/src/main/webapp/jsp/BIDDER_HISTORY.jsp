@@ -64,8 +64,6 @@
 									style="max-width: 100%; height: auto;">
 							</c:when>
 						</c:choose>
-						<a href="PRODUCT.jsp?productId=${bid.product.idProduct}"
-							class="btn btn-primary w-100">VIEW THIS LOT</a>
 					</div>
 
 					<div class="col-md-4 d-flex flex-column justify-content-center">
@@ -74,7 +72,8 @@
 							<strong>Price:</strong> $${bid.product.priceCurrent != null ?
 							bid.product.priceCurrent : '0.00'}<br> <strong>Date:</strong>
 							${bid.dateBid != null ? bid.dateBid : 'N/A'}<br> <strong>Description:</strong>
-							${bid.product != null && bid.product.description != null ? bid.product.description : 'No Description'}
+							${bid.product != null && bid.product.description != null ? bid.product.description : 'No Description'}<br>
+							<strong>Category:</strong> ${bid.product.category != null ? bid.product.category : 'N/A'}<br>
 						</div>
 					</div>
 
@@ -83,13 +82,12 @@
 						<c:choose>
 							<c:when test="${bid.state == 'TOP'}">
 								<div class="btn btn-success w-50 mb-2">You're the top
-									bidder</div>								
+									bidder</div>
 							</c:when>
 							<c:when test="${bid.state == 'SURPASSED'}">
 								<div class="btn btn-warning w-50 mb-2">Your bid has been
 									surpassed</div>
 							</c:when>
-
 							<c:when test="${bid.state == 'WON'}">
 								<div class="btn btn-success w-50 mb-2">You won the bid!</div>
 								<button class="btn btn-primary w-50" data-bs-toggle="modal"
@@ -99,7 +97,6 @@
 							<c:when test="${bid.state == 'LOST'}">
 								<div class="btn btn-danger w-50 mb-2">You lost the bid</div>
 							</c:when>
-
 							<c:when test="${bid.state == 'PENDING_APPROVAL'}">
 								<div class="btn btn-warning w-50 mb-2">Receipt Pending
 									Approval</div>
@@ -116,7 +113,6 @@
 									data-bs-target="#DESCRIPTION_REJECTION"
 									data-bid-id="${bid.idBid}">View Rejection Reason</button>
 							</c:when>
-
 							<c:otherwise>
 								<div class="btn btn-secondary w-50 mb-2">State:
 									${bid.state}</div>
@@ -161,10 +157,10 @@
 							Information</label>
 						<textarea class="form-control" id="bidderInfo" rows="4"
 							placeholder="Enter bidder information." readonly>
-	Username: 
-	Email: 
-	Phone: 
-	                        </textarea>
+Username: 
+Email: 
+Phone: 
+            </textarea>
 					</div>
 					<div class="mb-3">
 						<label for="receiptFile" class="form-label">Upload Receipt</label>
