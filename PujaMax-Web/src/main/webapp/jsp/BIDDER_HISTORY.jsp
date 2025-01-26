@@ -4,19 +4,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bidder History</title>
-<!-- Bootstrap CSS -->
-<link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-	rel="stylesheet">
-<!-- Font Awesome for icons -->
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-<!-- Custom CSS -->
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/css/style.css">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Bidder History</title>
+	<!-- Bootstrap CSS -->
+	<link
+		href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+		rel="stylesheet">
+	<!-- Font Awesome for icons -->
+	<link rel="stylesheet"
+		href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+	<!-- Custom CSS -->
+	<link rel="stylesheet"
+		href="${pageContext.request.contextPath}/css/style.css">
 </head>
 <body>
 	<!-- Header -->
@@ -63,27 +63,26 @@
 				style="background-color: white;">
 				<div class="row">
 					<!-- Fotos del Producto -->
-            <div class="col-md-4 d-flex justify-content-center align-items-center flex-column">
-                <c:choose>
-                    <c:when test="${not empty bid.product.photos}">
-                        <!-- Mostrar la primera foto disponible -->
-                        <img src="data:image/jpeg;base64,${bid.product.photos[0]}" 
-                             alt="${bid.product.title}" 
-                             class="product-img mb-3" 
-                             style="max-width: 100%; height: auto;">
-                    </c:when>
-                    <c:otherwise>
-                        <!-- Imagen predeterminada si no hay fotos -->
-                        <img src="images/default.jpg" 
-                             alt="No Image Available" 
-                             class="product-img mb-3" 
-                             style="max-width: 100%; height: auto;">
-                    </c:otherwise>
-                </c:choose>
-                <a href="PRODUCT.jsp?productId=${bid.product.idProduct}" class="btn btn-primary w-100">VIEW THIS LOT</a>
-            </div>
-            
-            <!-- Detalles del Producto -->					
+					<div
+						class="col-md-4 d-flex justify-content-center align-items-center flex-column">
+						<c:choose>
+							<c:when test="${not empty bid.product.photos}">
+								<!-- Mostrar la primera foto disponible -->
+								<img src="data:image/jpeg;base64,${bid.product.photos[0]}"
+									alt="${bid.product.title}" class="product-img mb-3"
+									style="max-width: 100%; height: auto;">
+							</c:when>
+							<c:otherwise>
+								<!-- Imagen predeterminada si no hay fotos -->
+								<img src="images/default.jpg" alt="No Image Available"
+									class="product-img mb-3" style="max-width: 100%; height: auto;">
+							</c:otherwise>
+						</c:choose>
+						<a href="PRODUCT.jsp?productId=${bid.product.idProduct}"
+							class="btn btn-primary w-100">VIEW THIS LOT</a>
+					</div>
+
+					<!-- Detalles del Producto -->
 					<div class="col-md-4 d-flex flex-column justify-content-center">
 						<div>
 							<strong>Title:</strong> ${bid.product != null ? bid.product.title : 'No Title'}<br>
@@ -131,7 +130,7 @@
 	</main>
 	<!-- Footer -->
 	<footer class="text-center bg-dark text-white py-3 mt-4">
-		<p>&copy; 2024 PujaMax | All rights reserved</p>
+		<p>&copy; 2025 BIDMAX | All rights reserved</p>
 	</footer>
 	<!-- Bootstrap JS -->
 	<script
