@@ -79,6 +79,19 @@ public class BidJPA {
                 transaction.rollback();
                 return false;
             } else {
+                // Actualizar las pujas previas a estado SURPASSED
+                List<Bid> previousBids = em.createQuery(
+                        "SELECT b FROM Bid b WHERE b.product.idProduct = :productId", Bid.class)
+                        .setParameter("productId", product.getIdProduct())
+                        .getResultList();
+                for (Bid previousBid : previousBids) {
+                    previousBid.setState(Bid.BidState.SURPASSED);
+                    em.merge(previousBid);
+                }
+
+                // Establecer el estado de la nueva puja como TOP
+                bid.setState(Bid.BidState.TOP);
+                
                 em.persist(bid);
                 product.setPriceCurrent(bid.getAmount());
                 em.merge(product);
@@ -91,19 +104,24 @@ public class BidJPA {
         return result;
     }
 
-    public boolean updateBid(Bid bid) {
-        boolean result = false;
-        try (EntityManager em = getEntityManager()) {
-            EntityTransaction transaction = em.getTransaction();
+
+    public void updateBid(Bid bid) {
+        EntityManager em = getEntityManager();
+        EntityTransaction transaction = em.getTransaction();
+        try {
             transaction.begin();
             em.merge(bid);
             transaction.commit();
-            result = true;
         } catch (Exception e) {
-            System.out.println("Couldn't update bid: " + e.getMessage());
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            throw new RuntimeException("Couldn't update bid: " + e.getMessage());
+        } finally {
+            em.close();
         }
-        return result;
     }
+
 
     public List<Bid> getBidsByUserId(int userId) {
         EntityManager em = getEntityManager();

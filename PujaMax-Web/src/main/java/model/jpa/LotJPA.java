@@ -1,9 +1,12 @@
 package model.jpa;
 
 import jakarta.persistence.*;
+import model.entities.Bid;
 import model.entities.Lot;
+import model.entities.Product;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -38,6 +41,22 @@ public class LotJPA {
                     if (!"INACTIVE".equals(lot.getState())) {
                         lot.setState("INACTIVE");
                         updateLotState(em, lot);
+                        List<Product> products = new ProductJPA().findProductsByLotId(lot.getIdLot());
+                        for (Product product : products) {
+                            List<Bid> bids = new BidJPA().findBidByProductId(product.getIdProduct());
+                            Bid winningBid = bids.stream()
+                                                 .max(Comparator.comparing(Bid::getAmount))
+                                                 .orElse(null);
+
+                            for (Bid bid : bids) {
+                                if (bid.equals(winningBid)) {
+                                    bid.setState(Bid.BidState.WON);
+                                } else {
+                                    bid.setState(Bid.BidState.LOST);
+                                }
+                                new BidJPA().updateBid(bid); // Persistir cambios en las pujas
+                            }
+                        }
                     }
                 }
             }

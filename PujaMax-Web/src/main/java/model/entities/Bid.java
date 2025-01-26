@@ -54,13 +54,13 @@ public class Bid {
     }
     
     public enum BidState {
-        ACTIVE,
-        LOST,
-        WON,
         TOP,
-        //PENDING_APPROVAL,
-        PENDING_DELIVERY,
-        PAID
+        SURPASSED,
+        WON,
+        LOST,
+        PENDING_APPROVAL,
+        ACCEPT,
+        REJECT
     }
 
 

@@ -37,7 +37,7 @@ public class ReceiptJPA {
                 throw new IllegalArgumentException("Bid not found with ID: " + bidId);
             }
 
-            bid.setState(Bid.BidState.PENDING_DELIVERY);
+            bid.setState(Bid.BidState.ACCEPT);
 
             // Crear y guardar el recibo
             Receipt receipt = new Receipt();
