@@ -63,7 +63,7 @@ Date currentDate = new Date();
 					class="nav-item"><i class="fas fa-home"></i> Home</a> <a
 					href="${pageContext.request.contextPath}/LotManagementController?route=add"
 					class="nav-item"> <i class="fas fa-plus-circle"></i> Add Lot
-				</a> <a href="AUCTIONEER_HISTORY.html" class="nav-item"><i
+				</a> <a href="${pageContext.request.contextPath}/VerifyPaymentController?route=viewHistory" class="nav-item"><i
 					class="fas fa-history"></i> History</a>
 			</nav>
 		</section>

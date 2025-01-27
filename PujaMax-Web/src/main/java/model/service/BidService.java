@@ -39,6 +39,11 @@ public class BidService {
         return bidJPA.updateBid(bid);
     }
     
+    public List<Bid> getBidsByState(Bid.BidState state) {
+        BidJPA bidJPA = new BidJPA();
+        return bidJPA.findBidsByState(state);
+    }
+    
    
 
 

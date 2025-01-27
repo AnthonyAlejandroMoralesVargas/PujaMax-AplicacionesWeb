@@ -105,7 +105,7 @@ public class BidJPA {
     }
 
 
-    public void updateBid(Bid bid) {
+    public boolean updateBid(Bid bid) {
         EntityManager em = getEntityManager();
         EntityTransaction transaction = em.getTransaction();
         try {
@@ -120,6 +120,7 @@ public class BidJPA {
         } finally {
             em.close();
         }
+		return false;
     }
 
 
@@ -136,5 +137,28 @@ public class BidJPA {
             em.close();
         }
     }
+    
+    public List<Bid> findBidsByState(Bid.BidState state) {
+        List<Bid> bids = new ArrayList<>();
+        EntityManager em = getEntityManager();
+
+        try {
+            // Consulta JPQL para obtener las pujas con el estado especificado
+            String jpql = "SELECT b FROM Bid b WHERE b.state = :state";
+            TypedQuery<Bid> query = em.createQuery(jpql, Bid.class);
+            query.setParameter("state", state);
+            bids = query.getResultList();
+        } catch (Exception e) {
+            System.err.println("Couldn't find bids by state: " + e.getMessage());
+        } finally {
+            em.close();
+        }
+
+        return bids;
+    }
+    
+    
+
+
 
 }
