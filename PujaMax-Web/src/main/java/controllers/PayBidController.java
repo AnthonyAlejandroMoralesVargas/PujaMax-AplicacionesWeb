@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
+import model.entities.Receipt;
 import model.jpa.BidJPA;
 import model.jpa.ReceiptJPA;
 import model.service.ReceiptService;

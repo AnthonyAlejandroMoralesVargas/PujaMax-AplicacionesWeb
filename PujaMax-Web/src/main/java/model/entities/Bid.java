@@ -12,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 
 @Entity
 public class Bid {
@@ -38,7 +39,10 @@ public class Bid {
     @ManyToOne
     @JoinColumn(name = "bidder_dni", referencedColumnName = "dni")
     private Bidder bidder;
-
+    
+    @OneToOne
+    @JoinColumn(name = "idReceipt", nullable = true)
+    private Receipt receipt;
 
 	// Constructors
     public Bid() {
@@ -51,6 +55,7 @@ public class Bid {
         this.state = BidState.TOP;
         this.product = product;
         this.bidder = bidder;
+        this.receipt = null;
     }
     
     public enum BidState {
@@ -113,8 +118,18 @@ public class Bid {
     public void setBidder(Bidder bidder) {
         this.bidder = bidder;
     }
+    
+    
 
-    @Override
+    public Receipt getReceipt() {
+		return receipt;
+	}
+
+	public void setReceipt(Receipt receipt) {
+		this.receipt = receipt;
+	}
+
+	@Override
     public String toString() {
         return "Bid{" +
                 "idBid=" + idBid +

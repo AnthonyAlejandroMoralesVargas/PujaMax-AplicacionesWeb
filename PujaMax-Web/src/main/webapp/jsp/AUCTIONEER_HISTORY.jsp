@@ -75,13 +75,11 @@
 
 						</div>
 					</div>
-					<form id="bidForm" method="POST" action="${pageContext.request.contextPath}/VerifyPaymentController?route=aprove">
-					
+					<form id="bidForm" method="POST" action="${pageContext.request.contextPath}/VerifyPaymentController?route=aprove&idBid=${bid.id}">
 					<!-- Status and Options -->
 					<div class="col-md-4">
 						<div class="status-box status-win">${bid.state}</div>
-						
-						<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#VIEW_RECEIPT"> Options</button>
+						<button type="submit" class="btn btn-primary"> Options</button>
 					</div>
 					</form>
 					
@@ -110,18 +108,17 @@
 			</div>
 			<div class="modal-body">
 				<form id="bidConfirmationForm" action="VerifyPaymentController?route=aprove" method="POST" enctype="multipart/form-data">
-				<input type="hidden" name="idReceipt" id="receiptIdField" />
+				<input type="hidden" name="idReceipt" id="receiptIdField" value="${bid.receipt.id}" />
 					<!-- Photo of the Receipt -->
 					<div class="mb-3 text-center">
-						<label for="receiptPhoto" class="form-label">Receipt</label> <img src="https://via.placeholder.com/300x200"	class="img-fluid rounded" alt="Receipt Image">
 					</div>
 					<!-- Bidder Information -->
 					<div class="mb-3">
 						<label for="bidderInfo" class="form-label">Bidder Information</label>
 						<textarea class="form-control" id="bidderInfo" rows="4"	placeholder="Enter bidder information." readonly>
-							Username: 
-							Email: 
-							Phone: 
+							Username:${bid.bidder.username}
+							Email: ${bid.bidder.email}
+							Phone: ${bid.bidder.phone}
             			</textarea>
 					</div>
 				

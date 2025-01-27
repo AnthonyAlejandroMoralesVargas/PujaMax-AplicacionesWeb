@@ -20,10 +20,7 @@ import model.entities.Bidder;
 import model.entities.Lot;
 import model.entities.Product;
 import model.jpa.BidJPA;
-import model.service.BidService;
-import model.service.LotService;
-import model.service.ProductService;
-import model.service.ReceiptService;
+import model.service.*;
 
 @WebServlet("/VerifyPaymentController")
 @MultipartConfig
@@ -63,34 +60,25 @@ public class VerifyPaymentController extends HttpServlet {
 	}
 
 	private void viewHistory(HttpServletRequest request, HttpServletResponse response)
-	        throws ServletException, IOException {
-	    HttpSession session = request.getSession();
-	    Auctioneer auctioneer = (Auctioneer) session.getAttribute("user");
+			throws ServletException, IOException {
+		HttpSession session = request.getSession();
+		Auctioneer auctioneer = (Auctioneer) session.getAttribute("user");
 
-	    // Consultar las pujas con estado PENDING_APPROVAL
-	    BidService bidService = new BidService();
-	    List<Bid> bids = bidService.getBidsByState(Bid.BidState.PENDING_APPROVAL); // Método para consultar pujas
+		// Consultar las pujas con estado PENDING_APPROVAL
+		BidService bidService = new BidService();
+		List<Bid> bids = bidService.getBidsByState(Bid.BidState.PENDING_APPROVAL);
 
-	    // Pasar las pujas al JSP
-	    request.setAttribute("bids", bids);
-	    getServletContext().getRequestDispatcher("/jsp/AUCTIONEER_HISTORY.jsp").forward(request, response);
+		// Pasar las pujas al JSP
+		request.setAttribute("bids", bids);
+		getServletContext().getRequestDispatcher("/jsp/AUCTIONEER_HISTORY.jsp").forward(request,response);
 	}
 	
 	private void approveReceipt(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		String param = req.getParameter("idReceipt");
-		System.out.println("Estoy en approveReceipt");
-		System.out.println("idReceipt param: " + param);
-		int idReceipt = Integer.parseInt(req.getParameter("idReceipt"));
-
-	    ReceiptService receiptService = new ReceiptService(null);
-	    if (receiptService.approveReceipt(idReceipt)) {
-	        req.setAttribute("messageType", "info");
-	        req.setAttribute("message", "Receipt approved successfully.");
-	    } else {
-	        req.setAttribute("messageType", "error");
-	        req.setAttribute("message", "Failed to approve receipt.");
-	    }
-
+		int idBid = Integer.parseInt(req.getParameter("idBid"));
+		System.out.println("idBid: " + idBid);
+		BidService bidService = new BidService();
+		Bid bid = bidService.findBidById(idBid);
+		req.setAttribute("bid", bid);
 	    req.getRequestDispatcher("/VerifyPaymentController?route=viewHistory").forward(req, resp);
 	}
 

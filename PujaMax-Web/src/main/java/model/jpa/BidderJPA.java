@@ -43,4 +43,13 @@ public class BidderJPA {
             return null;
         }
     }
+
+    public Bidder findById(int idBidder) {
+        try (EntityManager em = getEntityManager()) {
+            return em.find(Bidder.class, idBidder);
+        } catch (Exception e) {
+            System.out.println("An error occurred while trying to find the bidder by ID");
+            return null;
+        }
+    }
 }

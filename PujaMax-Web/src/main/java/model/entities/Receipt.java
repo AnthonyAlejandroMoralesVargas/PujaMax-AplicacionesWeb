@@ -14,6 +14,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -35,7 +36,7 @@ public class Receipt implements Serializable {
     @Column(name = "date", nullable = false)
     private String date = LocalDateTime.now().toString(); // Establece un valor predeterminado
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "bid_id", nullable = false)
     private Bid bid;
 

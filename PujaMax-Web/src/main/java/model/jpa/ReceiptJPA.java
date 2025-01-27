@@ -40,6 +40,7 @@ public class ReceiptJPA {
             bid.setState(Bid.BidState.PENDING_APPROVAL);
             entityManager.merge(bid);
 
+
             // Crear y guardar el recibo
             Receipt receipt = new Receipt();
             receipt.setBid(bid);
@@ -55,7 +56,8 @@ public class ReceiptJPA {
 
             // Actualizar el recibo con las imágenes
             entityManager.merge(receipt);
-
+            bid.setReceipt(receipt);
+            entityManager.merge(bid);
             transaction.commit();
             System.out.println("Receipt and images successfully saved.");
         } catch (Exception e) {
@@ -100,6 +102,19 @@ public class ReceiptJPA {
             }
             System.err.println("Couldn't approve receipt: " + e.getMessage());
             return false;
+        } finally {
+            em.close();
+        }
+    }
+
+    public Receipt findReceiptByBidId(int bidId) {
+        EntityManager em = getEntityManager();
+        try {
+            return em.createQuery("SELECT r FROM Receipt r WHERE r.bid.idBid = :bidId", Receipt.class)
+                    .setParameter("bidId", bidId)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
         } finally {
             em.close();
         }
