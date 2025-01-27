@@ -220,59 +220,58 @@ Phone:
 					aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
-				<form>
-					<div class="row">
-						<div class="col-md-6 mb-3">
-							<label for="name" class="form-label">Name</label> <input
-								type="text" class="form-control" id="name" value="Name" readonly>
-						</div>
-						<div class="col-md-6 mb-3">
-							<label for="company" class="form-label">Company</label> <input
-								type="text" class="form-control" id="company" value="Company"
-								readonly>
-						</div>
+				<!-- Mostrar los datos de la dirección -->
+				<div class="row">
+					<div class="col-md-6 mb-3">
+						<label for="name" class="form-label">Name</label>
+						<input type="text" class="form-control" id="name"
+							value="${bid.auctioneerAddress.name}" readonly>
 					</div>
-					<div class="row">
-						<div class="col-md-6 mb-3">
-							<label for="province" class="form-label">Province</label> <input
-								type="text" class="form-control" id="province" value="Province"
-								readonly>
-						</div>
-						<div class="col-md-6 mb-3">
-							<label for="city" class="form-label">City</label> <input
-								type="text" class="form-control" id="province" value="City"
-								readonly>
-						</div>
+					<div class="col-md-6 mb-3">
+						<label for="company" class="form-label">Company</label>
+						<input type="text" class="form-control" id="company"
+							value="${bid.auctioneerAddress.company}" readonly>
 					</div>
-					<div class="row">
-						<div class="col-md-6 mb-3">
-							<label for="mainStreet" class="form-label">Main Street</label> <input
-								type="text" class="form-control" id="mainStreet"
-								value="Main Streett" readonly>
-						</div>
-						<div class="col-md-6 mb-3">
-							<label for="secondaryStreet" class="form-label">Secondary
-								Street</label> <input type="text" class="form-control"
-								id="secondaryStreet" value="Secondary Street" readonly>
-						</div>
+				</div>
+				<div class="row">
+					<div class="col-md-6 mb-3">
+						<label for="province" class="form-label">Province</label>
+						<input type="text" class="form-control" id="province"
+							value="${bid.auctioneerAddress.province}" readonly>
 					</div>
-					<div class="row">
-						<div class="col-md-6 mb-3">
-							<label for="zipCode" class="form-label">Zip Code</label> <input
-								type="text" class="form-control" id="zipCode" value="Zip Code"
-								readonly>
-						</div>
-						<div class="col-md-6 mb-3">
-							<label for="houseNumber" class="form-label">House/Apartment
-								No.</label> <input type="text" class="form-control" id="houseNumber"
-								value="House/Apartment No.1" readonly>
-						</div>
+					<div class="col-md-6 mb-3">
+						<label for="city" class="form-label">City</label>
+						<input type="text" class="form-control" id="city"
+							value="${bid.auctioneerAddress.city}" readonly>
 					</div>
-				</form>
+				</div>
+				<div class="row">
+					<div class="col-md-6 mb-3">
+						<label for="mainStreet" class="form-label">Main Street</label>
+						<input type="text" class="form-control" id="mainStreet"
+							value="${bid.auctioneerAddress.mainStreet}" readonly>
+					</div>
+					<div class="col-md-6 mb-3">
+						<label for="secondaryStreet" class="form-label">Secondary Street</label>
+						<input type="text" class="form-control" id="secondaryStreet"
+							value="${bid.auctioneerAddress.secondaryStreet}" readonly>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-6 mb-3">
+						<label for="postcode" class="form-label">Postcode</label>
+						<input type="text" class="form-control" id="postcode"
+							value="${bid.auctioneerAddress.postcode}" readonly>
+					</div>
+					<div class="col-md-6 mb-3">
+						<label for="houseNumber" class="form-label">House/Apartment No.</label>
+						<input type="text" class="form-control" id="houseNumber"
+							value="${bid.auctioneerAddress.houseNumber}" readonly>
+					</div>
+				</div>
 			</div>
 			<div class="modal-footer justify-content-center">
-				<button type="button" class="btn btn-success"
-					data-bs-dismiss="modal">Accept</button>
+				<button type="button" class="btn btn-success" data-bs-dismiss="modal">Close</button>
 			</div>
 		</div>
 	</div>
