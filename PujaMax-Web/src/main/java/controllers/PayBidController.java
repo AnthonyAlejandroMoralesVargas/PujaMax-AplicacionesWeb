@@ -1,13 +1,10 @@
 package controllers;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Collection;
 import java.util.List;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -18,21 +15,16 @@ import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
 import model.jpa.BidJPA;
 import model.jpa.ReceiptJPA;
-import model.service.ProductService;
 import model.service.ReceiptService;
 import model.entities.Bid;
 import model.entities.Bidder;
 
 @WebServlet("/PayBidController")
-@MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, // 2MB
-        maxFileSize = 1024 * 1024 * 10, // 10MB
-        maxRequestSize = 1024 * 1024 * 50 // 50MB
-)
+@MultipartConfig
 public class PayBidController extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
-    private EntityManagerFactory entityManagerFactory; 
-
+    
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         this.router(req, resp);
@@ -121,7 +113,7 @@ public class PayBidController extends HttpServlet {
 
         response.sendRedirect("PayBidController?route=viewHistory");
     }
-
+    
     private void updateReceipt(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         HttpSession session = request.getSession();
@@ -134,36 +126,45 @@ public class PayBidController extends HttpServlet {
             return;
         }
 
-        // Validar parámetros
         String bidId = request.getParameter("idBid");
-        Part documentPart = request.getPart("document");
+        if (bidId == null || bidId.trim().isEmpty()) {
+            response.sendRedirect("PayBidController?route=viewHistory");
+            return;
+        }
 
-        if (bidId == null || bidId.trim().isEmpty() || documentPart == null || documentPart.getSize() == 0) {
+        // Procesar múltiples fotos del recibo
+        Collection<Part> imageParts = request.getParts().stream()
+                .filter(part -> "images".equals(part.getName()) && part.getSize() > 0)
+                .toList();
+
+        if (imageParts.isEmpty()) {
+            request.setAttribute("messageType", "error");
+            request.setAttribute("message", "No images provided for the receipt.");
             response.sendRedirect("PayBidController?route=viewHistory");
             return;
         }
 
         try {
-            // Guardar archivo
-            String fileName = Paths.get(documentPart.getSubmittedFileName()).getFileName().toString();
-            String uploadDir = getServletContext().getRealPath("") + "uploads";
-            File uploads = new File(uploadDir);
-            if (!uploads.exists()) {
-                uploads.mkdir();
+            // Convertir imágenes a Base64
+            List<String> base64Images = new ArrayList<>();
+            for (Part imagePart : imageParts) {
+                byte[] imageBytes = imagePart.getInputStream().readAllBytes();
+                String base64Image = Base64.getEncoder().encodeToString(imageBytes);
+                base64Images.add(base64Image);
             }
-            String filePath = uploadDir + File.separator + fileName;
-            documentPart.write(filePath);
 
             // Crear el recibo usando el servicio
             ReceiptJPA receiptJPA = new ReceiptJPA();
             ReceiptService receiptService = new ReceiptService(receiptJPA);
-            receiptService.createPayment(filePath, Integer.parseInt(bidId));
+            receiptService.createPayment(base64Images, Integer.parseInt(bidId));
+
             response.sendRedirect("PayBidController?route=viewHistory");
-            
         } catch (Exception e) {
+            e.printStackTrace();
             request.setAttribute("messageType", "error");
-            request.setAttribute("message", "An error occurred while updating the receipt.");
-            response.sendRedirect("PayBidController?route=viewHistory");
+            request.setAttribute("message", "An error occurred while updating the receipt: " + e.getMessage());
+            request.getRequestDispatcher("/jsp/BIDDER_HISTORY.jsp").forward(request, response);
         }
     }
+
 }

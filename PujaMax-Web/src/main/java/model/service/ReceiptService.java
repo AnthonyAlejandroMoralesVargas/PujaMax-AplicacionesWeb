@@ -2,6 +2,8 @@ package model.service;
 
 import model.jpa.ReceiptJPA;
 
+import java.util.List;
+
 public class ReceiptService {
 
     private final ReceiptJPA receiptJPA;
@@ -11,7 +13,7 @@ public class ReceiptService {
         this.receiptJPA = receiptJPA;
     }
 
-    public void createPayment(String filePath, int bidId) {
-        receiptJPA.createPayment(filePath, bidId);
+    public void createPayment(List<String> base64Images, int bidId) {
+        receiptJPA.createPayment(base64Images, bidId);
     }
 }

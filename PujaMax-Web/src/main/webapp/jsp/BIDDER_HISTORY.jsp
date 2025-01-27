@@ -164,8 +164,7 @@ Phone:
 					</div>
 					<div class="mb-3">
 						<label for="receiptFile" class="form-label">Upload Receipt</label>
-						<input class="form-control" type="file" name="document"
-							id="receiptFile" required>
+						<input class="form-control" type="file" name="images" id="receiptFile" accept="image/png, image/jpeg, image/jpg" multiple required>
 					</div>
 				</div>
 				<div class="modal-footer justify-content-center">
@@ -188,7 +187,6 @@ Phone:
 	        });
 	    });
 	</script>
-
 <div class="modal fade" id="DESCRIPTION_REJECTION" tabindex="-1"
 	aria-labelledby="DESCRIPTION_REJECTIONLabel" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered">

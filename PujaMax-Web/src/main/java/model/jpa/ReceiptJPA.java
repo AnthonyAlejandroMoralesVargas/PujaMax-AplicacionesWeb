@@ -1,10 +1,11 @@
 package model.jpa;
 
-import java.time.LocalDateTime;
 import jakarta.persistence.*;
-
 import model.entities.Bid;
 import model.entities.Receipt;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 public class ReceiptJPA {
 
@@ -13,14 +14,14 @@ public class ReceiptJPA {
     private EntityManager getEntityManager() {
         return emf.createEntityManager();
     }
-    
-    public ReceiptJPA() {
-		super();
-	}
 
-    public void createPayment(String filePath, int bidId) {
-        if (filePath == null || filePath.isBlank()) {
-            throw new IllegalArgumentException("The file path cannot be null or blank.");
+    public ReceiptJPA() {
+        super();
+    }
+
+    public void createPayment(List<String> base64Images, int bidId) {
+        if (base64Images == null || base64Images.isEmpty()) {
+            throw new IllegalArgumentException("The images list cannot be null or empty.");
         }
 
         EntityManager entityManager = getEntityManager();
@@ -34,20 +35,34 @@ public class ReceiptJPA {
             if (bid == null) {
                 throw new IllegalArgumentException("Bid not found with ID: " + bidId);
             }
+
+            // Cambiar el estado de la puja a PENDING_APPROVAL
             bid.setState(Bid.BidState.PENDING_APPROVAL);
+            entityManager.merge(bid);
+
             // Crear y guardar el recibo
             Receipt receipt = new Receipt();
-            receipt.setDocument(filePath);
             receipt.setBid(bid);
             receipt.setDate(LocalDateTime.now().toString());
 
+            // Persistir el recibo
             entityManager.persist(receipt);
 
+            // Guardar imágenes relacionadas
+            for (String base64Image : base64Images) {
+                receipt.getImages().add(base64Image);
+            }
+
+            // Actualizar el recibo con las imágenes
+            entityManager.merge(receipt);
+
             transaction.commit();
+            System.out.println("Receipt and images successfully saved.");
         } catch (Exception e) {
             if (transaction.isActive()) {
                 transaction.rollback();
             }
+            e.printStackTrace();
             throw e;
         } finally {
             entityManager.close();

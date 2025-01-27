@@ -2,8 +2,12 @@ package model.entities;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -22,8 +26,11 @@ public class Receipt implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "document", nullable = false)
-    private String document;
+    @ElementCollection
+    @CollectionTable(name = "receipt_images", joinColumns = @JoinColumn(name = "receipt_id"))
+    @Column(name = "image", columnDefinition = "LONGTEXT")
+    private List<String> images = new ArrayList<>(); // Maneja múltiples imágenes como Base64 o rutas
+
 
     @Column(name = "date", nullable = false)
     private String date = LocalDateTime.now().toString(); // Establece un valor predeterminado
@@ -34,9 +41,9 @@ public class Receipt implements Serializable {
 
     public Receipt() {}
 
-    public Receipt(int id, String document, String date, Bid bid) {
+    public Receipt(int id, List<String> images, String date, Bid bid) {
         this.id = id;
-        this.document = document;
+        this.images = images;
         this.date = date;
         this.bid = bid;
     }
@@ -49,12 +56,11 @@ public class Receipt implements Serializable {
         this.id = id;
     }
 
-    public String getDocument() {
-        return document;
+    public List<String> getImages() {
+        return images;
     }
-
-    public void setDocument(String document) {
-        this.document = document;
+    public void setImages(List<String> images) {
+        this.images = images;
     }
 
     public String getDate() {
@@ -75,6 +81,6 @@ public class Receipt implements Serializable {
 
     @Override
     public String toString() {
-        return "Receipt [id=" + id + ", document=" + document + ", date=" + date + ", bid=" + bid + "]";
+        return "Receipt [id=" + id + ", images=" + images.size() + " images, date=" + date + ", bid=" + bid + "]";
     }
 }
