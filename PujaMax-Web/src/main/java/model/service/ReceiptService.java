@@ -16,4 +16,8 @@ public class ReceiptService {
     public void createPayment(List<String> base64Images, int bidId) {
         receiptJPA.createPayment(base64Images, bidId);
     }
+    
+    public boolean approveReceipt(int idReceipt) {
+        return new ReceiptJPA().approveReceipt(idReceipt);
+    }
 }

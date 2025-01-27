@@ -68,4 +68,41 @@ public class ReceiptJPA {
             entityManager.close();
         }
     }
+    
+    public boolean approveReceipt(int idReceipt) {
+        EntityManager em = getEntityManager();
+        EntityTransaction transaction = em.getTransaction();
+
+        try {
+            transaction.begin();
+
+            // Buscar el recibo por ID
+            Receipt receipt = em.find(Receipt.class, idReceipt);
+            if (receipt == null) {
+                throw new IllegalArgumentException("Receipt not found with ID: " + idReceipt);
+            }
+
+            // Obtener la puja asociada
+            Bid bid = receipt.getBid();
+            if (bid.getState() != Bid.BidState.PENDING_APPROVAL) {
+                throw new IllegalStateException("Only bids in PENDING_APPROVAL state can be approved.");
+            }
+
+            // Cambiar el estado de la puja a ACCEPT
+            bid.setState(Bid.BidState.ACCEPT);
+            em.merge(bid);
+
+            transaction.commit();
+            return true;
+        } catch (Exception e) {
+            if (transaction.isActive()) {
+                transaction.rollback();
+            }
+            System.err.println("Couldn't approve receipt: " + e.getMessage());
+            return false;
+        } finally {
+            em.close();
+        }
+    }
+
 }
