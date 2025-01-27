@@ -45,9 +45,9 @@
 	<main class="main-container container my-4">
 		<section class="home-container">
 			<nav class="nav-container">
-				<a href="LotManagementController?route=listBidder&idLot=${idLot}"
+				<a href="LotManagementController?route=list&idLot=${idLot}"
 					class="nav-item"><i class="fas fa-home"></i> Home</a> <a
-					href="${pageContext.request.contextPath}/PlaceBidController?route=viewHistory"
+					href="${pageContext.request.contextPath}/PayBidController?route=viewHistory"
 					class="nav-item"><i class="fas fa-history"></i> History</a>
 			</nav>
 		</section>

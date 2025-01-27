@@ -52,7 +52,7 @@
         <section class="home-container mb-3">
             <nav class="nav-container">
                 <div class="d-flex flex-column flex-md-row">
-                    <a href="LotManagementController?route=listBidder&idLot=${idLot}" class="nav-item"><i class="fas fa-home"></i> Home</a>
+                    <a href="LotManagementController?route=list&idLot=${idLot}" class="nav-item"><i class="fas fa-home"></i> Home</a>
                     <a href="${pageContext.request.contextPath}/PayBidController?route=viewHistory" class="nav-item"><i class="fas fa-history"></i> History</a>
                 </div>
             </nav>
@@ -169,7 +169,7 @@
                         </div>
 
                         <div class="modal-footer justify-content-center">
-                            <a href="PlaceBidController?route=productDetails"
+                            <a href="PlaceBidController?route=productDetails&idProduct=${idProduct}&idLot=${idLot}"
                                class="btn btn-danger"> Cancel </a>
                             <button type="submit" class="btn btn-primary">Save</button>
                         </div>
