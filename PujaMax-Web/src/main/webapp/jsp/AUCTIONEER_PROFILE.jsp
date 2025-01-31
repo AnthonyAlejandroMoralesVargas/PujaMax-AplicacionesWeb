@@ -133,13 +133,13 @@
 		</div>
 	</main>
 
-	<!-- ADD ADDRESS MODAL -->
-	<div class="modal fade" id="ADD_ADDRESS_MODAL" tabindex="-1"
-		aria-labelledby="ADD_ADDRESS_MODALLabel" aria-hidden="true">
+	<!-- NEW ADDRESS FORM -->
+	<div class="modal fade" id="NEW_ADDRESS_FORM" tabindex="-1"
+		 aria-labelledby="NEW_ADDRESS_FORMLabel" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered">
 			<div class="modal-content">
 				<div class="modal-header bg-primary text-white">
-					<h5 class="modal-title" id="ADD_ADDRESS_MODALLabel">
+					<h5 class="modal-title" id="NEW_ADDRESS_FORMLabel">
 						<i class="fa-solid fa-location-crosshairs"></i> Add Address
 					</h5>
 					<a href="AddressManagementController?route=list" class="btn-close"
@@ -218,12 +218,12 @@
 	</div>
 
 	<!-- Modal for Edit Address -->
-	<div class="modal fade" id="EDIT_ADDRESS_MODAL" tabindex="-1"
-		aria-labelledby="EDIT_ADDRESS_MODALLabel" aria-hidden="true">
+	<div class="modal fade" id="EDIT_ADDRESS_FORM" tabindex="-1"
+		 aria-labelledby="EDIT_ADDRESS_FORMLabel" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered">
 			<div class="modal-content">
 				<div class="modal-header bg-primary text-white">
-					<h5 class="modal-title" id="EDIT_ADDRESS_MODALLabel">
+					<h5 class="modal-title" id="EDIT_ADDRESS_FORMLabel">
 						<i class="fas fa-edit"></i> Edit Address
 					</h5>
 					<a href="AddressManagementController?route=list" class="btn-close"
@@ -307,8 +307,8 @@
 	</div>
 
 	<!-- Delete Address Modal -->
-	<div class="modal fade" id="DELETE_ADDRESS_MODAL" tabindex="-1"
-		aria-labelledby="DELETE_ADDRESSLabel" aria-hidden="true">
+	<div class="modal fade" id="DELETE_ADDRESS" tabindex="-1"
+		 aria-labelledby="DELETE_ADDRESSLabel" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered">
 			<div class="modal-content">
 				<div class="modal-header"
@@ -348,7 +348,6 @@
 						method="POST">
 						<button type="submit" class="btn btn-success">Accept</button>
 					</form>
-
 				</div>
 			</div>
 		</div>
@@ -381,7 +380,7 @@
 
         if (route === "add") {
             var myModal = new bootstrap.Modal(document
-                .getElementById('ADD_ADDRESS_MODAL'), {
+                .getElementById('NEW_ADDRESS_FORM'), {
                 keyboard: false,
                 backdrop: 'static'
             });
@@ -389,7 +388,7 @@
             myModal.show();
         } else if (route === "edit" && "${param.idAddress}") {
             var myModal = new bootstrap.Modal(document
-                .getElementById('EDIT_ADDRESS_MODAL'), {
+                .getElementById('EDIT_ADDRESS_FORM'), {
                 keyboard: false,
                 backdrop: 'static'
             });
@@ -397,7 +396,7 @@
             myModal.show();
         } else if (route === "delete" && "${param.idAddress}") {
             var myModal = new bootstrap.Modal(document
-                .getElementById('DELETE_ADDRESS_MODAL'), {
+                .getElementById('DELETE_ADDRESS'), {
                 keyboard: false,
                 backdrop: 'static'
             });
