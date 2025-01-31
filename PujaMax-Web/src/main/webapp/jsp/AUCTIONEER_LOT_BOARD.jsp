@@ -165,12 +165,12 @@ Date currentDate = new Date();
 		<p>&copy; 2025 BIDMAX | All rights reserved</p>
 	</footer>
 	<!-- Add Lot Modal -->
-	<div class="modal fade" id="LOT_FORM" tabindex="-1"
-		aria-labelledby="LOT_FORMLabel" aria-hidden="true">
+	<div class="modal fade" id="NEW_LOT_FORM" tabindex="-1"
+		aria-labelledby="NEW_LOT_FORMLabel" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered">
 			<div class="modal-content">
 				<div class="modal-header bg-primary text-white">
-					<h5 class="modal-title" id="LOT_FORMLabel">
+					<h5 class="modal-title" id="NEW_LOT_FORMLabel">
 						<i class="fas fa-layer-group"></i> Lot
 					</h5>
 					<a href="LotManagementController?route=list" class="btn-close"
@@ -219,12 +219,12 @@ Date currentDate = new Date();
 	</div>
 
 	<!-- Edit Lot Modal -->
-	<div class="modal fade" id="EDIT_LOT_MODAL" tabindex="-1"
-		aria-labelledby="EDIT_LOT_MODALLabel" aria-hidden="true">
+	<div class="modal fade" id="EDIT_LOT_FORM" tabindex="-1"
+		aria-labelledby="EDIT_LOT_FORMLabel" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered">
 			<div class="modal-content">
 				<div class="modal-header bg-primary text-white">
-					<h5 class="modal-title" id="EDIT_LOT_MODALLabel">
+					<h5 class="modal-title" id="EDIT_LOT_FORMLabel">
 						<i class="fas fa-edit"></i> Edit Lot
 					</h5>
 					<a href="LotManagementController?route=list" class="btn-close"
@@ -290,12 +290,12 @@ Date currentDate = new Date();
 
 
 	<!-- Delete Lot Modal -->
-	<div class="modal fade" id="DELETE_LOT_MODAL" tabindex="-1"
-		aria-labelledby="DELETE_LOT_MODALLabel" aria-hidden="true">
+	<div class="modal fade" id="DELETE_LOT" tabindex="-1"
+		aria-labelledby="DELETE_LOTLabel" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered">
 			<div class="modal-content">
 				<div class="modal-header bg-danger text-white">
-					<h5 class="modal-title" id="DELETE_LOT_MODALLabel">
+					<h5 class="modal-title" id="DELETE_LOTLabel">
 						<i class="fas fa-trash-alt"></i> Confirm Deletion
 					</h5>
 					<a href="LotManagementController?route=list" class="btn-close"
@@ -355,7 +355,7 @@ Date currentDate = new Date();
 			var route = "${param.route}";
 			if (route === "add") {
 				var myModal = new bootstrap.Modal(document
-						.getElementById('LOT_FORM'), {
+						.getElementById('NEW_LOT_FORM'), {
 					keyboard : false,
 					backdrop : 'static'
 				});
@@ -363,15 +363,14 @@ Date currentDate = new Date();
 			} else if (route === "edit" && "${param.idLot}") {
 				// Abre modal de Editar
 				var editModal = new bootstrap.Modal(document
-						.getElementById('EDIT_LOT_MODAL'));
+						.getElementById('EDIT_LOT_FORM'));
 				editModal.show();
 			} else if (route === "delete" && "${param.idLot}") {
 				// Abre modal de Delete
 				var deleteModal = new bootstrap.Modal(document
-						.getElementById('DELETE_LOT_MODAL'));
+						.getElementById('DELETE_LOT'));
 				deleteModal.show();
 			}
-			F
 		};
 	</script>
 </body>
