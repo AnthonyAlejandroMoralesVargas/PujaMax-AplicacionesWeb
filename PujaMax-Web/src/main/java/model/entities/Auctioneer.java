@@ -11,8 +11,11 @@ import java.util.List;
         @AttributeOverride(name = "id", column = @Column(name = "idAuctioneer"))
 })
 public class Auctioneer extends User implements Serializable {
-    // Relación con Lot
+    @OneToMany(mappedBy = "auctioneer", cascade = CascadeType.MERGE, orphanRemoval = true)
     private List<Lot> lots;
+
+    @OneToMany(mappedBy = "auctioneer", cascade = CascadeType.MERGE, orphanRemoval = true)
+    private List<Address> addresses;
 
     // Constructor vacío
     public Auctioneer() {
@@ -23,9 +26,21 @@ public class Auctioneer extends User implements Serializable {
     public Auctioneer(int id,String dni, String name, String lastName, String email, String password, String phoneNumber) {
         super(id, dni, name, lastName, email, password, phoneNumber);
         this.lots = new ArrayList<>();
+        this.addresses = new ArrayList<>();
     }
 
-    // Getters y Setters para Lots
+    // Getters y Setters
+    public List<Address> getAddresses() {
+        return addresses;
+    }
+
+    public void setAddresses(List<Address> addresses) {
+        this.addresses = addresses;
+    }
+
+    public List<Lot> getLots() {
+        return lots;
+    }
 
     public void setLots(List<Lot> lots) {
         this.lots = lots;
