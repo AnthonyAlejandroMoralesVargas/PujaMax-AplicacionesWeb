@@ -52,6 +52,7 @@
 			</nav>
 		</section>
 		<c:forEach var="bid" items="${bids}">
+			<c:set var="address" value="${bid.product.lot.address}" />
 			<div class="product-card mb-3 p-3 shadow rounded"
 				style="background-color: white;">
 				<div class="row">
@@ -225,48 +226,48 @@ Phone:
 					<div class="col-md-6 mb-3">
 						<label for="name" class="form-label">Name</label>
 						<input type="text" class="form-control" id="name"
-							value="${bid.auctioneerAddress.name}" readonly>
+							value="${address.name}" readonly>
 					</div>
 					<div class="col-md-6 mb-3">
 						<label for="company" class="form-label">Company</label>
 						<input type="text" class="form-control" id="company"
-							value="${bid.auctioneerAddress.company}" readonly>
+							value="${address.company}" readonly>
 					</div>
 				</div>
 				<div class="row">
 					<div class="col-md-6 mb-3">
 						<label for="province" class="form-label">Province</label>
 						<input type="text" class="form-control" id="province"
-							value="${bid.auctioneerAddress.province}" readonly>
+							value="${address.province}" readonly>
 					</div>
 					<div class="col-md-6 mb-3">
 						<label for="city" class="form-label">City</label>
 						<input type="text" class="form-control" id="city"
-							value="${bid.auctioneerAddress.city}" readonly>
+							value="${address.city}" readonly>
 					</div>
 				</div>
 				<div class="row">
 					<div class="col-md-6 mb-3">
 						<label for="mainStreet" class="form-label">Main Street</label>
 						<input type="text" class="form-control" id="mainStreet"
-							value="${bid.auctioneerAddress.mainStreet}" readonly>
+							value="${address.mainStreet}" readonly>
 					</div>
 					<div class="col-md-6 mb-3">
 						<label for="secondaryStreet" class="form-label">Secondary Street</label>
 						<input type="text" class="form-control" id="secondaryStreet"
-							value="${bid.auctioneerAddress.secondaryStreet}" readonly>
+							value="${address.secondaryStreet}" readonly>
 					</div>
 				</div>
 				<div class="row">
 					<div class="col-md-6 mb-3">
 						<label for="postcode" class="form-label">Postcode</label>
 						<input type="text" class="form-control" id="postcode"
-							value="${bid.auctioneerAddress.postcode}" readonly>
+							value="${address.postcode}" readonly>
 					</div>
 					<div class="col-md-6 mb-3">
 						<label for="houseNumber" class="form-label">House/Apartment No.</label>
 						<input type="text" class="form-control" id="houseNumber"
-							value="${bid.auctioneerAddress.houseNumber}" readonly>
+							value="${address.houseNumber}" readonly>
 					</div>
 				</div>
 			</div>
