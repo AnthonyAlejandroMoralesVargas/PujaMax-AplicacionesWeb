@@ -18,10 +18,6 @@ public class BidService {
 		productJPA = new ProductJPA();
     }
 
-    public List<Product> findProductsByLotId(int idLot) throws SQLException {
-        return productJPA.findProductsByLotId(idLot);
-    }
-    
     public Bid findBidById(int idBid) {
         return bidJPA.findBidById(idBid);
     }
@@ -38,13 +34,5 @@ public class BidService {
     public boolean updateBid(Bid bid) {
         return bidJPA.updateBid(bid);
     }
-    
-    public List<Bid> getBidsByState(Bid.BidState state) {
-        BidJPA bidJPA = new BidJPA();
-        return bidJPA.findBidsByState(state);
-    }
-    
-   
-
 
 }

@@ -14,20 +14,6 @@ public class BidJPA {
         return emf.createEntityManager();
     }
 
-    public List<Product> findProductsByLotId(int idLot) {
-        List<Product> products = new ArrayList<>();
-        String jpql = "SELECT p FROM Product p WHERE p.lot.idLot = :idLot";
-
-        try (EntityManager em = getEntityManager()) {
-            Query query = em.createQuery(jpql);
-            query.setParameter("idLot", idLot);
-            products = query.getResultList();
-        } catch (Exception e) {
-            System.err.println("Couldn't find products by lot ID: " + e.getMessage());
-        }
-        return products;
-    }
-
     public List<Bid> findBidByProductId(int productId) {
         List<Bid> bids = new ArrayList<>();
         String jpql = "SELECT b FROM Bid b WHERE b.product.idProduct = :productId";
@@ -71,15 +57,12 @@ public class BidJPA {
         try (EntityManager em = getEntityManager()) {
             EntityTransaction transaction = em.getTransaction();
             transaction.begin();
-            Product product = bid.getProduct(); // asumiendo que ya viene lleno
+            Product product = bid.getProduct(); 
 
-            // Validamos si la puja es mayor que el priceCurrent
             if (bid.getAmount() <= product.getPriceCurrent()) {
-                // No persistimos
                 transaction.rollback();
                 return false;
             } else {
-                // Actualizar las pujas previas a estado SURPASSED
                 List<Bid> previousBids = em.createQuery(
                         "SELECT b FROM Bid b WHERE b.product.idProduct = :productId", Bid.class)
                         .setParameter("productId", product.getIdProduct())
@@ -88,8 +71,6 @@ public class BidJPA {
                     previousBid.setState(Bid.BidState.SURPASSED);
                     em.merge(previousBid);
                 }
-
-                // Establecer el estado de la nueva puja como TOP
                 bid.setState(Bid.BidState.TOP);
                 
                 em.persist(bid);
@@ -137,28 +118,5 @@ public class BidJPA {
             em.close();
         }
     }
-    
-    public List<Bid> findBidsByState(Bid.BidState state) {
-        List<Bid> bids = new ArrayList<>();
-        EntityManager em = getEntityManager();
-
-        try {
-            // Consulta JPQL para obtener las pujas con el estado especificado
-            String jpql = "SELECT b FROM Bid b WHERE b.state = :state";
-            TypedQuery<Bid> query = em.createQuery(jpql, Bid.class);
-            query.setParameter("state", state);
-            bids = query.getResultList();
-        } catch (Exception e) {
-            System.err.println("Couldn't find bids by state: " + e.getMessage());
-        } finally {
-            em.close();
-        }
-
-        return bids;
-    }
-    
-    
-
-
 
 }

@@ -100,16 +100,14 @@ public class PlaceBidController extends HttpServlet {
             ProductService productService = new ProductService();
             Product product = productService.findProductById(idProduct);
 
-            BidJPA bidJPA = new BidJPA();
-            List<Bid> bids = bidJPA.findBidByProductId(idProduct);
+            BidService bidService = new BidService();
+            List<Bid> bids = bidService.findBidByProductId(idProduct);
 
             req.setAttribute("product", product);
             req.setAttribute("bidCount", bids.size());
             req.getRequestDispatcher("jsp/PRODUCT.jsp").forward(req, resp);
         } catch (NumberFormatException e) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid Product ID format.");
-        } catch (Exception e) {
-            throw new ServletException("Error retrieving product details", e);
         }
     }
     private void placeBid(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -126,8 +124,6 @@ public class PlaceBidController extends HttpServlet {
         req.setAttribute("idLot", idLot);
         req.setAttribute("bidAmount", bidAmount);
         req.getRequestDispatcher("PlaceBidController?route=productDetails").forward(req, resp);
-
-        //req.getRequestDispatcher("jsp/PRODUCT.jsp").forward(req, resp);
     }
 
     private void confirmBid(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
