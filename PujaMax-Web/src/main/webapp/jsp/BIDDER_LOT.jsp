@@ -69,7 +69,7 @@
 			<nav class="nav-container d-flex bg-primary p-2 rounded">
 				<a href="LotManagementController?route=list&idLot=${idLot}"
 					class="nav-item"><i class="fas fa-home"></i> Home</a> <a
-					href="${pageContext.request.contextPath}/PlaceBidController?route=viewHistory"
+					href="${pageContext.request.contextPath}/PayBidController?route=viewHistory"
 					class="nav-item"><i class="fas fa-history"></i> History</a>
 			</nav>
 		</section>

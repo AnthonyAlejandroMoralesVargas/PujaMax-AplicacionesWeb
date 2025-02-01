@@ -55,6 +55,10 @@ public class PlaceBidController extends HttpServlet {
         try {
             HttpSession session = req.getSession();
             Bidder bidder = (Bidder) session.getAttribute("user");
+            if (bidder == null) {
+				resp.sendError(HttpServletResponse.SC_UNAUTHORIZED, "User not logged in");
+				return;
+			}
 
             int idLot = Integer.parseInt(req.getParameter("idLot"));
             req.setAttribute("idLot", idLot);
