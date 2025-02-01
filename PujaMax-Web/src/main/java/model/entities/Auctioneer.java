@@ -11,7 +11,10 @@ import java.util.List;
         @AttributeOverride(name = "id", column = @Column(name = "idAuctioneer"))
 })
 public class Auctioneer extends User implements Serializable {
-    @OneToMany(mappedBy = "auctioneer", cascade = CascadeType.MERGE, orphanRemoval = true)
+	
+	private static final long serialVersionUID = 1L;
+
+	@OneToMany(mappedBy = "auctioneer", cascade = CascadeType.MERGE, orphanRemoval = true)
     private List<Lot> lots;
 
     @OneToMany(mappedBy = "auctioneer", cascade = CascadeType.MERGE, orphanRemoval = true)

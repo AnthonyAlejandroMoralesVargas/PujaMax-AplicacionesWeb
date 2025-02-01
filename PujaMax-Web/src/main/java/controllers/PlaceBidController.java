@@ -2,12 +2,8 @@ package controllers;
 
 import java.io.IOException;
 import java.io.Serial;
-import java.sql.SQLException;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -15,10 +11,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.entities.*;
-import model.jpa.BidJPA;
 import model.service.BidService;
 import model.service.ProductService;
-import model.service.UserService;
 
 @WebServlet("/PlaceBidController")
 public class PlaceBidController extends HttpServlet {

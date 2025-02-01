@@ -1,6 +1,5 @@
 package model.service;
 
-import model.entities.Bid;
 import model.entities.Bidder;
 import model.jpa.BidderJPA;
 import org.mindrot.jbcrypt.BCrypt;

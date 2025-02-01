@@ -13,10 +13,8 @@ import model.entities.Auctioneer;
 import model.entities.Lot;
 import model.service.LotService;
 import model.service.ProductService;
-
 import java.io.IOException;
 import java.io.Serial;
-import java.sql.SQLException;
 import java.util.Base64;
 import java.util.Collection;
 import java.util.List;

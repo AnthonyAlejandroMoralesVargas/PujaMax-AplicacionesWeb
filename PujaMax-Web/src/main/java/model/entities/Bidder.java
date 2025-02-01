@@ -10,7 +10,10 @@ import jakarta.persistence.Entity;
         @AttributeOverride(name = "id", column = @Column(name = "idBidder"))
 })
 public class Bidder extends User {
-    public Bidder() {
+	
+	private static final long serialVersionUID = 1L;
+
+	public Bidder() {
     }
 
     public Bidder(int id, String dni, String name, String lastName, String email, String password, String phoneNumber) {

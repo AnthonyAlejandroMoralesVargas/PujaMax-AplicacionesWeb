@@ -6,11 +6,10 @@ import java.util.List;
 
 public class ReceiptService {
 
-    private final ReceiptJPA receiptJPA;
+	private final ReceiptJPA receiptJPA;
 
-    // Constructor que permite la inyección de ReceiptJPA
-    public ReceiptService(ReceiptJPA receiptJPA) {
-        this.receiptJPA = receiptJPA;
+    public ReceiptService() {
+        this.receiptJPA = new ReceiptJPA(); // Se instancia dentro del servicio, no en el controlador
     }
 
     public void createPayment(List<String> base64Images, int bidId) {
