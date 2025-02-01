@@ -126,6 +126,9 @@
 				</c:forEach>
 			</div>
 		</section>
+		<c:if test="${empty products}">
+			<div class="alert alert-warning text-center">There are no active products.</div>
+		</c:if>
 	</main>
 	<!-- Footer -->
 	<footer class="text-center bg-dark text-white py-3 mt-4">

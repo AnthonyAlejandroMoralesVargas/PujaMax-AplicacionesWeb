@@ -235,6 +235,9 @@
 				</c:forEach>
 			</div>
 		</section>
+		<c:if test="${empty products}">
+			<div class="alert alert-warning text-center">You have not created any product.</div>
+		</c:if>
 
 		<!-- Add Product Modal -->
 		<div class="modal fade" id="PRODUCT_FORM" tabindex="-1"

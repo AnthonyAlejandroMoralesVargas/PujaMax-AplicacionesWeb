@@ -141,6 +141,9 @@ Date currentDate = new Date();
 				</c:forEach>
 			</div>
 		</section>
+		<c:if test="${empty lots}">
+			<div class="alert alert-warning text-center">There are no active lots.</div>
+		</c:if>
 	</main>
 	<!-- Footer -->
 	<footer class="text-center bg-dark text-white py-3 mt-4">

@@ -128,7 +128,9 @@
 
 					</c:forEach>
 				</div>
-
+				<c:if test="${empty addresses}">
+					<div class="alert alert-warning text-center">You have not created any address.</div>
+				</c:if>
 			</div>
 		</div>
 	</main>

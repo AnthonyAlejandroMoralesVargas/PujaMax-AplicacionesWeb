@@ -125,8 +125,7 @@
 		</c:forEach>
 
 		<c:if test="${empty bids}">
-			<div class="alert alert-warning text-center">No bids found for
-				this bidder.</div>
+			<div class="alert alert-warning text-center">You have not placed a bid.</div>
 		</c:if>
 	</main>
 	<footer class="text-center bg-dark text-white py-3 mt-4">
