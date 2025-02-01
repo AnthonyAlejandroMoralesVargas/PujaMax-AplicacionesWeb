@@ -156,5 +156,4 @@ public class PayBidController extends HttpServlet {
 			request.getRequestDispatcher("/jsp/BIDDER_HISTORY.jsp").forward(request, response);
 		}
 	}
-
 }

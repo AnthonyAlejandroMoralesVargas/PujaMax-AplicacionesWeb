@@ -154,14 +154,12 @@
 					<input type="hidden" name="idBid" id="idBid"> <input
 						type="hidden" name="bidderDni" value="${bidderDni}">
 					<div class="mb-3">
-						<label for="bidderInfo" class="form-label">Bidder
-							Information</label>
-						<textarea class="form-control" id="bidderInfo" rows="4"
-							placeholder="Enter bidder information." readonly>
-Username: 
-Email: 
-Phone: 
-            </textarea>
+						<label class="form-label fw-bold">Bidder Information</label>
+						<div class="p-3 border rounded bg-light">
+							<p><strong>Username:</strong> ${sessionScope.user.name}</p>
+							<p><strong>Email:</strong> ${sessionScope.user.email}</p>
+							<p><strong>Phone:</strong> ${sessionScope.user.phoneNumber}</p>
+						</div>
 					</div>
 					<div class="mb-3">
 						<label for="receiptFile" class="form-label">Upload Receipt</label>
