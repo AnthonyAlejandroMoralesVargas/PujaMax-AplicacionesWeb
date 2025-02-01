@@ -83,7 +83,7 @@ public class LotManagementController extends HttpServlet {
         	try {
         		List<Lot> lots;
                 LotService lotService = new LotService();
-                lots = lotService.getActiveLots();
+                lots = lotService.findLotsByState("ACTIVE");
                 req.setAttribute("lots", lots);
                 req.getRequestDispatcher("jsp/BIDDER_LOT_BOARD.jsp").forward(req, resp);
             } catch (SQLException e) {
