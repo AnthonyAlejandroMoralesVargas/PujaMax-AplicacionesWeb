@@ -371,6 +371,23 @@ Date currentDate = new Date();
 						.getElementById('DELETE_LOT'));
 				deleteModal.show();
 			}
+			// Mostrar modal informativo si hay mensaje
+			const message = "${message}";
+			if (message !== "") {
+				const infoModalElement = document.getElementById("infoModal");
+				if (infoModalElement) {
+					const infoModal = new bootstrap.Modal(infoModalElement, {
+						backdrop: false, // Sin fondo oscuro
+						keyboard: false  // Desactiva cerrar con teclado
+					});
+					infoModal.show();
+
+					// Cerrar automáticamente después de 5 segundos
+					setTimeout(() => {
+						infoModal.hide();
+					}, 5000);
+				}
+			}
 		};
 	</script>
 </body>
