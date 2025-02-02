@@ -1,6 +1,6 @@
 package model.service;
 
-import model.jpa.LotJPA;
+import model.dao.LotDAO;
 import model.entities.Lot;
 
 import java.sql.SQLException;
@@ -8,33 +8,33 @@ import java.util.List;
 
 public class LotService {
 
-    private final LotJPA lotJPA;
+    private final LotDAO lotDAO;
 
     public LotService() {
-        lotJPA = new LotJPA();
+        lotDAO = new LotDAO();
     }
 
     public List<Lot> findLotsByIdAuctioneer(int idAuctioneer) throws SQLException {
-        return lotJPA.findLotsByIdAuctioneer(idAuctioneer);
+        return lotDAO.findLotsByIdAuctioneer(idAuctioneer);
     }
 
     public boolean createLot(Lot lot) {
-        return lotJPA.createLot(lot);
+        return lotDAO.create(lot);
     }
 
     public Lot findLotById(int idLot) {
-        return lotJPA.findLotById(idLot);
+        return lotDAO.findById(idLot);
     }
 
     public boolean updateLot(Lot lot) {
-        return lotJPA.updateLot(lot);
+        return lotDAO.update(lot);
     }
 
     public boolean removeLot(int idLot) {
-        return lotJPA.removeLot(idLot);
+        return lotDAO.remove(idLot);
     }
 
     public List<Lot> findLotsByState(String state) throws SQLException {
-        return lotJPA.findLotsByState(state);
+        return lotDAO.findLotsByState(state);
     }
 }
