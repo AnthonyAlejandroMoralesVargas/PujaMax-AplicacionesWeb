@@ -1,4 +1,4 @@
-package model.jpa;
+package model.dao;
 
 import jakarta.persistence.*;
 import model.entities.Bid;
@@ -7,16 +7,9 @@ import model.entities.Receipt;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class ReceiptJPA {
-
-    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("BidMax");
-
-    private EntityManager getEntityManager() {
-        return emf.createEntityManager();
-    }
-
-    public ReceiptJPA() {
-        super();
+public class ReceiptDAO extends GenericDAO<Receipt>{
+    public ReceiptDAO() {
+        super(Receipt.class);
     }
 
     public void createPayment(List<String> base64Images, int bidId) {
@@ -106,18 +99,4 @@ public class ReceiptJPA {
             em.close();
         }
     }
-
-    public Receipt findReceiptByBidId(int bidId) {
-        EntityManager em = getEntityManager();
-        try {
-            return em.createQuery("SELECT r FROM Receipt r WHERE r.bid.idBid = :bidId", Receipt.class)
-                    .setParameter("bidId", bidId)
-                    .getSingleResult();
-        } catch (NoResultException e) {
-            return null;
-        } finally {
-            em.close();
-        }
-    }
-
 }
