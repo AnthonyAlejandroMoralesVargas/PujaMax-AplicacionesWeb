@@ -142,7 +142,7 @@
 			<div class="modal-content">
 				<div class="modal-header bg-primary text-white">
 					<h5 class="modal-title" id="NEW_ADDRESS_FORMLabel">
-						<i class="fa-solid fa-location-crosshairs"></i> Add Address
+						<i class="fa-solid fa-location-crosshairs"></i> New Address
 					</h5>
 					<a href="AddressManagementController?route=list" class="btn-close"
 						aria-label="Close"></a>
