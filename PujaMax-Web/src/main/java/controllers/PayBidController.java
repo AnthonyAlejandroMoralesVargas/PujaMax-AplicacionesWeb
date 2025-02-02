@@ -13,8 +13,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
-import model.jpa.BidJPA;
-import model.jpa.ReceiptJPA;
 import model.service.BidService;
 import model.service.ReceiptService;
 import model.entities.Bid;
@@ -144,7 +142,7 @@ public class PayBidController extends HttpServlet {
 				base64Images.add(base64Image);
 			}
 
-			// Usar ReceiptService en lugar de instanciar ReceiptJPA en el controlador
+			// Usar ReceiptService en lugar de instanciar ReceiptDAO en el controlador
 	        ReceiptService receiptService = new ReceiptService();
 	        receiptService.createPayment(base64Images, Integer.parseInt(bidId));
 
