@@ -1,4 +1,4 @@
-package model.jpa;
+package model.dao;
 
 import jakarta.persistence.*;
 import model.entities.Bid;
@@ -10,11 +10,9 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-public class LotJPA {
-    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("BidMax");
-
-    private EntityManager getEntityManager() {
-        return emf.createEntityManager();
+public class LotDAO extends GenericDAO<Lot> {
+    public LotDAO() {
+        super(Lot.class);
     }
 
     public List<Lot> findLotsByIdAuctioneer(int idAuctioneer) {
@@ -41,9 +39,9 @@ public class LotJPA {
                     if (!"INACTIVE".equals(lot.getState())) {
                         lot.setState("INACTIVE");
                         updateLotState(em, lot);
-                        List<Product> products = new ProductJPA().findProductsByLotId(lot.getIdLot());
+                        List<Product> products = new ProductDAO().findProductsByLotId(lot.getIdLot());
                         for (Product product : products) {
-                            List<Bid> bids = new BidJPA().findBidByProductId(product.getIdProduct());
+                            List<Bid> bids = new BidDAO().findBidByProductId(product.getIdProduct());
                             Bid winningBid = bids.stream()
                                                  .max(Comparator.comparing(Bid::getAmount))
                                                  .orElse(null);
@@ -54,7 +52,7 @@ public class LotJPA {
                                 } else {
                                     bid.setState(Bid.BidState.LOST);
                                 }
-                                new BidJPA().updateBid(bid); // Persistir cambios en las pujas
+                                new BidDAO().update(bid); // Persistir cambios en las pujas
                             }
                         }
                     }
@@ -80,25 +78,11 @@ public class LotJPA {
         }
     }
 
-    public boolean createLot(Lot lot) {
-        boolean result = false;
-        try (EntityManager em = getEntityManager()) {
-            EntityTransaction transaction = em.getTransaction();
-            transaction.begin();
-            em.persist(lot);
-            transaction.commit();
-
-            result = true;
-        } catch (Exception e) {
-            System.out.println("Couldn't create lot: " + e.getMessage());
-        }
-        return result;
-    }
-
-    public Lot findLotById(int idLot) {
+    @Override
+    public Lot findById(Object id) {
         Lot lot = null;
         try (EntityManager em = getEntityManager()) {
-            lot = em.find(Lot.class, idLot);
+            lot = em.find(Lot.class, id);
 
             if (lot != null) {
                 Date now = new Date();
@@ -122,39 +106,6 @@ public class LotJPA {
         return lot;
     }
 
-    public boolean updateLot(Lot lot) {
-        boolean result = false;
-        try (EntityManager em = getEntityManager()) {
-            EntityTransaction transaction = em.getTransaction();
-            transaction.begin();
-            em.merge(lot);
-            transaction.commit();
-
-            result = true;
-        } catch (Exception e) {
-            System.out.println("Couldn't update lot: " + e.getMessage());
-        }
-        return result;
-    }
-
-    public boolean removeLot(int idLot) {
-        boolean result = false;
-        try (EntityManager em = getEntityManager()) {
-            EntityTransaction transaction = em.getTransaction();
-            transaction.begin();
-
-            Lot lot = em.find(Lot.class, idLot);
-            if (lot != null) {
-                em.remove(lot);
-                transaction.commit();
-                result = true;
-            }
-        } catch (Exception e) {
-            System.out.println("Couldn't remove lot: " + e.getMessage());
-        }
-        return result;
-    }
-    
     public List<Lot> findLotsByState(String state) {
         List<Lot> lots = new ArrayList<>();
 
