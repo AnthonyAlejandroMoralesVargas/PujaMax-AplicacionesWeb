@@ -1,9 +1,8 @@
 package model.entities;
 
-import jakarta.persistence.AttributeOverride;
-import jakarta.persistence.AttributeOverrides;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 @AttributeOverrides({
@@ -13,6 +12,9 @@ public class Bidder extends User {
 	
 	private static final long serialVersionUID = 1L;
 
+    @OneToMany(mappedBy = "bidder", cascade = CascadeType.MERGE, orphanRemoval = true)
+    private List<Bid> bids;
+
 	public Bidder() {
     }
 
@@ -20,4 +22,11 @@ public class Bidder extends User {
         super(id, dni, name, lastName, email, password, phoneNumber);
     }
 
+    public List<Bid> getBids() {
+        return bids;
+    }
+
+    public void setBids(List<Bid> bids) {
+        this.bids = bids;
+    }
 }
