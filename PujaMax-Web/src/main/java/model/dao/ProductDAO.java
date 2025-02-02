@@ -1,4 +1,4 @@
-package model.jpa;
+package model.dao;
 
 import jakarta.persistence.*;
 import model.entities.Lot;
@@ -7,11 +7,11 @@ import model.entities.Product;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductJPA {
-    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("BidMax");
+public class ProductDAO extends GenericDAO<Product> {
 
-    private EntityManager getEntityManager() {
-        return emf.createEntityManager();
+
+    public ProductDAO() {
+        super(Product.class);
     }
 
     public List<Product> findProductsByLotId(int idLot) {
@@ -28,7 +28,8 @@ public class ProductJPA {
         return products;
     }
 
-    public boolean createProduct(Product product) {
+    @Override
+    public boolean create(Product product) {
         boolean result = false;
         EntityManager em = getEntityManager();
         EntityTransaction transaction = em.getTransaction();
@@ -49,31 +50,6 @@ public class ProductJPA {
             System.out.println("Couldn't create product: " + e.getMessage());
         } finally {
             em.close();
-        }
-        return result;
-    }
-
-    public Product findProductById(int idProduct) {
-        Product product = null;
-        try (EntityManager em = getEntityManager()) {
-            product = em.find(Product.class, idProduct);
-        } catch (Exception e) {
-            System.out.println("Couldn't find product by ID: " + e.getMessage());
-        }
-        return product;
-    }
-
-    public boolean updateProduct(Product product) {
-        boolean result = false;
-        try (EntityManager em = getEntityManager()) {
-            EntityTransaction transaction = em.getTransaction();
-            transaction.begin();
-            em.merge(product);
-            transaction.commit();
-
-            result = true;
-        } catch (Exception e) {
-            System.out.println("Couldn't update product: " + e.getMessage());
         }
         return result;
     }
@@ -102,16 +78,5 @@ public class ProductJPA {
             em.close();
         }
         return result;
-    }
-    public List<Product> getAllProducts() {
-        List<Product> products = new ArrayList<>();
-        String jpql = "SELECT p FROM Product p";
-        try (EntityManager em = getEntityManager()) {
-            TypedQuery<Product> query = em.createQuery(jpql, Product.class);
-            products = query.getResultList();
-        } catch (Exception e) {
-            System.err.println("Couldn't fetch all products: " + e.getMessage());
-        }
-        return products;
     }
 }
