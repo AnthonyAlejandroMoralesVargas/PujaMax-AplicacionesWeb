@@ -1,4 +1,4 @@
-package model.jpa;
+package model.dao;
 
 import jakarta.persistence.*;
 import model.entities.Bid;
@@ -7,11 +7,10 @@ import model.entities.Product;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BidJPA {
-    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("BidMax");
+public class BidDAO extends GenericDAO<Bid>{
 
-    private EntityManager getEntityManager() {
-        return emf.createEntityManager();
+    public BidDAO() {
+        super(Bid.class);
     }
 
     public List<Bid> findBidByProductId(int productId) {
@@ -28,17 +27,6 @@ public class BidJPA {
         return bids;
     }
 
-
-    public Bid findBidById(int idBid) {
-        Bid bid = null;
-        try (EntityManager em = getEntityManager()) {
-            bid = em.find(Bid.class, idBid);
-        } catch (Exception e) {
-            System.out.println("Couldn't find bid by ID: " + e.getMessage());
-        }
-        return bid;
-    }
-    
     public List<Bid> getBids(String dni) {
         String jpql = "SELECT b FROM Bid b JOIN FETCH b.product WHERE b.bidder.dni = :dni";
         List<Bid> bids = new ArrayList<>();
@@ -52,19 +40,20 @@ public class BidJPA {
         return bids;
     }
 
-    public boolean createBid(Bid bid) {
+    @Override
+    public boolean create(Bid bid) {
         boolean result = false;
         try (EntityManager em = getEntityManager()) {
             EntityTransaction transaction = em.getTransaction();
             transaction.begin();
-            Product product = bid.getProduct(); 
+            Product product = bid.getProduct();
 
             if (bid.getAmount() <= product.getPriceCurrent()) {
                 transaction.rollback();
                 return false;
             } else {
                 List<Bid> previousBids = em.createQuery(
-                        "SELECT b FROM Bid b WHERE b.product.idProduct = :productId", Bid.class)
+                                "SELECT b FROM Bid b WHERE b.product.idProduct = :productId", Bid.class)
                         .setParameter("productId", product.getIdProduct())
                         .getResultList();
                 for (Bid previousBid : previousBids) {
@@ -72,7 +61,7 @@ public class BidJPA {
                     em.merge(previousBid);
                 }
                 bid.setState(Bid.BidState.TOP);
-                
+
                 em.persist(bid);
                 product.setPriceCurrent(bid.getAmount());
                 em.merge(product);
@@ -84,26 +73,6 @@ public class BidJPA {
         }
         return result;
     }
-
-
-    public boolean updateBid(Bid bid) {
-        EntityManager em = getEntityManager();
-        EntityTransaction transaction = em.getTransaction();
-        try {
-            transaction.begin();
-            em.merge(bid);
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction.isActive()) {
-                transaction.rollback();
-            }
-            throw new RuntimeException("Couldn't update bid: " + e.getMessage());
-        } finally {
-            em.close();
-        }
-		return false;
-    }
-
 
     public List<Bid> getBidsByUserId(int userId) {
         EntityManager em = getEntityManager();
