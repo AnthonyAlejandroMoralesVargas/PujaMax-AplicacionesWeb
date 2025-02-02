@@ -2,7 +2,9 @@ package model.entities;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 public class Lot {
@@ -27,6 +29,9 @@ public class Lot {
     @Column(name = "state")
     private String state; // Estado del lote (e.g., "Activo", "Inactivo")
 
+    @OneToMany(mappedBy = "lot", cascade = CascadeType.MERGE)
+    private List<Product> products;
+
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "idAddress")
     private Address address;
@@ -48,6 +53,7 @@ public class Lot {
         this.address = address;
         this.state = state;
         this.auctioneer = auctioneer;
+        this.products = new ArrayList<>();
     }
 
     // Getters y setters
@@ -113,6 +119,14 @@ public class Lot {
 
     public void setAuctioneer(Auctioneer auctioneer) {
         this.auctioneer = auctioneer;
+    }
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
     }
 
     @Override
