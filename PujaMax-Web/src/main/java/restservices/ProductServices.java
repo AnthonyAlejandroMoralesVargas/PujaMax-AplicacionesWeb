@@ -1,6 +1,5 @@
 package restservices;
 
-import java.sql.SQLException;
 import java.util.List;
 
 import jakarta.ws.rs.Consumes;
@@ -13,48 +12,47 @@ import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import model.entities.Product;
-import model.jpa.ProductJPA;
+import model.dao.ProductDAO;
 
 @Path("/product")
 public class ProductServices {
-	
-	private final ProductJPA productJPA;
+    private final ProductDAO productDAO;
 
     public ProductServices() {
-        productJPA = new ProductJPA();
+        productDAO = new ProductDAO();
     }
 
     @Path("/list/{idLot}")
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-    public List<Product> findProductsByLotId(@PathParam("idLot")int idLot) throws SQLException {
-        return productJPA.findProductsByLotId(idLot);
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Product> findProductsByLotId(@PathParam("idLot") int idLot) {
+        return productDAO.findProductsByLotId(idLot);
     }
 
     @Path("/create")
-	@POST
-	@Consumes(MediaType.APPLICATION_JSON)
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
     public boolean createProduct(Product product) {
-        return productJPA.createProduct(product);
+        return productDAO.create(product);
     }
-    
+
     @Path("/find/{idProduct}")
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-    public Product findProductById(@PathParam("idProduct")int idProduct) {
-        return productJPA.findProductById(idProduct);
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Product findProductById(@PathParam("idProduct") int idProduct) {
+        return productDAO.findById(idProduct);
     }
 
     @Path("/update")
-	@PUT
-	@Consumes(MediaType.APPLICATION_JSON)
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
     public boolean updateProduct(Product product) {
-        return productJPA.updateProduct(product);
+        return productDAO.update(product);
     }
-    
+
     @Path("/delete/{idProduct}")
-	@DELETE
-    public boolean removeProduct(@PathParam("idProduct")int idProduct) {
-        return productJPA.removeProduct(idProduct);
+    @DELETE
+    public boolean removeProduct(@PathParam("idProduct") int idProduct) {
+        return productDAO.remove(idProduct);
     }
 }
