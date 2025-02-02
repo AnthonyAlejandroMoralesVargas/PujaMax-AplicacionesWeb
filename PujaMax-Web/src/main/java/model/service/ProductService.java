@@ -29,6 +29,6 @@ public class ProductService {
     }
 
     public boolean removeProduct(int idProduct) {
-        return productDAO.removeProduct(idProduct);
+        return productDAO.remove(idProduct);
     }
 }

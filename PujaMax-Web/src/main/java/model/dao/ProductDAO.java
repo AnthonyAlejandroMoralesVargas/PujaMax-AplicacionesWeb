@@ -54,7 +54,8 @@ public class ProductDAO extends GenericDAO<Product> {
         return result;
     }
 
-    public boolean removeProduct(int idProduct) {
+    @Override
+    public boolean remove(Object idProduct) {
         boolean result = false;
         EntityManager em = getEntityManager();
         EntityTransaction transaction = em.getTransaction();
