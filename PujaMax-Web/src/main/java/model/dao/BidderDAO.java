@@ -1,4 +1,4 @@
-package model.jpa;
+package model.dao;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -6,11 +6,10 @@ import jakarta.persistence.NoResultException;
 import jakarta.persistence.Persistence;
 import model.entities.Bidder;
 
-public class BidderJPA {
-    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("BidMax");
+public class BidderDAO extends GenericDAO<Bidder> {
 
-    private EntityManager getEntityManager() {
-        return emf.createEntityManager();
+    public BidderDAO() {
+        super(Bidder.class);
     }
 
     public boolean create(Bidder bidder) {
