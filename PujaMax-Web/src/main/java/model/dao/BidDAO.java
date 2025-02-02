@@ -27,19 +27,6 @@ public class BidDAO extends GenericDAO<Bid>{
         return bids;
     }
 
-    public List<Bid> getBids(String dni) {
-        String jpql = "SELECT b FROM Bid b JOIN FETCH b.product WHERE b.bidder.dni = :dni";
-        List<Bid> bids = new ArrayList<>();
-        try (EntityManager em = getEntityManager()) {
-            TypedQuery<Bid> query = em.createQuery(jpql, Bid.class);
-            query.setParameter("dni", dni);
-            bids = query.getResultList();
-        } catch (Exception e) {
-            System.err.println("Couldn't fetch bids for bidder DNI: " + e.getMessage());
-        }
-        return bids;
-    }
-
     @Override
     public boolean create(Bid bid) {
         boolean result = false;
