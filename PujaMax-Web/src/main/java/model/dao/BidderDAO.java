@@ -1,33 +1,13 @@
 package model.dao;
 
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.NoResultException;
-import jakarta.persistence.Persistence;
 import model.entities.Bidder;
 
 public class BidderDAO extends GenericDAO<Bidder> {
 
     public BidderDAO() {
         super(Bidder.class);
-    }
-
-    public boolean create(Bidder bidder) {
-        EntityManager em = getEntityManager();
-        try {
-            em.getTransaction().begin();
-            em.persist(bidder);
-            em.getTransaction().commit();
-            return true;
-        } catch (Exception e) {
-            if (em.getTransaction().isActive()) {
-                em.getTransaction().rollback();
-            }
-            System.out.println("User could not be created");
-            return false;
-        } finally {
-            em.close();
-        }
     }
 
     public Bidder findByDni(String dni) {
@@ -39,15 +19,6 @@ public class BidderDAO extends GenericDAO<Bidder> {
             return null;
         } catch (Exception e) {
             System.out.println("An error occurred while trying to find the bidder by DNI");
-            return null;
-        }
-    }
-
-    public Bidder findById(int idBidder) {
-        try (EntityManager em = getEntityManager()) {
-            return em.find(Bidder.class, idBidder);
-        } catch (Exception e) {
-            System.out.println("An error occurred while trying to find the bidder by ID");
             return null;
         }
     }
